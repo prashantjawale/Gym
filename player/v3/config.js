@@ -1,9 +1,9 @@
 if (GmCXt === undefined) {
-	var GmCXt = {};
+    var GmCXt = {};
 }
 
 GmCXt.conf = {};
-GmCXt.conf.version = "2025.3.2";
+GmCXt.conf.version = "2025.3.1";
 GmCXt.conf.env = "Test";
 
 GmCXt.conf.creatorApp = 'mgExt';
@@ -31,19 +31,19 @@ GmCXt.conf.adminEmail = "<a href='mailto:admin@edcast.com' target='_top'>admin@e
 GmCXt.conf.hideCaptcha = "";
 
 try {
-	chrome.runtime.onMessage.addListener(function() {
-		return true;
-	});
-	GmCXt.conf.appType = GmCXt.conf.appTypeExt;
+    chrome.runtime.onMessage.addListener(function() {
+        return true;
+    });
+    GmCXt.conf.appType = GmCXt.conf.appTypeExt;
 } catch (e) {
-	try {
-		var uri = safari.extension.baseURI;
-		if (uri !== null) {
-			GmCXt.conf.appType = GmCXt.conf.appTypeExt;
-		}
-	} catch (e2) {
-		GmCXt.conf.appType = GmCXt.conf.appTypeScript;
-	}
+    try {
+        let uri = safari.extension.baseURI;
+        if (uri !== null) {
+            GmCXt.conf.appType = GmCXt.conf.appTypeExt;
+        }
+    } catch (e2) {
+        GmCXt.conf.appType = GmCXt.conf.appTypeScript;
+    }
 }
 
 // Default true, guideme icon will be visible on all urls. 
@@ -52,47 +52,47 @@ try {
 GmCXt.conf.allUrls = true;
 
 GmCXt.setConfig = function() {
-	GmCXt.conf.clientJsBaseUrl = "https://stagecdn.guideme.io/guideme-player/ent/";
-	GmCXt.conf.chromeExtensionUrl = "";
-	GmCXt.conf.webServiceUrl = "https://qa-api.guideme.io/v3/";
-	GmCXt.conf.staticContentPath = "https://stagecdn.guideme.io/guideme-assests/";
-	GmCXt.conf.webPortalUrl = "https://qa-admin.myguide.org/";
-	GmCXt.conf.analyticsPath = "https://analytics-qa.guideme.io/";
-	GmCXt.conf.analyticsPortalUrl = "https://analytics-qa.myguide.org/";
+    GmCXt.conf.clientJsBaseUrl = "https://stagecdn.guideme.io/guideme-player/ent/";
+    GmCXt.conf.chromeExtensionUrl = "";
+    GmCXt.conf.webServiceUrl = "https://qa-api.guideme.io/v3/";
+    GmCXt.conf.staticContentPath = "https://stagecdn.guideme.io/guideme-assests/";
+    GmCXt.conf.webPortalUrl = "https://qa-admin.myguide.org/";
+    GmCXt.conf.analyticsPath = "https://analytics-qa.guideme.io/";
+    GmCXt.conf.analyticsPortalUrl = "https://analytics-qa.myguide.org/";
 
-	GmCXt.conf.cdn = "https://stagecdn.guideme.io/";
-	GmCXt.conf.jsonStorageUrl = "https://stage-mycdn.guideme.io/";
+    GmCXt.conf.cdn = "https://stagecdn.guideme.io/";
+    GmCXt.conf.jsonStorageUrl = "https://stage-mycdn.guideme.io/";
 	
-	GmCXt.conf.ssoRedirectionUrl = "https://qa-sso.guideme.io/saml2/sp/sso/";
-	GmCXt.conf.ssoApiUrl = "https://qa-sso.guideme.io/saml2/sp/session/";
-	GmCXt.conf.ssoConfigUrl = "https://stagecdn.guideme.io/guideme-auth-qa/objects/";
-	GmCXt.conf.publicTimestampUrl = "https://stagecdn.guideme.io/guideme-auth-qa/timestamp/";
+    GmCXt.conf.ssoRedirectionUrl = "https://qa-sso.guideme.io/saml2/sp/sso/";
+    GmCXt.conf.ssoApiUrl = "https://qa-sso.guideme.io/saml2/sp/session/";
+    GmCXt.conf.ssoConfigUrl = "https://stagecdn.guideme.io/guideme-auth-qa/objects/";
+    GmCXt.conf.publicTimestampUrl = "https://stagecdn.guideme.io/guideme-auth-qa/timestamp/";
 };
 
 GmCXt.setConfig();
 
 (function() {
-	if (GmCXt.conf.appType === GmCXt.conf.appTypeExt) {
+    if (GmCXt.conf.appType === GmCXt.conf.appTypeExt) {
 
-		var root = '';
+        let root = '';
 
-		if (GmCXt.browserApp === 'Safari') {
-			root = safari.extension.baseURI;
-		} else if (GmCXt.browserApp === 'firefox' ) {
+        if (GmCXt.browserApp === 'Safari') {
+            root = safari.extension.baseURI;
+        } else if (GmCXt.browserApp === 'firefox' ) {
 
-			root = chrome.extension.getURL('');
+            root = chrome.extension.getURL('');
 
-		} else {
-			root = chrome.runtime.getURL('');
-		}
-	}
+        } else {
+            root = chrome.runtime.getURL('');
+        }
+    }
 
 })();
 
 GmCXt.conf.appConfig = {
-	login: {guideme: 1},
-	testme: 1,
-	customer: 'myguide',
-	desktopCommunication: false,
-	iframeInjection: true
+    login: {guideme: 1},
+    testme: 1,
+    customer: 'myguide',
+    desktopCommunication: false,
+    iframeInjection: true
 };

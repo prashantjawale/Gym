@@ -16,6 +16,23 @@ wmgPlayerJSTest_ {
     font-size: 13px;
     word-wrap: break-word;
 }
+wmgPlayerJSTest_ button,
+wmgPlayerJSTest_ textarea,
+wmgPlayerJSTest_ input,
+wmgPlayerJSTest_ select {
+    all: unset;
+    display: inline-block;
+    appearance: auto;
+    -webkit-appearance: auto;
+    box-sizing: border-box;
+    background-color: unset;
+    color: unset;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: initial;
+    margin: 2px;
+    padding: initial;
+}
 
 wmgPlayerJSTest_ b {
     font-weight: bold !important;
@@ -164,6 +181,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_panel {
     box-shadow: rgba(0, 0, 0, 0.25) -1px 0px 5px;
     transition: all .2s;
     z-index: 2147483647;
+    display: none;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_panel:focus-visible, 
@@ -232,10 +250,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_panel-micro-header wmgPlayerJSTest_.mgPlayerJSTe
     color: #ffffff;
     padding: 15px;
     text-align: center;
-}
-
-.mgPlayerJSTest_wb-micro-font-family {
-    font-family: Trebuchet MS;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_theme-mplayer {
@@ -312,10 +326,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_theme-mplayer-header-icon #mgPlayerJSTest_micro_
     float: left !important;
 }
 
-.mgPlayerJSTest_pull-right {
-    float: right !important;
-}
-
 .mgPlayerJSTest_no-padding {
     padding: 0px !important;
 }
@@ -374,10 +384,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_theme-mplayer-header-icon #mgPlayerJSTest_micro_
 
 .mgPlayerJSTest_width-auto {
     width: auto;
-}
-
-.no-margin {
-    margin: 0px !important;
 }
 
 .mgPlayerJSTest_new-step-panel {
@@ -588,7 +594,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_image-step-screen {
     z-index: 2147483644;
 }
 
-#mgPlayerJSTest_img-step-div {
+.mgPlayerJSTest_img-step-div {
     height: auto;
     width: auto;
     max-width: 100%;
@@ -618,22 +624,17 @@ wmgPlayerJSTest_.mgPlayerJSTest_inline-block {
     vertical-align: bottom;
 }
 
-.ege-inline-block-vt {
+.mgPlayerJSTest_ege-inline-block-vt {
     display: inline-block;
     vertical-align: top;
 }
 
-.ege-inline-block-vm {
+.mgPlayerJSTest_ege-inline-block-vm {
     display: inline-block;
     vertical-align: middle;
 }
 
-.ege-inline-block-vb {
-    display: inline-block;
-    vertical-align: bottom;
-}
-
-.ege-btn {
+.mgPlayerJSTest_ege-btn {
     font-family: 'Source Sans Pro', sans-serif;
     text-align: center;
     font-weight: normal;
@@ -653,7 +654,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_inline-block {
     box-shadow: 0px 2px 3px -2px #333;
 }
 
-.ege-btn:hover {
+.mgPlayerJSTest_ege-btn:hover {
     background: rgb(0, 141, 197) !important;
 }
 
@@ -764,7 +765,7 @@ wmgPlayerJSTest_ font a {
     color: inherit !important;
 }
 
-wmgPlayerJSTest_#mgPlayerJSTest_toast-msg {
+wmgPlayerJSTest_.mgPlayerJSTest_toast-msg {
     max-width: 500px;
     font-size: 15px;
     font-family: Arial, sans-serif;
@@ -781,18 +782,18 @@ wmgPlayerJSTest_#mgPlayerJSTest_toast-msg {
     border-left: 6px solid #9476C9 !important;
 }
 
-wmgPlayerJSTest_#mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-timer {
+wmgPlayerJSTest_.mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-timer {
     font-weight: bold;
 }
 
-wmgPlayerJSTest_#mgPlayerJSTest_toast-msg #mgPlayerJSTest_toast-msg-text {
+wmgPlayerJSTest_.mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-msg-text {
     float: left;
     max-width: 440px;
     width: auto;
     height: auto;
 }
 
-wmgPlayerJSTest_#mgPlayerJSTest_toast-msg #mgPlayerJSTest_toast-msg-close {
+wmgPlayerJSTest_.mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-msg-close {
     float: right;
     width: 18px;
     height: 18px;
@@ -807,13 +808,13 @@ wmgPlayerJSTest_#mgPlayerJSTest_toast-msg #mgPlayerJSTest_toast-msg-close {
     border-radius: 24px;
 }
 
-wmgPlayerJSTest_#mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-msg-wrapper {
+wmgPlayerJSTest_.mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-msg-wrapper {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
 }
 
-wmgPlayerJSTest_#mgPlayerJSTest_toast-msg #mgPlayerJSTest_toast-msg-close:hover {
+wmgPlayerJSTest_.mgPlayerJSTest_toast-msg .mgPlayerJSTest_toast-msg-close:hover {
     background: #ccc;
 }
 
@@ -1018,17 +1019,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_add-link-ok {
     margin: 0 50px 0 0;
 }
 
-wmgPlayerJSTest_.mgPlayerJSTest_screen {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2147483644;
-    display: none;
-    overflow: auto;
-}
-
 wmgPlayerJSTest_gssbox {
     width: 100%;
     height: 100%;
@@ -1046,8 +1036,8 @@ wmgPlayerJSTest_gssbox img {
     /*    border: solid 2px red;*/
 }
 
-#mgPlayerJSTest_canvas-ref,
-#mgPlayerJSTest_image-canvas {
+#mgPlayerJSTest_canvas_ref,
+.mgPlayerJSTest_image_canvas {
     position: absolute;
     z-index: 2147483643;
     /*top: 50%;
@@ -1065,125 +1055,7 @@ wmgPlayerJSTest_gssbox img {
     cursor: crosshair;
 }
 
-wmgPlayerJSTest_.mgPlayerJSTest_paint-toolbar {
-    text-align: center;
-    z-index: 2147483647;
-    position: fixed;
-    top: 0;
-    background: rgba(0, 0, 0, .8);
-    width: 70%;
-    left: 50%;
-    min-width: 1180px;
-    max-width: 1200px;
-    padding: 5px 10px;
-    transform: translate(-50%, 0);
-    border-radius: 5px;
-    background: rgb(238, 238, 238);
-    box-shadow: rgb(82, 82, 82) 0px 0px 5px -1px;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_paint-crop-toolbar {
-    width: 200px;
-    max-width: 200px;
-    padding: 10px;
-    border-radius: 2px;
-    text-align: center;
-    z-index: 2147483646;
-    position: fixed;
-    display: none;
-    top: 40px;
-    background: rgba(0, 0, 0, .8);
-    left: 50%;
-    transform: translate(-50%, 0);
-    background: rgb(238, 238, 238);
-    box-shadow: rgb(82, 82, 82) 0px 0px 5px -1px;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_paint-crop-toolbar .crop {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    font-weight: normal;
-    color: #ffffff;
-    cursor: pointer;
-    line-height: 30px;
-    font-size: 13px;
-    height: 29px;
-    min-width: 80px;
-    transition: all 0.2s;
-    background: #0078d4 !important;
-    border: none !important;
-    outline: none !important;
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border-bottom: 0px solid #008dc5 !important;
-    box-shadow: 0px 2px 3px -2px #333;
-    display: inline-block;
-    margin: 0 10px 0 0;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_paint-crop-toolbar .cancel {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    font-weight: normal;
-    color: #ffffff;
-    cursor: pointer;
-    line-height: 30px;
-    font-size: 13px;
-    height: 29px;
-    min-width: 80px;
-    transition: all 0.2s;
-    background: #0078d4 !important;
-    border: none !important;
-    outline: none !important;
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border-bottom: 0px solid #008dc5 !important;
-    box-shadow: 0px 2px 3px -2px #333;
-    display: inline-block;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn {
-    display: inline-block;
-    margin: 0 5px;
-    padding: 0px 5px;
-    /* line-height: 26px; */
-    line-height: 27px;
-    border-radius: 4px;
-    background: rgb(253, 253, 253);
-    color: rgb(47, 46, 47);
-    cursor: pointer;
-    vertical-align: top;
-    background: #fff;
-    box-shadow: rgb(82, 82, 82) 0px 0px 5px -1px;
-    color: #696969;
-    height: 26px;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn.fa {
-    font-size: 18px !important;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn.mgPlayerJSTest_draw-btn-active,
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn:hover {
-    color: #ffffff;
-    background: #0078d4;
-}
-
-.mgPlayerJSTest_canvas-draw-btn img {
-    width: 25px !important;
-    height: 25px !important;
-    padding: 3px;
-}
-
 .mgPlayerJSTest_draw-icon-white {
-    display: none !important;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn.mgPlayerJSTest_draw-btn-active .mgPlayerJSTest_draw-icon-white {
-    display: block !important;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn.mgPlayerJSTest_draw-btn-active .mgPlayerJSTest_draw-icon-gray {
     display: none !important;
 }
 
@@ -1248,49 +1120,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_image-tooltip-btn-text {
     color: #0078d4;
 }
 
-wmgPlayerJSTest_.mgPlayerJSTest_paint-toolbar-position {
-    float: right;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_paint-toolbar-download {
-    float: left;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_canvas-draw-btn input {
-    width: 30px !important;
-    height: 20px !important;
-    padding: 0 3px !important;
-    margin: 0px !important;
-    min-width: 0px !important;
-    min-height: 0px !important;
-    font-size: 13px;
-    box-shadow: none;
-    box-sizing: border-box;
-    line-height: 20px;
-    text-align: left;
-    background: rgb(255, 255, 255) !important;
-    border: 1px solid rgb(204, 204, 204) !important;
-    border-radius: 4px !important;
-    outline: none !important;
-    display: inline-block;
-}
-
-.mgPlayerJSTest_crop-tool-border {
-    z-index: 2147483646;
-    position: absolute;
-    border-top: 1px dashed red;
-    border-right: 1px dashed red;
-    pointer-events: none;
-}
-
-.mgPlayerJSTest_crop-tool-center {
-    z-index: 2147483646;
-    position: fixed;
-    display: none;
-    background-color: transparent;
-    cursor: move;
-}
-
 wmgPlayerJSTest_.mgPlayerJSTest_highlighter-span {
     border: solid 1px red !important;
     position: absolute !important;
@@ -1313,7 +1142,7 @@ wmgPlayerJSTest_over {
 /********Add step popup************/
 wmgPlayerJSTest_.mgPlayerJSTest_preview-step-popup-container {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 35%;
     left: 35%;
     background: #Fff;
@@ -1868,7 +1697,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-step-navigation .mgPlayerJSTest_play-step-p
     vertical-align: initial;
 }
 
-.popup-classic-design-navigation-prev.mgPlayerJSTest_play-step-prev {
+.mgPlayerJSTest_popup-classic-design-navigation-prev.mgPlayerJSTest_play-step-prev {
     border: none !important;
 }
 
@@ -2068,6 +1897,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_auto-prog-expand-options {
 
 wmgPlayerJSTest_.mgPlayerJSTest_completed-progress-bar-container {
     min-height: 250px;
+    max-height: 250px;
     padding: 12px;
     display: flex;
     flex-direction: column;
@@ -2111,32 +1941,32 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-loader {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[face=normal],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[face=normal],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[face=normal],
-wmgPlayerJSTest_.smarttip-guidance-msg font[face=normal] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[face=normal] {
     font-family: Arial, sans-serif !important;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title a,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content a,
-wmgPlayerJSTest_.smarttip-guidance-msg a,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description ol,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title ol,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content ol,
-wmgPlayerJSTest_.smarttip-guidance-msg ol,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ol,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description ul,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title ul,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content ul,
-wmgPlayerJSTest_.smarttip-guidance-msg ul,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ul,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description li,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title li,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content li,
-wmgPlayerJSTest_.smarttip-guidance-msg li,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg li,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description p,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description p span,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title p,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title p span,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content p,
-wmgPlayerJSTest_.smarttip-guidance-msg p {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg p {
     font-family: inherit;
     line-height: initial;
     line-height: normal;
@@ -2144,7 +1974,7 @@ wmgPlayerJSTest_.smarttip-guidance-msg p {
     background: initial;
 }
 
-wmgPlayerJSTest_.smarttip-guidance-msg ol, wmgPlayerJSTest_.smarttip-guidance-msg ul, wmgPlayerJSTest_.smarttip-guidance-msg li {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ol, wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ul, wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg li {
     line-height: inherit !important;
     padding: 0 !important;
 }
@@ -2154,7 +1984,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description p span,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title p,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title p span,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content p,
-wmgPlayerJSTest_.smarttip-guidance-msg p {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg p {
     font-family: inherit !important;
     color: inherit;
     font-weight: inherit;
@@ -2164,14 +1994,14 @@ wmgPlayerJSTest_.smarttip-guidance-msg p {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description p,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title p,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content p,
-wmgPlayerJSTest_.smarttip-guidance-msg p {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg p {
     margin: 0px;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description hr,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title hr,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content hr,
-wmgPlayerJSTest_.smarttip-guidance-msg hr {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg hr {
     margin: 8px 0;
     box-sizing: border-box;
 }
@@ -2179,7 +2009,7 @@ wmgPlayerJSTest_.smarttip-guidance-msg hr {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description i,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title i,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content i,
-wmgPlayerJSTest_.smarttip-guidance-msg i {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg i {
     margin: 0px;
     padding: 0px;
     border: none;
@@ -2188,7 +2018,7 @@ wmgPlayerJSTest_.smarttip-guidance-msg i {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description img,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title img,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content img,
-wmgPlayerJSTest_.smarttip-guidance-msg img {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg img {
     max-width: 100% !important;
     width: auto !important;
     display: inline-block;
@@ -2199,49 +2029,49 @@ wmgPlayerJSTest_.smarttip-guidance-msg img {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='7'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='7'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='7'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='7'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='7'] {
     font-size: -webkit-xxx-large;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='6'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='6'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='6'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='6'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='6'] {
     font-size: xx-large;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='5'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='5'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='5'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='5'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='5'] {
     font-size: x-large;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='4'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='4'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='4'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='4'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='4'] {
     font-size: large;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='3'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='3'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='3'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='3'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='3'] {
     font-size: medium;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='2'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='2'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='2'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='2'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='2'] {
     font-size: small;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font[size='1'],
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font[size='1'],
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font[size='1'],
-wmgPlayerJSTest_.smarttip-guidance-msg font[size='1'] {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font[size='1'] {
     font-size: x-small;
 }
 
@@ -2251,8 +2081,8 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title span,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content span,
-wmgPlayerJSTest_.smarttip-guidance-msg font,
-wmgPlayerJSTest_.smarttip-guidance-msg span {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg span {
     line-height: initial !important;
     white-space: inherit !important;
 }
@@ -2260,19 +2090,19 @@ wmgPlayerJSTest_.smarttip-guidance-msg span {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description pre,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title pre,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content pre,
-wmgPlayerJSTest_.smarttip-guidance-msg pre,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg pre,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font a,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font a,
-wmgPlayerJSTest_.smarttip-guidance-msg font a,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description span a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title span a,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content span a,
-wmgPlayerJSTest_.smarttip-guidance-msg span a,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg span a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description font span a,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content font span a,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title font span a,
-wmgPlayerJSTest_.smarttip-guidance-msg font span a {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg font span a {
     font-family: inherit !important;
     font-size: inherit !important;
     white-space: pre-wrap;
@@ -2284,8 +2114,8 @@ wmgPlayerJSTest_.mgPlayerJSTest_notification-content ol,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description ul,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title ul,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content ul,
-wmgPlayerJSTest_.smarttip-guidance-msg ul,
-wmgPlayerJSTest_.smarttip-guidance-msg ol {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ul,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ol {
     margin: 0px;
     padding: 0px;
     border: none;
@@ -2297,8 +2127,8 @@ wmgPlayerJSTest_.mgPlayerJSTest_notification-content ol li,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description ul li,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title ul li,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content ul li,
-wmgPlayerJSTest_.smarttip-guidance-msg ul li,
-wmgPlayerJSTest_.smarttip-guidance-msg ol li {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ul li,
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ol li {
     margin: 10px 0 10px 30px;
     list-style: inherit !important;
     white-space: normal !important;
@@ -2308,7 +2138,7 @@ wmgPlayerJSTest_.smarttip-guidance-msg ol li {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description ol,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title ol,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content ol,
-wmgPlayerJSTest_.smarttip-guidance-msg ol {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ol {
     list-style-type: decimal;
     font-size: inherit !important;
     white-space: normal !important;
@@ -2318,7 +2148,7 @@ wmgPlayerJSTest_.smarttip-guidance-msg ol {
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-description ul,
 wmgPlayerJSTest_.mgPlayerJSTest_play-step-popup-s-title ul,
 wmgPlayerJSTest_.mgPlayerJSTest_notification-content ul,
-wmgPlayerJSTest_.smarttip-guidance-msg ul {
+wmgPlayerJSTest_.mgPlayerJSTest_smarttip-guidance-msg ul {
     list-style-type: disc !important;
     font-size: inherit !important;
     white-space: normal !important;
@@ -2364,11 +2194,11 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     color: #8c8da2;
 }
 
-.popup-classic-design-navigation {
+.mgPlayerJSTest_popup-classic-design-navigation {
     width: 100%;
 }
 
-.popup-classic-design-navigation .popup-classic-design-navigation-prev {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-design-navigation-prev {
     width: 49%;
     min-width: 48%;
     max-width: 49%;
@@ -2386,7 +2216,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     box-sizing: border-box;
 }
 
-.popup-classic-design-navigation .popup-classic-design-navigation-prev svg {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-design-navigation-prev svg {
     width: 12px;
     height: 12px;
     margin: 0 0 2px 0;
@@ -2394,7 +2224,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     display: inline-block;
 }
 
-.popup-classic-design-navigation .popup-classic-design-navigation-prev span {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-design-navigation-prev span {
     font-family: Arial, sans-serif;
     margin: 0 0 0 5px;
     font-size: 17px;
@@ -2406,7 +2236,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     overflow: hidden;
 }
 
-.popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-next {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-next {
     width: 49%;
     min-width: 48%;
     max-width: 49%;
@@ -2425,7 +2255,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     box-sizing: border-box;
 }
 
-.popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-next svg {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-next svg {
     width: 12px;
     height: 12px;
     margin: 0 0 2px 0;
@@ -2433,7 +2263,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     display: inline-block;
 }
 
-.popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-next span {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-next span {
     font-family: Arial, sans-serif;
     margin: 0 5px 0 10px;
     font-size: 17px;
@@ -2445,7 +2275,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     overflow: hidden;
 }
 
-.popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-pause {
+.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-pause {
     border: none !important;
     background: #0078d4;
     color: #ffffff;
@@ -2461,7 +2291,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_play-total-step-cont {
     line-height: normal;
 }
 
-wmgPlayerJSTest_.popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-pause svg {
+wmgPlayerJSTest_.mgPlayerJSTest_popup-classic-design-navigation .mgPlayerJSTest_popup-classic-navigation-pause svg {
     width: 12px;
     height: 12px;
     vertical-align: initial;
@@ -2478,7 +2308,7 @@ wmgPlayerJSTest_.popup-classic-design-navigation .mgPlayerJSTest_popup-classic-n
     justify-content: center;
 }
 
-.preview-step-popup-classic-design .mgPlayerJSTest_play-step-popup-header {
+.mgPlayerJSTest_preview-step-popup-classic-design .mgPlayerJSTest_play-step-popup-header {
     padding: 0px 0px 0px 0px;
 }
 
@@ -3261,6 +3091,10 @@ wmgPlayerJSTest_.mgPlayerJSTest_survey-popup-container wmgPlayerJSTest_.mgPlayer
     border-right: 0;
 }
 
+wmgPlayerJSTest_.mgPlayerJSTest_survey-popup-container wmgPlayerJSTest_.mgPlayerJSTest_survey-content-wrapper wmgPlayerJSTest_.mgPlayerJSTest_question-single-select-wrapper wmgPlayerJSTest_.mgPlayerJSTest_range-question-wrapper .mgPlayerJSTest_value-range.mgPlayerJSTest_border-right {
+    border-right: 1px solid #cccccc;
+}
+
 wmgPlayerJSTest_.mgPlayerJSTest_survey-popup-container wmgPlayerJSTest_.mgPlayerJSTest_survey-content-wrapper wmgPlayerJSTest_.mgPlayerJSTest_question-single-select-wrapper wmgPlayerJSTest_.mgPlayerJSTest_range-question-wrapper .mgPlayerJSTest_value-range:hover {
     background: var(--mg-primary);
     color: #ffffff;
@@ -3411,14 +3245,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_global-black-overlay {
     top: 0;
     opacity: 0.1;
     z-index: 2147483647;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_popup-header-wrapper {
-    background: #F79B42 !important;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_popup-header-wrapper .mgPlayerJSTest_popup-header-icon-wrapper {
-    background: #F79B42 !important;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_step-not-found-notification {
@@ -3818,26 +3644,6 @@ wmgPlayerJSTest_.mgPlayerJSTest_popup-button-wrapper .mgPlayerJSTest_never-show-
     transition: all .3s;
     border-radius: 6px;
     text-transform: capitalize;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_wb-footer-wrapper {
-    padding: 5px 10px;
-    width: 100%;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_wb-footer-wrapper .mgPlayerJSTest_label-brought {
-    font-weight: 550;
-    color: #cccccc;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_wb-footer-wrapper .mgPlayerJSTest_label-learn-more {
-    width: 216px;
-    text-align: right;
-    font-weight: 550;
-}
-
-wmgPlayerJSTest_.mgPlayerJSTest_wb-theme-text-color {
-    color: #0078d4 !important;
 }
 
 wmgPlayerJSTest_.mgPlayerJSTest_overlay-tours-popup-checkbox {
@@ -4777,7 +4583,7 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     fill: #0078d4;
 }
 
-.mgPlayerJSTest_step-title-wrapper {
+/* .mgPlayerJSTest_step-title-wrapper {
     margin: 30px 20px 0px 20px;
     text-align: center;
     font-weight: 550;
@@ -4785,13 +4591,13 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     line-height: 20px;
     height: 42px;
     overflow: hidden;
-}
+} */
 
 .mgPlayerJSTest_step-title-wrapper p {
     margin: 0px;
 }
 
-.mgPlayerJSTest_step-image-wrapper,
+/* .mgPlayerJSTest_step-image-wrapper,
 .mgPlayerJSTest_step-video-wrapper {
     position: relative;
     width: 460px;
@@ -4799,7 +4605,7 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     margin: 10px 20px 10px 20px;
     border: 1px solid #cccccc;
     background: #000000;
-}
+} */
 
 .mgPlayerJSTest_step-image-wrapper img,
 .mgPlayerJSTest_step-video-wrapper video {
@@ -4958,7 +4764,7 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
 }
 
 /* Loader Container CSS */
-.ege-loader-wrapper {
+.mgPlayerJSTest_ege-loader-wrapper {
     position: absolute;
     top: 0;
     left: 0;
@@ -4969,14 +4775,14 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     border-radius: 5px;
 }
 
-.ege-loader-wrapper .ege-loader-wrapper-spinner {
+.mgPlayerJSTest_ege-loader-wrapper .mgPlayerJSTest_ege-loader-wrapper-spinner {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.ege-loader-wrapper .ege-loader-wrapper-spinner .mgPlayerJSTest_loader-image {
+.mgPlayerJSTest_ege-loader-wrapper .mgPlayerJSTest_ege-loader-wrapper-spinner .mgPlayerJSTest_loader-image {
     width: 150px;
     height: 150px;
 }
@@ -5023,6 +4829,10 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     border-radius: 6px;
     border-top-style: none;
     z-index: 2147483648;
+}
+
+.mgPlayerJSTest_auto-prog-wrapper.mgPlayerJSTest_width-90px {
+    width: 90px;
 }
 
 .mgPlayerJSTest_auto-prog-btn {
@@ -5763,7 +5573,7 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     border: 1px solid var(--mg-primary-btn-hover) !important;
 }
 
-.mgPlayerJSTest_input-radio-custom {
+/* .mgPlayerJSTest_input-radio-custom {
     width: 14px !important;
     height: 14px !important;
     -webkit-appearance: none;
@@ -5781,7 +5591,7 @@ wmgPlayerJSTest_.tooltip-step-popup-logo img {
     outline: none;
     border: 1px solid #acadc1 !important;
     margin: 3px 3px 3px 5px;
-}
+} */
 
 .mgPlayerJSTest_input-radio-custom:checked {
     border: 1px solid var(--mg-primary) !important;
@@ -6041,7 +5851,7 @@ wmgPlayerJSTest_.mgPlayerJSTest_popup-insights-capture-events wmgPlayerJSTest_.m
     z-index: 2147483646;
 }
 
-.close-text {
+.mgPlayerJSTest_close-text {
     font-size: 17px;
     margin-top: -4px;
     margin-left: 2px;
@@ -6411,6 +6221,10 @@ wmgPlayerJSTest_.mgPlayerJSTest_panel-micro-header wmgPlayerJSTest_.mgPlayerJSTe
 
 #mgPlayerJSTest_btn-img-step-capture {
     max-width: 200px !important;
+}
+
+.mgPlayerJSTest_z-index-maximum {
+    z-index: 2147483647 !important;
 }
 
 @media only screen and (max-width: 480px) {
