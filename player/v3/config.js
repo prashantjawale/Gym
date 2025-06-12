@@ -52,7 +52,7 @@ try {
 GmCXt.conf.allUrls = true;
 
 GmCXt.setConfig = function() {
-	GmCXt.conf.clientJsBaseUrl = "//localhost:8000/player/v3/";
+	GmCXt.conf.clientJsBaseUrl = "//prashantjawale.github.io/Gym/player/v3/";
 	GmCXt.conf.chromeExtensionUrl = "";
 	GmCXt.conf.webServiceUrl = "https://qa-api.guideme.io/v3/";
 	GmCXt.conf.staticContentPath = "https://stagecdn.guideme.io/guideme-assests/";

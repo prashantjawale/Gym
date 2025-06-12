@@ -3,7 +3,7 @@ if (typeof guideMe === 'undefined') {
 	guideMe = {};
 }
 if (!guideMe.baseUrl) {
-	guideMe.baseUrl = "//localhost:8000/player/v3/";
+	guideMe.baseUrl = "//prashantjawale.github.io/Gym/player/v3/";
 }
 configPath = guideMe.baseUrl + 'config.js';
 var playerExtImgUrl = "";
