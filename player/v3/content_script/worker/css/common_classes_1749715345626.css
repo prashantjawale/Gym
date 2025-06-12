@@ -1,0 +1,562 @@
+:root {
+    --mg-primary: #005BF0;
+    --mg-primary-hover: rgba(0, 91, 240, 0.08);
+    --mg-primary-btn-base: var(--mg-primary);
+    --mg-primary-btn-hover: #0069d9;
+    --mg-primary-btn-focus: #0069d9;
+    --mg-primary-btn-active: #0062cc;
+    --mg-border-color: #eeeeee;
+}
+
+/* common classes */
+.mgPlayerJSTest_btn-default {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    font-weight: normal;
+    color: #ffffff;
+    cursor: pointer;
+    line-height: 35px;
+    font-size: 14px;
+    height: 35px;
+    min-width: 100px;
+    max-width: 140px;
+    transition: all 0.3s;
+    background: linear-gradient(0deg, #fff0, #ffffff40), var(--mg-primary-btn-base);
+    border: none;
+    outline: none;
+    padding: 0px 10px;
+    margin: 0px 10px;
+    border-radius: 4px;
+    text-transform: capitalize;
+}
+
+.mgPlayerJSTest_btn-default:hover {
+    background: var(--mg-primary-btn-hover);
+}
+
+.mgPlayerJSTest_btn-default:focus {
+    background: var(--mg-primary-btn-focus);
+    outline: medium solid black;
+}
+
+.mgPlayerJSTest_btn-default:active {
+    background: var(--mg-primary-btn-active);
+}
+
+.mgPlayerJSTest_btn-default:disabled,
+.mgPlayerJSTest_btn-default.disabled {
+    background: #ffffff;
+    color: #cfd0dd;
+    border-color: #cfd0dd;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-neutral {
+    height: 35px;
+    border: 1px solid #acadc1;
+    background: #ffffff;
+    color: #26273b;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-neutral:hover {
+    background: #F0F0F5;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-neutral:focus {
+    background: #DFE0E7;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-neutral:active {
+    background: #CFD0DD;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border {
+    border: 1px solid var(--mg-primary);
+    color: var(--mg-primary);
+    background: #ffffff;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border:hover {
+    background: #EBF7F5;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border:focus {
+    background: #CEECE7;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border:active {
+    background: #A6DED4;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border.mgPlayerJSTest_btn-svg .mgPlayerJSTest_btn-svg-wrapper {
+    width: 15px;
+    height: 15px;
+    margin: 0px 5px 0px 0px;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border.mgPlayerJSTest_btn-svg .mgPlayerJSTest_btn-svg-wrapper svg {
+    width: 100%;
+    height: 100%;
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-border.mgPlayerJSTest_btn-svg .mgPlayerJSTest_btn-svg-wrapper svg path {
+    fill: var(--mg-primary);
+}
+
+.mgPlayerJSTest_btn-default.mgPlayerJSTest_btn-large {
+    min-width: 174px;
+    height: 40px;
+    padding: 10px;
+    line-height: 20px;
+}
+
+.mgPlayerJSTest_btn-shadow {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.mgPlayerJSTest_disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.mgPlayerJSTest_input-type-text {
+    border: 1px solid #707070 !important;
+    border-radius: 4px !important;
+    font-family: Arial, sans-serif;
+    width: 350px !important;
+    min-width: 0px !important;
+    min-height: 0px !important;
+    background: #ffffff !important;
+    padding: 0px 10px !important;
+    outline: none !important;
+    height: 40px !important;
+    box-sizing: border-box !important;
+    color: #000000 !important;
+    text-align: left !important;
+    box-shadow: 0px 1px 10px -8px #555555 inset;
+}
+
+.mgPlayerJSTest_input-type-text::-webkit-input-placeholder,
+.mgPlayerJSTest_input-type-text::-moz-placeholder,
+.mgPlayerJSTest_input-type-text::-moz-placeholder,
+.mgPlayerJSTest_input-type-text::-ms-input-placeholder {
+    color: #707070 !important;
+}
+
+.mgPlayerJSTest_font-size-12 {
+    font-size: 12px;
+}
+
+.mgPlayerJSTest_font-size-13 {
+    font-size: 13px;
+}
+
+.mgPlayerJSTest_font-size-14 {
+    font-size: 14px;
+}
+
+.mgPlayerJSTest_font-size-15 {
+    font-size: 15px;
+}
+
+.mgPlayerJSTest_font-size-16 {
+    font-size: 16px;
+}
+
+.mgPlayerJSTest_font-size-17 {
+    font-size: 17px;
+}
+
+.mgPlayerJSTest_font-size-18 {
+    font-size: 18px;
+}
+
+.mgPlayerJSTest_font-size-20 {
+    font-size: 20px;
+}
+
+.mgPlayerJSTest_clear {
+    clear: both;
+}
+
+.mgPlayerJSTest_no-margin {
+    margin: 0px !important;
+}
+
+.mgPlayerJSTest_no-padding {
+    padding: 0px !important;
+}
+
+.mgPlayerJSTest_mt-5 {
+    margin-top: 5px;
+}
+
+.mgPlayerJSTest_margin-5 {
+    margin: 5px;
+}
+
+.mgPlayerJSTest_margin-tb-5 {
+    margin: 5px 0px;
+}
+
+.mgPlayerJSTest_margin-lr-5 {
+    margin: 0px 5px;
+}
+
+.mgPlayerJSTest_margin-10 {
+    margin: 10px;
+}
+
+.mgPlayerJSTest_margin-tb-10 {
+    margin: 10px 0px;
+}
+
+.mgPlayerJSTest_margin-lr-10 {
+    margin: 0px 10px;
+}
+
+.mgPlayerJSTest_margin-15 {
+    margin: 15px;
+}
+
+.mgPlayerJSTest_margin-tb-15 {
+    margin: 15px 0px;
+}
+
+.mgPlayerJSTest_margin-lr-15 {
+    margin: 0px 15px;
+}
+
+.mgPlayerJSTest_margin-20 {
+    margin: 20px;
+}
+
+.mgPlayerJSTest_margin-tb-20 {
+    margin: 20px 0px;
+}
+
+.mgPlayerJSTest_margin-lr-20 {
+    margin: 0px 20px;
+}
+
+.mgPlayerJSTest_margin-25 {
+    margin: 25px;
+}
+
+.mgPlayerJSTest_margin-tb-25 {
+    margin: 25px 0px;
+}
+
+.mgPlayerJSTest_margin-lr-25 {
+    margin: 0px 25px;
+}
+
+.mgPlayerJSTest_padding-5 {
+    padding: 5px;
+}
+
+.mgPlayerJSTest_padding-tb-5 {
+    padding: 5px 0px;
+}
+
+.mgPlayerJSTest_padding-lr-5 {
+    padding: 0px 5px;
+}
+
+.mgPlayerJSTest_padding-10 {
+    padding: 10px;
+}
+
+.mgPlayerJSTest_padding-tb-10 {
+    padding: 10px 0px;
+}
+
+.mgPlayerJSTest_padding-lr-10 {
+    padding: 0px 10px;
+}
+
+.mgPlayerJSTest_padding-15 {
+    padding: 15px;
+}
+
+.mgPlayerJSTest_padding-tb-15 {
+    padding: 15px 0px;
+}
+
+.mgPlayerJSTest_padding-lr-15 {
+    padding: 0px 15px;
+}
+
+.mgPlayerJSTest_padding-20 {
+    padding: 20px;
+}
+
+.mgPlayerJSTest_padding-tb-20 {
+    padding: 20px 0px;
+}
+
+.mgPlayerJSTest_padding-lr-20 {
+    padding: 0px 20px;
+}
+
+.mgPlayerJSTest_padding-25 {
+    padding: 25px;
+}
+
+.mgPlayerJSTest_padding-tb-25 {
+    padding: 25px 0px;
+}
+
+.mgPlayerJSTest_padding-lr-25 {
+    padding: 0px 25px;
+}
+
+.mgPlayerJSTest_margin-bottom-30 {
+    margin-bottom: 30px;
+}
+
+.mgPlayerJSTest_margin-b-0 {
+    margin-bottom: 0px !important;
+}
+
+.mgPlayerJSTest_display-inline-block {
+    display: inline-block;
+}
+
+.mgPlayerJSTest_inline-block-vm {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.mgPlayerJSTest_inline-block-vt {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.mgPlayerJSTest_inline-block-vb {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.mgPlayerJSTest_text-align-left {
+    text-align: left;
+}
+
+.mgPlayerJSTest_text-align-center {
+    text-align: center;
+}
+
+.mgPlayerJSTest_text-align-right {
+    text-align: right;
+}
+
+.mgPlayerJSTest_float-left {
+    float: left;
+}
+
+.mgPlayerJSTest_float-right {
+    float: right;
+}
+
+.mgPlayerJSTest_theme-background {
+    background: #0070C5;
+}
+
+.mgPlayerJSTest_theme-border {
+    border: 1px solid #0070C5;
+}
+
+.mgPlayerJSTest_theme-color {
+    color: #0070C5;
+}
+
+.mgPlayerJSTest_text-color-light {
+    color: #555555;
+}
+
+.mgPlayerJSTest_text-color-dark {
+    color: #000000;
+    opacity: 0.75;
+}
+
+.mgPlayerJSTest_width-100 {
+    width: 100% !important;
+}
+
+.mgPlayerJSTest_height-100 {
+    height: 100% !important;
+}
+
+.mgPlayerJSTest_width-50 {
+    width: 50% !important;
+}
+
+.mgPlayerJSTest_height-50 {
+    height: 50% !important;
+}
+
+.mgPlayerJSTest_position-relative {
+    position: relative;
+}
+
+.mgPlayerJSTest_font-weight-550 {
+    font-weight: 550;
+}
+
+.mgPlayerJSTest_cursor-pointer {
+    cursor: pointer;
+}
+
+.mgPlayerJSTest_border-radius-50 {
+    border-radius: 50%;
+}
+
+.mgPlayerJSTest_overflow {
+    overflow: auto;
+}
+
+.mgPlayerJSTest_overflow.mgPlayerJSTest_overflow-x {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.mgPlayerJSTest_overflow.mgPlayerJSTest_overflow-y {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.mgPlayerJSTest_overflow.mgPlayerJSTest_overflow-hidden {
+    overflow: hidden;
+}
+
+.mgPlayerJSTest_overflow::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 10px !important;
+    background-color: #F5F5F5 !important;
+}
+
+.mgPlayerJSTest_overflow::-webkit-scrollbar {
+    width: 7px !important;
+    background-color: #F5F5F5 !important;
+}
+
+.mgPlayerJSTest_overflow::-webkit-scrollbar-thumb {
+    border-radius: 10px !important;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+    background-color: #b3b3b3 !important;
+}
+
+.mgPlayerJSTest_position-tr-10 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.mgPlayerJSTest_position-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mgPlayerJSTest_width-height-auto {
+    width: auto;
+    height: auto;
+}
+
+.mgPlayerJSTest_width-height-100 {
+    width: 100%;
+    height: 100%;
+}
+
+.mgPlayerJSTest_max-width-height-100 {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.mgPlayerJSTest_no-box-shadow {
+    box-shadow: none !important;
+}
+
+.mgPlayerJSTest_no-border.mgPlayerJSTest_no-border-all {
+    border: none !important;
+}
+
+.mgPlayerJSTest_no-border.mgPlayerJSTest_no-border-top {
+    border-top: none !important;
+}
+
+.mgPlayerJSTest_no-border.mgPlayerJSTest_no-border-right {
+    border-right: none !important;
+}
+
+.mgPlayerJSTest_no-border.mgPlayerJSTest_no-border-bottom {
+    border-bottom: none !important;
+}
+
+.mgPlayerJSTest_no-border.mgPlayerJSTest_no-border-left {
+    border-left: none !important;
+}
+
+.mgPlayerJSTest_rotate-180 {
+    transform: rotate(180deg);
+}
+
+.mgPlayerJSTest_text-uppercase {
+    text-transform: uppercase;
+}
+
+.mgPlayerJSTest_text-lowercase {
+    text-transform: lowercase;
+}
+
+.mgPlayerJSTest_text-capitalize {
+    text-transform: capitalize;
+}
+
+.mgPlayerJSTest_z-index.mgPlayerJSTest_z-index-max {
+    z-index: 2147483638;
+}
+
+.mgPlayerJSTest_show-text-tooltip:hover .mgPlayerJSTest_title-tooltip-wrapper {
+    font-weight: normal !important;
+    display: block !important;
+}
+
+.mgPlayerJSTest_display-none {
+    display: none;
+}
+
+.mgPlayerJSTest_display-block {
+    display: block;
+}
+
+.mgPlayerJSTest_text-color-white {
+    color: #fff !important;
+}
+
+.mgPlayerJSTest_text-color-black {
+    color: #000000 !important;
+}
+
+.mgPlayerJSTest_text-overflow-ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.mgPlayerJSTest_display-none-imp {
+    display: none !important;
+}
+
+.mgPlayerJSTest_display-inline-block-imp {
+    display: inline-block !important;
+}
+
+.mgPlayerJSTest_pointer-events-none  {
+    pointer-events: none;  
+}
+
+.mgPlayerJSTest_error-text-color {
+    color: #DE350B !important;
+}
+/* common classes */
