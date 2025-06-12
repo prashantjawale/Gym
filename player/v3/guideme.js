@@ -3,7 +3,7 @@ if (typeof guideMe === 'undefined') {
 	guideMe = {};
 }
 if (!guideMe.baseUrl) {
-	guideMe.baseUrl = "//prashantjawale.github.io/Gym/player/v3/";
+	guideMe.baseUrl = "https://stagecdn.guideme.io/guideme-player/ent/";
 }
 configPath = guideMe.baseUrl + 'config.js';
 var playerExtImgUrl = "";
@@ -43,9 +43,9 @@ function getScriptCB() {
 
 	function loadGuideMeClientFiles() {
 		if (window.self === window.top) {
-			a.src = GmCXt.conf.baseUrl + 'gm_client_1749715345626.js';
+			a.src = GmCXt.conf.baseUrl + 'gm_client_1749722599831.js';
 		} else {
-			a.src = GmCXt.conf.baseUrl + 'gm_client_iframe_1749715345626.js';
+			a.src = GmCXt.conf.baseUrl + 'gm_client_iframe_1749722599831.js';
 		}
 		document.head.appendChild(a);
 	}

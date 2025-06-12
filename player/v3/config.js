@@ -3,7 +3,7 @@ if (GmCXt === undefined) {
 }
 
 GmCXt.conf = {};
-GmCXt.conf.version = "2025.5.2";
+GmCXt.conf.version = "2025.3.2";
 GmCXt.conf.env = "Test";
 
 GmCXt.conf.creatorApp = 'mgExt';
@@ -52,7 +52,7 @@ try {
 GmCXt.conf.allUrls = true;
 
 GmCXt.setConfig = function() {
-	GmCXt.conf.clientJsBaseUrl = "//prashantjawale.github.io/Gym/player/v3/";
+	GmCXt.conf.clientJsBaseUrl = "https://stagecdn.guideme.io/guideme-player/ent/";
 	GmCXt.conf.chromeExtensionUrl = "";
 	GmCXt.conf.webServiceUrl = "https://qa-api.guideme.io/v3/";
 	GmCXt.conf.staticContentPath = "https://stagecdn.guideme.io/guideme-assests/";

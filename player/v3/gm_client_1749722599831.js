@@ -1,3 +1,11 @@
+/**
+ * Check if script is not already loaded
+ */
+if (window.guideMeClientLoaded === true) {
+	throw new Error("gm_client.js is already loaded!");
+}
+window.guideMeClientLoaded = true;
+
 !function(e){function n(){}function t(e,n){return function(){e.apply(n,arguments)}}function o(e){if("object"!=typeof this)throw new TypeError("Promises must be constructed via new");if("function"!=typeof e)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=void 0,this._deferreds=[],s(e,this)}function i(e,n){for(;3===e._state;)e=e._value;return 0===e._state?void e._deferreds.push(n):(e._handled=!0,void o._immediateFn(function(){var t=1===e._state?n.onFulfilled:n.onRejected;if(null===t)return void(1===e._state?r:u)(n.promise,e._value);var o;try{o=t(e._value)}catch(i){return void u(n.promise,i)}r(n.promise,o)}))}function r(e,n){try{if(n===e)throw new TypeError("A promise cannot be resolved with itself.");if(n&&("object"==typeof n||"function"==typeof n)){var i=n.then;if(n instanceof o)return e._state=3,e._value=n,void f(e);if("function"==typeof i)return void s(t(i,n),e)}e._state=1,e._value=n,f(e)}catch(r){u(e,r)}}function u(e,n){e._state=2,e._value=n,f(e)}function f(e){2===e._state&&0===e._deferreds.length&&o._immediateFn(function(){e._handled||o._unhandledRejectionFn(e._value)});for(var n=0,t=e._deferreds.length;n<t;n++)i(e,e._deferreds[n]);e._deferreds=null}function c(e,n,t){this.onFulfilled="function"==typeof e?e:null,this.onRejected="function"==typeof n?n:null,this.promise=t}function s(e,n){var t=!1;try{e(function(e){t||(t=!0,r(n,e))},function(e){t||(t=!0,u(n,e))})}catch(o){if(t)return;t=!0,u(n,o)}}var a=setTimeout;o.prototype["catch"]=function(e){return this.then(null,e)},o.prototype.then=function(e,t){var o=new this.constructor(n);return i(this,new c(e,t,o)),o},o.all=function(e){var n=Array.prototype.slice.call(e);return new o(function(e,t){function o(r,u){try{if(u&&("object"==typeof u||"function"==typeof u)){var f=u.then;if("function"==typeof f)return void f.call(u,function(e){o(r,e)},t)}n[r]=u,0===--i&&e(n)}catch(c){t(c)}}if(0===n.length)return e([]);for(var i=n.length,r=0;r<n.length;r++)o(r,n[r])})},o.resolve=function(e){return e&&"object"==typeof e&&e.constructor===o?e:new o(function(n){n(e)})},o.reject=function(e){return new o(function(n,t){t(e)})},o.race=function(e){return new o(function(n,t){for(var o=0,i=e.length;o<i;o++)e[o].then(n,t)})},o._immediateFn="function"==typeof setImmediate&&function(e){setImmediate(e)}||function(e){a(e,0)},o._unhandledRejectionFn=function(e){"undefined"!=typeof console&&console&&console.warn("Possible Unhandled Promise Rejection:",e)},o._setImmediateFn=function(e){o._immediateFn=e},o._setUnhandledRejectionFn=function(e){o._unhandledRejectionFn=e},"undefined"!=typeof module&&module.exports?module.exports=o:e.Promise||(e.Promise=o)}(this);
 if (GmCXt === undefined) var GmCXt = {};
 
@@ -23,104 +31,6 @@ if (GmCXt.isIE) {
 	}
 	GmCXt.browserApp = 'ie';
 }
-if (GmCXt === undefined) {
-	var GmCXt = {};
-}
-
-GmCXt.conf = {};
-GmCXt.conf.version = "2025.5.2";
-GmCXt.conf.env = "Test";
-
-GmCXt.conf.creatorApp = 'mgExt';
-GmCXt.conf.playerApp = 'mgPlayer';
-GmCXt.conf.appName = "mgPlayer";
-
-GmCXt.conf.allowedDomains = [];
-GmCXt.conf.appTypeExt = 'Extension';
-GmCXt.conf.appTypeScript = 'JScript';
-GmCXt.conf.appTypeElectron = 'electron';
-GmCXt.conf.Premise = 'Premise';
-GmCXt.conf.runEnv = "browser";
-GmCXt.conf.msgPrefix = "mgPlayerJSTest_";
-
-GmCXt.conf.showWidget = false;
-
-GmCXt.conf.playerExtension = GmCXt.conf.playerApp + GmCXt.conf.appTypeExt;
-GmCXt.conf.playerJS = GmCXt.conf.playerApp + GmCXt.conf.appTypeScript;
-
-GmCXt.conf.websiteUrl = "https://myguide.org";
-GmCXt.conf.privacyPolicyUrl = "https://www.edcast.com/corp/privacy-policy/";
-GmCXt.conf.termsURL = "https://www.edcast.com/corp/terms-of-service/";
-GmCXt.conf.feedbackDetails = "mailto:support@csod.com?Subject=MyGuide Feedback";
-GmCXt.conf.adminEmail = "<a href='mailto:admin@edcast.com' target='_top'>admin@edcast.com</a>";
-GmCXt.conf.hideCaptcha = "";
-
-try {
-	chrome.runtime.onMessage.addListener(function() {
-		return true;
-	});
-	GmCXt.conf.appType = GmCXt.conf.appTypeExt;
-} catch (e) {
-	try {
-		var uri = safari.extension.baseURI;
-		if (uri !== null) {
-			GmCXt.conf.appType = GmCXt.conf.appTypeExt;
-		}
-	} catch (e2) {
-		GmCXt.conf.appType = GmCXt.conf.appTypeScript;
-	}
-}
-
-// Default true, guideme icon will be visible on all urls. 
-// If false, guideme icon will only be visible on urls where user have created tours. 
-
-GmCXt.conf.allUrls = true;
-
-GmCXt.setConfig = function() {
-	GmCXt.conf.clientJsBaseUrl = "https://stagecdn.guideme.io/guideme-player/ent/";
-	GmCXt.conf.chromeExtensionUrl = "";
-	GmCXt.conf.webServiceUrl = "https://qa-api.guideme.io/v3/";
-	GmCXt.conf.staticContentPath = "https://stagecdn.guideme.io/guideme-assests/";
-	GmCXt.conf.webPortalUrl = "https://qa-admin.myguide.org/";
-	GmCXt.conf.analyticsPath = "https://analytics-qa.guideme.io/";
-	GmCXt.conf.analyticsPortalUrl = "https://analytics-qa.myguide.org/";
-
-	GmCXt.conf.cdn = "https://stagecdn.guideme.io/";
-	GmCXt.conf.jsonStorageUrl = "https://stage-mycdn.guideme.io/";
-	
-	GmCXt.conf.ssoRedirectionUrl = "https://qa-sso.guideme.io/saml2/sp/sso/";
-	GmCXt.conf.ssoApiUrl = "https://qa-sso.guideme.io/saml2/sp/session/";
-	GmCXt.conf.ssoConfigUrl = "https://stagecdn.guideme.io/guideme-auth-qa/objects/";
-	GmCXt.conf.publicTimestampUrl = "https://stagecdn.guideme.io/guideme-auth-qa/timestamp/";
-};
-
-GmCXt.setConfig();
-
-(function() {
-	if (GmCXt.conf.appType === GmCXt.conf.appTypeExt) {
-
-		var root = '';
-
-		if (GmCXt.browserApp === 'Safari') {
-			root = safari.extension.baseURI;
-		} else if (GmCXt.browserApp === 'firefox' ) {
-
-			root = chrome.extension.getURL('');
-
-		} else {
-			root = chrome.runtime.getURL('');
-		}
-	}
-
-})();
-
-GmCXt.conf.appConfig = {
-	login: {guideme: 1},
-	testme: 1,
-	customer: 'myguide',
-	desktopCommunication: false,
-	iframeInjection: true
-};
 /*! jQuery v3.7.1 | (c) OpenJS Foundation and other contributors | jquery.org/license */
 var hostJquery;
 var host$;
@@ -136,6 +46,2554 @@ if (hostJquery) {
 }
 !function(t){var i=t(window);t.fn.visible=function(t,e,o){if(!(this.length<1)){var r=this.length>1?this.eq(0):this,n=r.get(0),f=i.width(),h=i.height(),o=o?o:"both",l=e===!0?n.offsetWidth*n.offsetHeight:!0;if("function"==typeof n.getBoundingClientRect){var g=n.getBoundingClientRect(),u=g.top>=0&&g.top<h,s=g.bottom>0&&g.bottom<=h,c=g.left>=0&&g.left<f,a=g.right>0&&g.right<=f,v=t?u||s:u&&s,b=t?c||a:c&&a;if("both"===o)return l&&v&&b;if("vertical"===o)return l&&v;if("horizontal"===o)return l&&b}else{var d=i.scrollTop(),p=d+h,w=i.scrollLeft(),m=w+f,y=r.offset(),z=y.top,B=z+r.height(),C=y.left,R=C+r.width(),j=t===!0?B:z,q=t===!0?z:B,H=t===!0?R:C,L=t===!0?C:R;if("both"===o)return!!l&&p>=q&&j>=d&&m>=L&&H>=w;if("vertical"===o)return!!l&&p>=q&&j>=d;if("horizontal"===o)return!!l&&m>=L&&H>=w}}}}(mg$);
 
+/*
+ * JavaScript MD5
+ * https://github.com/blueimp/JavaScript-MD5
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ *
+ * Based on
+ * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+ * Digest Algorithm, as defined in RFC 1321.
+ * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+ * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+ * Distributed under the BSD License
+ * See http://pajhome.org.uk/crypt/md5 for more info.
+ */
+
+/* global define */
+
+(function ($) {
+  'use strict'
+
+  /*
+  * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+  * to work around bugs in some JS interpreters.
+  */
+  function safeAdd (x, y) {
+    var lsw = (x & 0xffff) + (y & 0xffff)
+    var msw = (x >> 16) + (y >> 16) + (lsw >> 16)
+    return (msw << 16) | (lsw & 0xffff)
+  }
+
+  /*
+  * Bitwise rotate a 32-bit number to the left.
+  */
+  function bitRotateLeft (num, cnt) {
+    return (num << cnt) | (num >>> (32 - cnt))
+  }
+
+  /*
+  * These functions implement the four basic operations the algorithm uses.
+  */
+  function md5cmn (q, a, b, x, s, t) {
+    return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b)
+  }
+  function md5ff (a, b, c, d, x, s, t) {
+    return md5cmn((b & c) | (~b & d), a, b, x, s, t)
+  }
+  function md5gg (a, b, c, d, x, s, t) {
+    return md5cmn((b & d) | (c & ~d), a, b, x, s, t)
+  }
+  function md5hh (a, b, c, d, x, s, t) {
+    return md5cmn(b ^ c ^ d, a, b, x, s, t)
+  }
+  function md5ii (a, b, c, d, x, s, t) {
+    return md5cmn(c ^ (b | ~d), a, b, x, s, t)
+  }
+
+  /*
+  * Calculate the MD5 of an array of little-endian words, and a bit length.
+  */
+  function binlMD5 (x, len) {
+    /* append padding */
+    x[len >> 5] |= 0x80 << (len % 32)
+    x[((len + 64) >>> 9 << 4) + 14] = len
+
+    var i
+    var olda
+    var oldb
+    var oldc
+    var oldd
+    var a = 1732584193
+    var b = -271733879
+    var c = -1732584194
+    var d = 271733878
+
+    for (i = 0; i < x.length; i += 16) {
+      olda = a
+      oldb = b
+      oldc = c
+      oldd = d
+
+      a = md5ff(a, b, c, d, x[i], 7, -680876936)
+      d = md5ff(d, a, b, c, x[i + 1], 12, -389564586)
+      c = md5ff(c, d, a, b, x[i + 2], 17, 606105819)
+      b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330)
+      a = md5ff(a, b, c, d, x[i + 4], 7, -176418897)
+      d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426)
+      c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341)
+      b = md5ff(b, c, d, a, x[i + 7], 22, -45705983)
+      a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416)
+      d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417)
+      c = md5ff(c, d, a, b, x[i + 10], 17, -42063)
+      b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162)
+      a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682)
+      d = md5ff(d, a, b, c, x[i + 13], 12, -40341101)
+      c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290)
+      b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329)
+
+      a = md5gg(a, b, c, d, x[i + 1], 5, -165796510)
+      d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632)
+      c = md5gg(c, d, a, b, x[i + 11], 14, 643717713)
+      b = md5gg(b, c, d, a, x[i], 20, -373897302)
+      a = md5gg(a, b, c, d, x[i + 5], 5, -701558691)
+      d = md5gg(d, a, b, c, x[i + 10], 9, 38016083)
+      c = md5gg(c, d, a, b, x[i + 15], 14, -660478335)
+      b = md5gg(b, c, d, a, x[i + 4], 20, -405537848)
+      a = md5gg(a, b, c, d, x[i + 9], 5, 568446438)
+      d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690)
+      c = md5gg(c, d, a, b, x[i + 3], 14, -187363961)
+      b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501)
+      a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467)
+      d = md5gg(d, a, b, c, x[i + 2], 9, -51403784)
+      c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473)
+      b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734)
+
+      a = md5hh(a, b, c, d, x[i + 5], 4, -378558)
+      d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463)
+      c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562)
+      b = md5hh(b, c, d, a, x[i + 14], 23, -35309556)
+      a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060)
+      d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353)
+      c = md5hh(c, d, a, b, x[i + 7], 16, -155497632)
+      b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640)
+      a = md5hh(a, b, c, d, x[i + 13], 4, 681279174)
+      d = md5hh(d, a, b, c, x[i], 11, -358537222)
+      c = md5hh(c, d, a, b, x[i + 3], 16, -722521979)
+      b = md5hh(b, c, d, a, x[i + 6], 23, 76029189)
+      a = md5hh(a, b, c, d, x[i + 9], 4, -640364487)
+      d = md5hh(d, a, b, c, x[i + 12], 11, -421815835)
+      c = md5hh(c, d, a, b, x[i + 15], 16, 530742520)
+      b = md5hh(b, c, d, a, x[i + 2], 23, -995338651)
+
+      a = md5ii(a, b, c, d, x[i], 6, -198630844)
+      d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415)
+      c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905)
+      b = md5ii(b, c, d, a, x[i + 5], 21, -57434055)
+      a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571)
+      d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606)
+      c = md5ii(c, d, a, b, x[i + 10], 15, -1051523)
+      b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799)
+      a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359)
+      d = md5ii(d, a, b, c, x[i + 15], 10, -30611744)
+      c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380)
+      b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649)
+      a = md5ii(a, b, c, d, x[i + 4], 6, -145523070)
+      d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379)
+      c = md5ii(c, d, a, b, x[i + 2], 15, 718787259)
+      b = md5ii(b, c, d, a, x[i + 9], 21, -343485551)
+
+      a = safeAdd(a, olda)
+      b = safeAdd(b, oldb)
+      c = safeAdd(c, oldc)
+      d = safeAdd(d, oldd)
+    }
+    return [a, b, c, d]
+  }
+
+  /*
+  * Convert an array of little-endian words to a string
+  */
+  function binl2rstr (input) {
+    var i;
+    var output = '';
+    var length32 = input.length * 32;
+    for (i = 0; i < length32; i += 8) {
+      output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xff);
+    }
+    return output;
+  }
+
+  /*
+  * Convert a raw string to an array of little-endian words
+  * Characters >255 have their high-byte silently ignored.
+  */
+  function rstr2binl (input) {
+    var i
+    var output = []
+    output[(input.length >> 2) - 1] = undefined
+    for (i = 0; i < output.length; i += 1) {
+      output[i] = 0
+    }
+    var length8 = input.length * 8
+    for (i = 0; i < length8; i += 8) {
+      output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << (i % 32)
+    }
+    return output
+  }
+
+  /*
+  * Calculate the MD5 of a raw string
+  */
+  function rstrMD5 (s) {
+    return binl2rstr(binlMD5(rstr2binl(s), s.length * 8))
+  }
+
+  /*
+  * Calculate the HMAC-MD5, of a key and some data (raw strings)
+  */
+  function rstrHMACMD5 (key, data) {
+    var i
+    var bkey = rstr2binl(key)
+    var ipad = []
+    var opad = []
+    var hash
+    ipad[15] = opad[15] = undefined
+    if (bkey.length > 16) {
+      bkey = binlMD5(bkey, key.length * 8)
+    }
+    for (i = 0; i < 16; i += 1) {
+      ipad[i] = bkey[i] ^ 0x36363636
+      opad[i] = bkey[i] ^ 0x5c5c5c5c
+    }
+    hash = binlMD5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)
+    return binl2rstr(binlMD5(opad.concat(hash), 512 + 128))
+  }
+
+  /*
+  * Convert a raw string to a hex string
+  */
+  function rstr2hex (input) {
+    var hexTab = '0123456789abcdef'
+    var output = ''
+    var x
+    var i
+    for (i = 0; i < input.length; i += 1) {
+      x = input.charCodeAt(i)
+      output += hexTab.charAt((x >>> 4) & 0x0f) + hexTab.charAt(x & 0x0f)
+    }
+    return output
+  }
+
+  /*
+  * Encode a string as utf-8
+  */
+  function str2rstrUTF8 (input) {
+    return unescape(encodeURIComponent(input))
+  }
+
+  /*
+  * Take string arguments and return either raw or hex encoded strings
+  */
+  function rawMD5 (s) {
+    return rstrMD5(str2rstrUTF8(s))
+  }
+  function hexMD5 (s) {
+    return rstr2hex(rawMD5(s))
+  }
+  function rawHMACMD5 (k, d) {
+    return rstrHMACMD5(str2rstrUTF8(k), str2rstrUTF8(d))
+  }
+  function hexHMACMD5 (k, d) {
+    return rstr2hex(rawHMACMD5(k, d))
+  }
+
+  function md5 (string, key, raw) {
+    if (!key) {
+      if (!raw) {
+        return hexMD5(string)
+      }
+      return rawMD5(string)
+    }
+    if (!raw) {
+      return hexHMACMD5(key, string)
+    }
+    return rawHMACMD5(key, string)
+  }
+
+  if (typeof define === 'function' && define.amd) {
+    define(function () {
+      return md5
+    })
+  } else if (typeof module === 'object' && module.exports) {
+    module.exports = md5
+  } else {
+    $.md5 = md5
+  }
+})(this);
+
+
+function SHA256(s){
+    var chrsz = 8;
+    var hexcase = 0;
+   
+    function safe_add (x, y) {
+    var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+    var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+    return (msw << 16) | (lsw & 0xFFFF);
+    }
+   
+    function S (X, n) { return ( X >>> n ) | (X << (32 - n)); }
+    function R (X, n) { return ( X >>> n ); }
+    function Ch(x, y, z) { return ((x & y) ^ ((~x) & z)); }
+    function Maj(x, y, z) { return ((x & y) ^ (x & z) ^ (y & z)); }
+    function Sigma0256(x) { return (S(x, 2) ^ S(x, 13) ^ S(x, 22)); }
+    function Sigma1256(x) { return (S(x, 6) ^ S(x, 11) ^ S(x, 25)); }
+    function Gamma0256(x) { return (S(x, 7) ^ S(x, 18) ^ R(x, 3)); }
+    function Gamma1256(x) { return (S(x, 17) ^ S(x, 19) ^ R(x, 10)); }
+   
+    function core_sha256 (m, l) {
+    var K = new Array(0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5, 0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174, 0xE49B69C1, 0xEFBE4786, 0xFC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA, 0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7, 0xC6E00BF3, 0xD5A79147, 0x6CA6351, 0x14292967, 0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13, 0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85, 0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3, 0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070, 0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5, 0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3, 0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208, 0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2);
+    var HASH = new Array(0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19);
+    var W = new Array(64);
+    var a, b, c, d, e, f, g, h, i, j;
+    var T1, T2;
+   
+    m[l >> 5] |= 0x80 << (24 - l % 32);
+    m[((l + 64 >> 9) << 4) + 15] = l;
+   
+    for ( var i = 0; i<m.length; i+=16 ) {
+    a = HASH[0];
+    b = HASH[1];
+    c = HASH[2];
+    d = HASH[3];
+    e = HASH[4];
+    f = HASH[5];
+    g = HASH[6];
+    h = HASH[7];
+   
+    for ( var j = 0; j<64; j++) {
+    if (j < 16) W[j] = m[j + i];
+    else W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]);
+   
+    T1 = safe_add(safe_add(safe_add(safe_add(h, Sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);
+    T2 = safe_add(Sigma0256(a), Maj(a, b, c));
+   
+    h = g;
+    g = f;
+    f = e;
+    e = safe_add(d, T1);
+    d = c;
+    c = b;
+    b = a;
+    a = safe_add(T1, T2);
+    }
+   
+    HASH[0] = safe_add(a, HASH[0]);
+    HASH[1] = safe_add(b, HASH[1]);
+    HASH[2] = safe_add(c, HASH[2]);
+    HASH[3] = safe_add(d, HASH[3]);
+    HASH[4] = safe_add(e, HASH[4]);
+    HASH[5] = safe_add(f, HASH[5]);
+    HASH[6] = safe_add(g, HASH[6]);
+    HASH[7] = safe_add(h, HASH[7]);
+    }
+    return HASH;
+    }
+   
+    function str2binb (str) {
+    var bin = Array();
+    var mask = (1 << chrsz) - 1;
+    for(var i = 0; i < str.length * chrsz; i += chrsz) {
+    bin[i>>5] |= (str.charCodeAt(i / chrsz) & mask) << (24 - i % 32);
+    }
+    return bin;
+    }
+   
+    function Utf8Encode(string) {
+    string = string.replace(/\r\n/g,'\n');
+    var utftext = '';
+   
+    for (var n = 0; n < string.length; n++) {
+   
+    var c = string.charCodeAt(n);
+   
+    if (c < 128) {
+    utftext += String.fromCharCode(c);
+    }
+    else if((c > 127) && (c < 2048)) {
+    utftext += String.fromCharCode((c >> 6) | 192);
+    utftext += String.fromCharCode((c & 63) | 128);
+    }
+    else {
+    utftext += String.fromCharCode((c >> 12) | 224);
+    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+    utftext += String.fromCharCode((c & 63) | 128);
+    }
+   
+    }
+   
+    return utftext;
+    }
+   
+    function binb2hex (binarray) {
+    var hex_tab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef';
+    var str = '';
+    for(var i = 0; i < binarray.length * 4; i++) {
+    str += hex_tab.charAt((binarray[i>>2] >> ((3 - i % 4)*8+4)) & 0xF) +
+    hex_tab.charAt((binarray[i>>2] >> ((3 - i % 4)*8 )) & 0xF);
+    }
+    return str;
+    }
+   
+    s = Utf8Encode(s);
+    return binb2hex(core_sha256(str2binb(s), s.length * chrsz));
+   }
+! function(t, r) {
+	"object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r()
+}(this, function() {
+	var t = t || function(t, r) {
+		var e = Object.create || function() {
+				function t() {}
+				return function(r) {
+					var e;
+					return t.prototype = r, e = new t, t.prototype = null, e
+				}
+			}(),
+			i = {},
+			n = i.lib = {},
+			o = n.Base = function() {
+				return {
+					extend: function(t) {
+						var r = e(this);
+						return t && r.mixIn(t), r.hasOwnProperty("init") && this.init !== r.init || (r.init = function() {
+							r.$super.init.apply(this, arguments)
+						}), r.init.prototype = r, r.$super = this, r
+					},
+					create: function() {
+						var t = this.extend();
+						return t.init.apply(t, arguments), t
+					},
+					init: function() {},
+					mixIn: function(t) {
+						for (var r in t) t.hasOwnProperty(r) && (this[r] = t[r]);
+						t.hasOwnProperty("toString") && (this.toString = t.toString)
+					},
+					clone: function() {
+						return this.init.prototype.extend(this)
+					}
+				}
+			}(),
+			s = n.WordArray = o.extend({
+				init: function(t, e) {
+					t = this.words = t || [], e != r ? this.sigBytes = e : this.sigBytes = 4 * t.length
+				},
+				toString: function(t) {
+					return (t || c).stringify(this)
+				},
+				concat: function(t) {
+					var r = this.words,
+						e = t.words,
+						i = this.sigBytes,
+						n = t.sigBytes;
+					if (this.clamp(), i % 4)
+						for (var o = 0; o < n; o++) {
+							var s = e[o >>> 2] >>> 24 - o % 4 * 8 & 255;
+							r[i + o >>> 2] |= s << 24 - (i + o) % 4 * 8
+						} else
+							for (var o = 0; o < n; o += 4) r[i + o >>> 2] = e[o >>> 2];
+					return this.sigBytes += n, this
+				},
+				clamp: function() {
+					var r = this.words,
+						e = this.sigBytes;
+					r[e >>> 2] &= 4294967295 << 32 - e % 4 * 8, r.length = t.ceil(e / 4)
+				},
+				clone: function() {
+					var t = o.clone.call(this);
+					return t.words = this.words.slice(0), t
+				},
+				random: function(r) {
+					for (var e, i = [], n = function(r) {
+							var r = r,
+								e = 987654321,
+								i = 4294967295;
+							return function() {
+								e = 36969 * (65535 & e) + (e >> 16) & i, r = 18e3 * (65535 & r) + (r >> 16) & i;
+								var n = (e << 16) + r & i;
+								return n /= 4294967296, n += .5, n * (t.random() > .5 ? 1 : -1)
+							}
+						}, o = 0; o < r; o += 4) {
+						var a = n(4294967296 * (e || t.random()));
+						e = 987654071 * a(), i.push(4294967296 * a() | 0)
+					}
+					return new s.init(i, r)
+				}
+			}),
+			a = i.enc = {},
+			c = a.Hex = {
+				stringify: function(t) {
+					for (var r = t.words, e = t.sigBytes, i = [], n = 0; n < e; n++) {
+						var o = r[n >>> 2] >>> 24 - n % 4 * 8 & 255;
+						i.push((o >>> 4).toString(16)), i.push((15 & o).toString(16))
+					}
+					return i.join("")
+				},
+				parse: function(t) {
+					for (var r = t.length, e = [], i = 0; i < r; i += 2) e[i >>> 3] |= parseInt(t.substr(i, 2), 16) << 24 - i % 8 * 4;
+					return new s.init(e, r / 2)
+				}
+			},
+			h = a.Latin1 = {
+				stringify: function(t) {
+					for (var r = t.words, e = t.sigBytes, i = [], n = 0; n < e; n++) {
+						var o = r[n >>> 2] >>> 24 - n % 4 * 8 & 255;
+						i.push(String.fromCharCode(o))
+					}
+					return i.join("")
+				},
+				parse: function(t) {
+					for (var r = t.length, e = [], i = 0; i < r; i++) e[i >>> 2] |= (255 & t.charCodeAt(i)) << 24 - i % 4 * 8;
+					return new s.init(e, r)
+				}
+			},
+			l = a.Utf8 = {
+				stringify: function(t) {
+					try {
+						return decodeURIComponent(escape(h.stringify(t)))
+					} catch (t) {
+						throw new Error("Malformed UTF-8 data")
+					}
+				},
+				parse: function(t) {
+					return h.parse(unescape(encodeURIComponent(t)))
+				}
+			},
+			f = n.BufferedBlockAlgorithm = o.extend({
+				reset: function() {
+					this._data = new s.init, this._nDataBytes = 0
+				},
+				_append: function(t) {
+					"string" == typeof t && (t = l.parse(t)), this._data.concat(t), this._nDataBytes += t.sigBytes
+				},
+				_process: function(r) {
+					var e = this._data,
+						i = e.words,
+						n = e.sigBytes,
+						o = this.blockSize,
+						a = 4 * o,
+						c = n / a;
+					c = r ? t.ceil(c) : t.max((0 | c) - this._minBufferSize, 0);
+					var h = c * o,
+						l = t.min(4 * h, n);
+					if (h) {
+						for (var f = 0; f < h; f += o) this._doProcessBlock(i, f);
+						var u = i.splice(0, h);
+						e.sigBytes -= l
+					}
+					return new s.init(u, l)
+				},
+				clone: function() {
+					var t = o.clone.call(this);
+					return t._data = this._data.clone(), t
+				},
+				_minBufferSize: 0
+			}),
+			u = (n.Hasher = f.extend({
+				cfg: o.extend(),
+				init: function(t) {
+					this.cfg = this.cfg.extend(t), this.reset()
+				},
+				reset: function() {
+					f.reset.call(this), this._doReset()
+				},
+				update: function(t) {
+					return this._append(t), this._process(), this
+				},
+				finalize: function(t) {
+					t && this._append(t);
+					var r = this._doFinalize();
+					return r
+				},
+				blockSize: 16,
+				_createHelper: function(t) {
+					return function(r, e) {
+						return new t.init(e).finalize(r)
+					}
+				},
+				_createHmacHelper: function(t) {
+					return function(r, e) {
+						return new u.HMAC.init(t, e).finalize(r)
+					}
+				}
+			}), i.algo = {});
+		return i
+	}(Math);
+	return function() {
+			function r(t, r, e) {
+				for (var i = [], o = 0, s = 0; s < r; s++)
+					if (s % 4) {
+						var a = e[t.charCodeAt(s - 1)] << s % 4 * 2,
+							c = e[t.charCodeAt(s)] >>> 6 - s % 4 * 2;
+						i[o >>> 2] |= (a | c) << 24 - o % 4 * 8, o++
+					}
+				return n.create(i, o)
+			}
+			var e = t,
+				i = e.lib,
+				n = i.WordArray,
+				o = e.enc;
+			o.Base64 = {
+				stringify: function(t) {
+					var r = t.words,
+						e = t.sigBytes,
+						i = this._map;
+					t.clamp();
+					for (var n = [], o = 0; o < e; o += 3)
+						for (var s = r[o >>> 2] >>> 24 - o % 4 * 8 & 255, a = r[o + 1 >>> 2] >>> 24 - (o + 1) % 4 * 8 & 255, c = r[o + 2 >>> 2] >>> 24 - (o + 2) % 4 * 8 & 255, h = s << 16 | a << 8 | c, l = 0; l < 4 && o + .75 * l < e; l++) n.push(i.charAt(h >>> 6 * (3 - l) & 63));
+					var f = i.charAt(64);
+					if (f)
+						for (; n.length % 4;) n.push(f);
+					return n.join("")
+				},
+				parse: function(t) {
+					var e = t.length,
+						i = this._map,
+						n = this._reverseMap;
+					if (!n) {
+						n = this._reverseMap = [];
+						for (var o = 0; o < i.length; o++) n[i.charCodeAt(o)] = o
+					}
+					var s = i.charAt(64);
+					if (s) {
+						var a = t.indexOf(s);
+						a !== -1 && (e = a)
+					}
+					return r(t, e, n)
+				},
+				_map: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+			}
+		}(),
+		function(r) {
+			function e(t, r, e, i, n, o, s) {
+				var a = t + (r & e | ~r & i) + n + s;
+				return (a << o | a >>> 32 - o) + r
+			}
+
+			function i(t, r, e, i, n, o, s) {
+				var a = t + (r & i | e & ~i) + n + s;
+				return (a << o | a >>> 32 - o) + r
+			}
+
+			function n(t, r, e, i, n, o, s) {
+				var a = t + (r ^ e ^ i) + n + s;
+				return (a << o | a >>> 32 - o) + r
+			}
+
+			function o(t, r, e, i, n, o, s) {
+				var a = t + (e ^ (r | ~i)) + n + s;
+				return (a << o | a >>> 32 - o) + r
+			}
+			var s = t,
+				a = s.lib,
+				c = a.WordArray,
+				h = a.Hasher,
+				l = s.algo,
+				f = [];
+			! function() {
+				for (var t = 0; t < 64; t++) f[t] = 4294967296 * r.abs(r.sin(t + 1)) | 0
+			}();
+			var u = l.MD5 = h.extend({
+				_doReset: function() {
+					this._hash = new c.init([1732584193, 4023233417, 2562383102, 271733878])
+				},
+				_doProcessBlock: function(t, r) {
+					for (var s = 0; s < 16; s++) {
+						var a = r + s,
+							c = t[a];
+						t[a] = 16711935 & (c << 8 | c >>> 24) | 4278255360 & (c << 24 | c >>> 8)
+					}
+					var h = this._hash.words,
+						l = t[r + 0],
+						u = t[r + 1],
+						d = t[r + 2],
+						v = t[r + 3],
+						p = t[r + 4],
+						_ = t[r + 5],
+						y = t[r + 6],
+						g = t[r + 7],
+						B = t[r + 8],
+						w = t[r + 9],
+						k = t[r + 10],
+						S = t[r + 11],
+						m = t[r + 12],
+						x = t[r + 13],
+						b = t[r + 14],
+						H = t[r + 15],
+						z = h[0],
+						A = h[1],
+						C = h[2],
+						D = h[3];
+					z = e(z, A, C, D, l, 7, f[0]), D = e(D, z, A, C, u, 12, f[1]), C = e(C, D, z, A, d, 17, f[2]), A = e(A, C, D, z, v, 22, f[3]), z = e(z, A, C, D, p, 7, f[4]), D = e(D, z, A, C, _, 12, f[5]), C = e(C, D, z, A, y, 17, f[6]), A = e(A, C, D, z, g, 22, f[7]), z = e(z, A, C, D, B, 7, f[8]), D = e(D, z, A, C, w, 12, f[9]), C = e(C, D, z, A, k, 17, f[10]), A = e(A, C, D, z, S, 22, f[11]), z = e(z, A, C, D, m, 7, f[12]), D = e(D, z, A, C, x, 12, f[13]), C = e(C, D, z, A, b, 17, f[14]), A = e(A, C, D, z, H, 22, f[15]), z = i(z, A, C, D, u, 5, f[16]), D = i(D, z, A, C, y, 9, f[17]), C = i(C, D, z, A, S, 14, f[18]), A = i(A, C, D, z, l, 20, f[19]), z = i(z, A, C, D, _, 5, f[20]), D = i(D, z, A, C, k, 9, f[21]), C = i(C, D, z, A, H, 14, f[22]), A = i(A, C, D, z, p, 20, f[23]), z = i(z, A, C, D, w, 5, f[24]), D = i(D, z, A, C, b, 9, f[25]), C = i(C, D, z, A, v, 14, f[26]), A = i(A, C, D, z, B, 20, f[27]), z = i(z, A, C, D, x, 5, f[28]), D = i(D, z, A, C, d, 9, f[29]), C = i(C, D, z, A, g, 14, f[30]), A = i(A, C, D, z, m, 20, f[31]), z = n(z, A, C, D, _, 4, f[32]), D = n(D, z, A, C, B, 11, f[33]), C = n(C, D, z, A, S, 16, f[34]), A = n(A, C, D, z, b, 23, f[35]), z = n(z, A, C, D, u, 4, f[36]), D = n(D, z, A, C, p, 11, f[37]), C = n(C, D, z, A, g, 16, f[38]), A = n(A, C, D, z, k, 23, f[39]), z = n(z, A, C, D, x, 4, f[40]), D = n(D, z, A, C, l, 11, f[41]), C = n(C, D, z, A, v, 16, f[42]), A = n(A, C, D, z, y, 23, f[43]), z = n(z, A, C, D, w, 4, f[44]), D = n(D, z, A, C, m, 11, f[45]), C = n(C, D, z, A, H, 16, f[46]), A = n(A, C, D, z, d, 23, f[47]), z = o(z, A, C, D, l, 6, f[48]), D = o(D, z, A, C, g, 10, f[49]), C = o(C, D, z, A, b, 15, f[50]), A = o(A, C, D, z, _, 21, f[51]), z = o(z, A, C, D, m, 6, f[52]), D = o(D, z, A, C, v, 10, f[53]), C = o(C, D, z, A, k, 15, f[54]), A = o(A, C, D, z, u, 21, f[55]), z = o(z, A, C, D, B, 6, f[56]), D = o(D, z, A, C, H, 10, f[57]), C = o(C, D, z, A, y, 15, f[58]), A = o(A, C, D, z, x, 21, f[59]), z = o(z, A, C, D, p, 6, f[60]), D = o(D, z, A, C, S, 10, f[61]), C = o(C, D, z, A, d, 15, f[62]), A = o(A, C, D, z, w, 21, f[63]), h[0] = h[0] + z | 0, h[1] = h[1] + A | 0, h[2] = h[2] + C | 0, h[3] = h[3] + D | 0
+				},
+				_doFinalize: function() {
+					var t = this._data,
+						e = t.words,
+						i = 8 * this._nDataBytes,
+						n = 8 * t.sigBytes;
+					e[n >>> 5] |= 128 << 24 - n % 32;
+					var o = r.floor(i / 4294967296),
+						s = i;
+					e[(n + 64 >>> 9 << 4) + 15] = 16711935 & (o << 8 | o >>> 24) | 4278255360 & (o << 24 | o >>> 8), e[(n + 64 >>> 9 << 4) + 14] = 16711935 & (s << 8 | s >>> 24) | 4278255360 & (s << 24 | s >>> 8), t.sigBytes = 4 * (e.length + 1), this._process();
+					for (var a = this._hash, c = a.words, h = 0; h < 4; h++) {
+						var l = c[h];
+						c[h] = 16711935 & (l << 8 | l >>> 24) | 4278255360 & (l << 24 | l >>> 8)
+					}
+					return a
+				},
+				clone: function() {
+					var t = h.clone.call(this);
+					return t._hash = this._hash.clone(), t
+				}
+			});
+			s.MD5 = h._createHelper(u), s.HmacMD5 = h._createHmacHelper(u)
+		}(Math),
+		function() {
+			var r = t,
+				e = r.lib,
+				i = e.WordArray,
+				n = e.Hasher,
+				o = r.algo,
+				s = [],
+				a = o.SHA1 = n.extend({
+					_doReset: function() {
+						this._hash = new i.init([1732584193, 4023233417, 2562383102, 271733878, 3285377520])
+					},
+					_doProcessBlock: function(t, r) {
+						for (var e = this._hash.words, i = e[0], n = e[1], o = e[2], a = e[3], c = e[4], h = 0; h < 80; h++) {
+							if (h < 16) s[h] = 0 | t[r + h];
+							else {
+								var l = s[h - 3] ^ s[h - 8] ^ s[h - 14] ^ s[h - 16];
+								s[h] = l << 1 | l >>> 31
+							}
+							var f = (i << 5 | i >>> 27) + c + s[h];
+							f += h < 20 ? (n & o | ~n & a) + 1518500249 : h < 40 ? (n ^ o ^ a) + 1859775393 : h < 60 ? (n & o | n & a | o & a) - 1894007588 : (n ^ o ^ a) - 899497514, c = a, a = o, o = n << 30 | n >>> 2, n = i, i = f
+						}
+						e[0] = e[0] + i | 0, e[1] = e[1] + n | 0, e[2] = e[2] + o | 0, e[3] = e[3] + a | 0, e[4] = e[4] + c | 0
+					},
+					_doFinalize: function() {
+						var t = this._data,
+							r = t.words,
+							e = 8 * this._nDataBytes,
+							i = 8 * t.sigBytes;
+						return r[i >>> 5] |= 128 << 24 - i % 32, r[(i + 64 >>> 9 << 4) + 14] = Math.floor(e / 4294967296), r[(i + 64 >>> 9 << 4) + 15] = e, t.sigBytes = 4 * r.length, this._process(), this._hash
+					},
+					clone: function() {
+						var t = n.clone.call(this);
+						return t._hash = this._hash.clone(), t
+					}
+				});
+			r.SHA1 = n._createHelper(a), r.HmacSHA1 = n._createHmacHelper(a)
+		}(),
+		function(r) {
+			var e = t,
+				i = e.lib,
+				n = i.WordArray,
+				o = i.Hasher,
+				s = e.algo,
+				a = [],
+				c = [];
+			! function() {
+				function t(t) {
+					for (var e = r.sqrt(t), i = 2; i <= e; i++)
+						if (!(t % i)) return !1;
+					return !0
+				}
+
+				function e(t) {
+					return 4294967296 * (t - (0 | t)) | 0
+				}
+				for (var i = 2, n = 0; n < 64;) t(i) && (n < 8 && (a[n] = e(r.pow(i, .5))), c[n] = e(r.pow(i, 1 / 3)), n++), i++
+			}();
+			var h = [],
+				l = s.SHA256 = o.extend({
+					_doReset: function() {
+						this._hash = new n.init(a.slice(0))
+					},
+					_doProcessBlock: function(t, r) {
+						for (var e = this._hash.words, i = e[0], n = e[1], o = e[2], s = e[3], a = e[4], l = e[5], f = e[6], u = e[7], d = 0; d < 64; d++) {
+							if (d < 16) h[d] = 0 | t[r + d];
+							else {
+								var v = h[d - 15],
+									p = (v << 25 | v >>> 7) ^ (v << 14 | v >>> 18) ^ v >>> 3,
+									_ = h[d - 2],
+									y = (_ << 15 | _ >>> 17) ^ (_ << 13 | _ >>> 19) ^ _ >>> 10;
+								h[d] = p + h[d - 7] + y + h[d - 16]
+							}
+							var g = a & l ^ ~a & f,
+								B = i & n ^ i & o ^ n & o,
+								w = (i << 30 | i >>> 2) ^ (i << 19 | i >>> 13) ^ (i << 10 | i >>> 22),
+								k = (a << 26 | a >>> 6) ^ (a << 21 | a >>> 11) ^ (a << 7 | a >>> 25),
+								S = u + k + g + c[d] + h[d],
+								m = w + B;
+							u = f, f = l, l = a, a = s + S | 0, s = o, o = n, n = i, i = S + m | 0
+						}
+						e[0] = e[0] + i | 0, e[1] = e[1] + n | 0, e[2] = e[2] + o | 0, e[3] = e[3] + s | 0, e[4] = e[4] + a | 0, e[5] = e[5] + l | 0, e[6] = e[6] + f | 0, e[7] = e[7] + u | 0
+					},
+					_doFinalize: function() {
+						var t = this._data,
+							e = t.words,
+							i = 8 * this._nDataBytes,
+							n = 8 * t.sigBytes;
+						return e[n >>> 5] |= 128 << 24 - n % 32, e[(n + 64 >>> 9 << 4) + 14] = r.floor(i / 4294967296), e[(n + 64 >>> 9 << 4) + 15] = i, t.sigBytes = 4 * e.length, this._process(), this._hash
+					},
+					clone: function() {
+						var t = o.clone.call(this);
+						return t._hash = this._hash.clone(), t
+					}
+				});
+			e.SHA256 = o._createHelper(l), e.HmacSHA256 = o._createHmacHelper(l)
+		}(Math),
+		function() {
+			function r(t) {
+				return t << 8 & 4278255360 | t >>> 8 & 16711935
+			}
+			var e = t,
+				i = e.lib,
+				n = i.WordArray,
+				o = e.enc;
+			o.Utf16 = o.Utf16BE = {
+				stringify: function(t) {
+					for (var r = t.words, e = t.sigBytes, i = [], n = 0; n < e; n += 2) {
+						var o = r[n >>> 2] >>> 16 - n % 4 * 8 & 65535;
+						i.push(String.fromCharCode(o))
+					}
+					return i.join("")
+				},
+				parse: function(t) {
+					for (var r = t.length, e = [], i = 0; i < r; i++) e[i >>> 1] |= t.charCodeAt(i) << 16 - i % 2 * 16;
+					return n.create(e, 2 * r)
+				}
+			};
+			o.Utf16LE = {
+				stringify: function(t) {
+					for (var e = t.words, i = t.sigBytes, n = [], o = 0; o < i; o += 2) {
+						var s = r(e[o >>> 2] >>> 16 - o % 4 * 8 & 65535);
+						n.push(String.fromCharCode(s))
+					}
+					return n.join("")
+				},
+				parse: function(t) {
+					for (var e = t.length, i = [], o = 0; o < e; o++) i[o >>> 1] |= r(t.charCodeAt(o) << 16 - o % 2 * 16);
+					return n.create(i, 2 * e)
+				}
+			}
+		}(),
+		function() {
+			if ("function" == typeof ArrayBuffer) {
+				var r = t,
+					e = r.lib,
+					i = e.WordArray,
+					n = i.init,
+					o = i.init = function(t) {
+						if (t instanceof ArrayBuffer && (t = new Uint8Array(t)), (t instanceof Int8Array || "undefined" != typeof Uint8ClampedArray && t instanceof Uint8ClampedArray || t instanceof Int16Array || t instanceof Uint16Array || t instanceof Int32Array || t instanceof Uint32Array || t instanceof Float32Array || t instanceof Float64Array) && (t = new Uint8Array(t.buffer, t.byteOffset, t.byteLength)), t instanceof Uint8Array) {
+							for (var r = t.byteLength, e = [], i = 0; i < r; i++) e[i >>> 2] |= t[i] << 24 - i % 4 * 8;
+							n.call(this, e, r)
+						} else n.apply(this, arguments)
+					};
+				o.prototype = i
+			}
+		}(),
+		function(r) {
+			function e(t, r, e) {
+				return t ^ r ^ e
+			}
+
+			function i(t, r, e) {
+				return t & r | ~t & e
+			}
+
+			function n(t, r, e) {
+				return (t | ~r) ^ e
+			}
+
+			function o(t, r, e) {
+				return t & e | r & ~e
+			}
+
+			function s(t, r, e) {
+				return t ^ (r | ~e)
+			}
+
+			function a(t, r) {
+				return t << r | t >>> 32 - r
+			}
+			var c = t,
+				h = c.lib,
+				l = h.WordArray,
+				f = h.Hasher,
+				u = c.algo,
+				d = l.create([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 7, 4, 13, 1, 10, 6, 15, 3, 12, 0, 9, 5, 2, 14, 11, 8, 3, 10, 14, 4, 9, 15, 8, 1, 2, 7, 0, 6, 13, 11, 5, 12, 1, 9, 11, 10, 0, 8, 12, 4, 13, 3, 7, 15, 14, 5, 6, 2, 4, 0, 5, 9, 7, 12, 2, 10, 14, 1, 3, 8, 11, 6, 15, 13]),
+				v = l.create([5, 14, 7, 0, 9, 2, 11, 4, 13, 6, 15, 8, 1, 10, 3, 12, 6, 11, 3, 7, 0, 13, 5, 10, 14, 15, 8, 12, 4, 9, 1, 2, 15, 5, 1, 3, 7, 14, 6, 9, 11, 8, 12, 2, 10, 0, 4, 13, 8, 6, 4, 1, 3, 11, 15, 0, 5, 12, 2, 13, 9, 7, 10, 14, 12, 15, 10, 4, 1, 5, 8, 7, 6, 2, 13, 14, 0, 3, 9, 11]),
+				p = l.create([11, 14, 15, 12, 5, 8, 7, 9, 11, 13, 14, 15, 6, 7, 9, 8, 7, 6, 8, 13, 11, 9, 7, 15, 7, 12, 15, 9, 11, 7, 13, 12, 11, 13, 6, 7, 14, 9, 13, 15, 14, 8, 13, 6, 5, 12, 7, 5, 11, 12, 14, 15, 14, 15, 9, 8, 9, 14, 5, 6, 8, 6, 5, 12, 9, 15, 5, 11, 6, 8, 13, 12, 5, 12, 13, 14, 11, 8, 5, 6]),
+				_ = l.create([8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6, 9, 13, 15, 7, 12, 8, 9, 11, 7, 7, 12, 7, 6, 15, 13, 11, 9, 7, 15, 11, 8, 6, 6, 14, 12, 13, 5, 14, 13, 13, 7, 5, 15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8, 8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11]),
+				y = l.create([0, 1518500249, 1859775393, 2400959708, 2840853838]),
+				g = l.create([1352829926, 1548603684, 1836072691, 2053994217, 0]),
+				B = u.RIPEMD160 = f.extend({
+					_doReset: function() {
+						this._hash = l.create([1732584193, 4023233417, 2562383102, 271733878, 3285377520])
+					},
+					_doProcessBlock: function(t, r) {
+						for (var c = 0; c < 16; c++) {
+							var h = r + c,
+								l = t[h];
+							t[h] = 16711935 & (l << 8 | l >>> 24) | 4278255360 & (l << 24 | l >>> 8)
+						}
+						var f, u, B, w, k, S, m, x, b, H, z = this._hash.words,
+							A = y.words,
+							C = g.words,
+							D = d.words,
+							R = v.words,
+							E = p.words,
+							M = _.words;
+						S = f = z[0], m = u = z[1], x = B = z[2], b = w = z[3], H = k = z[4];
+						for (var F, c = 0; c < 80; c += 1) F = f + t[r + D[c]] | 0, F += c < 16 ? e(u, B, w) + A[0] : c < 32 ? i(u, B, w) + A[1] : c < 48 ? n(u, B, w) + A[2] : c < 64 ? o(u, B, w) + A[3] : s(u, B, w) + A[4], F |= 0, F = a(F, E[c]), F = F + k | 0, f = k, k = w, w = a(B, 10), B = u, u = F, F = S + t[r + R[c]] | 0, F += c < 16 ? s(m, x, b) + C[0] : c < 32 ? o(m, x, b) + C[1] : c < 48 ? n(m, x, b) + C[2] : c < 64 ? i(m, x, b) + C[3] : e(m, x, b) + C[4], F |= 0, F = a(F, M[c]), F = F + H | 0, S = H, H = b, b = a(x, 10), x = m, m = F;
+						F = z[1] + B + b | 0, z[1] = z[2] + w + H | 0, z[2] = z[3] + k + S | 0, z[3] = z[4] + f + m | 0, z[4] = z[0] + u + x | 0, z[0] = F
+					},
+					_doFinalize: function() {
+						var t = this._data,
+							r = t.words,
+							e = 8 * this._nDataBytes,
+							i = 8 * t.sigBytes;
+						r[i >>> 5] |= 128 << 24 - i % 32, r[(i + 64 >>> 9 << 4) + 14] = 16711935 & (e << 8 | e >>> 24) | 4278255360 & (e << 24 | e >>> 8), t.sigBytes = 4 * (r.length + 1), this._process();
+						for (var n = this._hash, o = n.words, s = 0; s < 5; s++) {
+							var a = o[s];
+							o[s] = 16711935 & (a << 8 | a >>> 24) | 4278255360 & (a << 24 | a >>> 8)
+						}
+						return n
+					},
+					clone: function() {
+						var t = f.clone.call(this);
+						return t._hash = this._hash.clone(), t
+					}
+				});
+			c.RIPEMD160 = f._createHelper(B), c.HmacRIPEMD160 = f._createHmacHelper(B)
+		}(Math),
+		function() {
+			var r = t,
+				e = r.lib,
+				i = e.Base,
+				n = r.enc,
+				o = n.Utf8,
+				s = r.algo;
+			s.HMAC = i.extend({
+				init: function(t, r) {
+					t = this._hasher = new t.init, "string" == typeof r && (r = o.parse(r));
+					var e = t.blockSize,
+						i = 4 * e;
+					r.sigBytes > i && (r = t.finalize(r)), r.clamp();
+					for (var n = this._oKey = r.clone(), s = this._iKey = r.clone(), a = n.words, c = s.words, h = 0; h < e; h++) a[h] ^= 1549556828, c[h] ^= 909522486;
+					n.sigBytes = s.sigBytes = i, this.reset()
+				},
+				reset: function() {
+					var t = this._hasher;
+					t.reset(), t.update(this._iKey)
+				},
+				update: function(t) {
+					return this._hasher.update(t), this
+				},
+				finalize: function(t) {
+					var r = this._hasher,
+						e = r.finalize(t);
+					r.reset();
+					var i = r.finalize(this._oKey.clone().concat(e));
+					return i
+				}
+			})
+		}(),
+		function() {
+			var r = t,
+				e = r.lib,
+				i = e.Base,
+				n = e.WordArray,
+				o = r.algo,
+				s = o.SHA1,
+				a = o.HMAC,
+				c = o.PBKDF2 = i.extend({
+					cfg: i.extend({
+						keySize: 4,
+						hasher: s,
+						iterations: 1
+					}),
+					init: function(t) {
+						this.cfg = this.cfg.extend(t)
+					},
+					compute: function(t, r) {
+						for (var e = this.cfg, i = a.create(e.hasher, t), o = n.create(), s = n.create([1]), c = o.words, h = s.words, l = e.keySize, f = e.iterations; c.length < l;) {
+							var u = i.update(r).finalize(s);
+							i.reset();
+							for (var d = u.words, v = d.length, p = u, _ = 1; _ < f; _++) {
+								p = i.finalize(p), i.reset();
+								for (var y = p.words, g = 0; g < v; g++) d[g] ^= y[g]
+							}
+							o.concat(u), h[0]++
+						}
+						return o.sigBytes = 4 * l, o
+					}
+				});
+			r.PBKDF2 = function(t, r, e) {
+				return c.create(e).compute(t, r)
+			}
+		}(),
+		function() {
+			var r = t,
+				e = r.lib,
+				i = e.Base,
+				n = e.WordArray,
+				o = r.algo,
+				s = o.MD5,
+				a = o.EvpKDF = i.extend({
+					cfg: i.extend({
+						keySize: 4,
+						hasher: s,
+						iterations: 1
+					}),
+					init: function(t) {
+						this.cfg = this.cfg.extend(t)
+					},
+					compute: function(t, r) {
+						for (var e = this.cfg, i = e.hasher.create(), o = n.create(), s = o.words, a = e.keySize, c = e.iterations; s.length < a;) {
+							h && i.update(h);
+							var h = i.update(t).finalize(r);
+							i.reset();
+							for (var l = 1; l < c; l++) h = i.finalize(h), i.reset();
+							o.concat(h)
+						}
+						return o.sigBytes = 4 * a, o
+					}
+				});
+			r.EvpKDF = function(t, r, e) {
+				return a.create(e).compute(t, r)
+			}
+		}(),
+		function() {
+			var r = t,
+				e = r.lib,
+				i = e.WordArray,
+				n = r.algo,
+				o = n.SHA256,
+				s = n.SHA224 = o.extend({
+					_doReset: function() {
+						this._hash = new i.init([3238371032, 914150663, 812702999, 4144912697, 4290775857, 1750603025, 1694076839, 3204075428])
+					},
+					_doFinalize: function() {
+						var t = o._doFinalize.call(this);
+						return t.sigBytes -= 4, t
+					}
+				});
+			r.SHA224 = o._createHelper(s), r.HmacSHA224 = o._createHmacHelper(s)
+		}(),
+		function(r) {
+			var e = t,
+				i = e.lib,
+				n = i.Base,
+				o = i.WordArray,
+				s = e.x64 = {};
+			s.Word = n.extend({
+				init: function(t, r) {
+					this.high = t, this.low = r
+				}
+			}), s.WordArray = n.extend({
+				init: function(t, e) {
+					t = this.words = t || [], e != r ? this.sigBytes = e : this.sigBytes = 8 * t.length
+				},
+				toX32: function() {
+					for (var t = this.words, r = t.length, e = [], i = 0; i < r; i++) {
+						var n = t[i];
+						e.push(n.high), e.push(n.low)
+					}
+					return o.create(e, this.sigBytes)
+				},
+				clone: function() {
+					for (var t = n.clone.call(this), r = t.words = this.words.slice(0), e = r.length, i = 0; i < e; i++) r[i] = r[i].clone();
+					return t
+				}
+			})
+		}(),
+		function(r) {
+			var e = t,
+				i = e.lib,
+				n = i.WordArray,
+				o = i.Hasher,
+				s = e.x64,
+				a = s.Word,
+				c = e.algo,
+				h = [],
+				l = [],
+				f = [];
+			! function() {
+				for (var t = 1, r = 0, e = 0; e < 24; e++) {
+					h[t + 5 * r] = (e + 1) * (e + 2) / 2 % 64;
+					var i = r % 5,
+						n = (2 * t + 3 * r) % 5;
+					t = i, r = n
+				}
+				for (var t = 0; t < 5; t++)
+					for (var r = 0; r < 5; r++) l[t + 5 * r] = r + (2 * t + 3 * r) % 5 * 5;
+				for (var o = 1, s = 0; s < 24; s++) {
+					for (var c = 0, u = 0, d = 0; d < 7; d++) {
+						if (1 & o) {
+							var v = (1 << d) - 1;
+							v < 32 ? u ^= 1 << v : c ^= 1 << v - 32
+						}
+						128 & o ? o = o << 1 ^ 113 : o <<= 1
+					}
+					f[s] = a.create(c, u)
+				}
+			}();
+			var u = [];
+			! function() {
+				for (var t = 0; t < 25; t++) u[t] = a.create()
+			}();
+			var d = c.SHA3 = o.extend({
+				cfg: o.cfg.extend({
+					outputLength: 512
+				}),
+				_doReset: function() {
+					for (var t = this._state = [], r = 0; r < 25; r++) t[r] = new a.init;
+					this.blockSize = (1600 - 2 * this.cfg.outputLength) / 32
+				},
+				_doProcessBlock: function(t, r) {
+					for (var e = this._state, i = this.blockSize / 2, n = 0; n < i; n++) {
+						var o = t[r + 2 * n],
+							s = t[r + 2 * n + 1];
+						o = 16711935 & (o << 8 | o >>> 24) | 4278255360 & (o << 24 | o >>> 8), s = 16711935 & (s << 8 | s >>> 24) | 4278255360 & (s << 24 | s >>> 8);
+						var a = e[n];
+						a.high ^= s, a.low ^= o
+					}
+					for (var c = 0; c < 24; c++) {
+						for (var d = 0; d < 5; d++) {
+							for (var v = 0, p = 0, _ = 0; _ < 5; _++) {
+								var a = e[d + 5 * _];
+								v ^= a.high, p ^= a.low
+							}
+							var y = u[d];
+							y.high = v, y.low = p
+						}
+						for (var d = 0; d < 5; d++)
+							for (var g = u[(d + 4) % 5], B = u[(d + 1) % 5], w = B.high, k = B.low, v = g.high ^ (w << 1 | k >>> 31), p = g.low ^ (k << 1 | w >>> 31), _ = 0; _ < 5; _++) {
+								var a = e[d + 5 * _];
+								a.high ^= v, a.low ^= p
+							}
+						for (var S = 1; S < 25; S++) {
+							var a = e[S],
+								m = a.high,
+								x = a.low,
+								b = h[S];
+							if (b < 32) var v = m << b | x >>> 32 - b,
+								p = x << b | m >>> 32 - b;
+							else var v = x << b - 32 | m >>> 64 - b,
+								p = m << b - 32 | x >>> 64 - b;
+							var H = u[l[S]];
+							H.high = v, H.low = p
+						}
+						var z = u[0],
+							A = e[0];
+						z.high = A.high, z.low = A.low;
+						for (var d = 0; d < 5; d++)
+							for (var _ = 0; _ < 5; _++) {
+								var S = d + 5 * _,
+									a = e[S],
+									C = u[S],
+									D = u[(d + 1) % 5 + 5 * _],
+									R = u[(d + 2) % 5 + 5 * _];
+								a.high = C.high ^ ~D.high & R.high, a.low = C.low ^ ~D.low & R.low
+							}
+						var a = e[0],
+							E = f[c];
+						a.high ^= E.high, a.low ^= E.low
+					}
+				},
+				_doFinalize: function() {
+					var t = this._data,
+						e = t.words,
+						i = (8 * this._nDataBytes, 8 * t.sigBytes),
+						o = 32 * this.blockSize;
+					e[i >>> 5] |= 1 << 24 - i % 32, e[(r.ceil((i + 1) / o) * o >>> 5) - 1] |= 128, t.sigBytes = 4 * e.length, this._process();
+					for (var s = this._state, a = this.cfg.outputLength / 8, c = a / 8, h = [], l = 0; l < c; l++) {
+						var f = s[l],
+							u = f.high,
+							d = f.low;
+						u = 16711935 & (u << 8 | u >>> 24) | 4278255360 & (u << 24 | u >>> 8), d = 16711935 & (d << 8 | d >>> 24) | 4278255360 & (d << 24 | d >>> 8), h.push(d), h.push(u)
+					}
+					return new n.init(h, a)
+				},
+				clone: function() {
+					for (var t = o.clone.call(this), r = t._state = this._state.slice(0), e = 0; e < 25; e++) r[e] = r[e].clone();
+					return t
+				}
+			});
+			e.SHA3 = o._createHelper(d), e.HmacSHA3 = o._createHmacHelper(d)
+		}(Math),
+		function() {
+			function r() {
+				return s.create.apply(s, arguments)
+			}
+			var e = t,
+				i = e.lib,
+				n = i.Hasher,
+				o = e.x64,
+				s = o.Word,
+				a = o.WordArray,
+				c = e.algo,
+				h = [r(1116352408, 3609767458), r(1899447441, 602891725), r(3049323471, 3964484399), r(3921009573, 2173295548), r(961987163, 4081628472), r(1508970993, 3053834265), r(2453635748, 2937671579), r(2870763221, 3664609560), r(3624381080, 2734883394), r(310598401, 1164996542), r(607225278, 1323610764), r(1426881987, 3590304994), r(1925078388, 4068182383), r(2162078206, 991336113), r(2614888103, 633803317), r(3248222580, 3479774868), r(3835390401, 2666613458), r(4022224774, 944711139), r(264347078, 2341262773), r(604807628, 2007800933), r(770255983, 1495990901), r(1249150122, 1856431235), r(1555081692, 3175218132), r(1996064986, 2198950837), r(2554220882, 3999719339), r(2821834349, 766784016), r(2952996808, 2566594879), r(3210313671, 3203337956), r(3336571891, 1034457026), r(3584528711, 2466948901), r(113926993, 3758326383), r(338241895, 168717936), r(666307205, 1188179964), r(773529912, 1546045734), r(1294757372, 1522805485), r(1396182291, 2643833823), r(1695183700, 2343527390), r(1986661051, 1014477480), r(2177026350, 1206759142), r(2456956037, 344077627), r(2730485921, 1290863460), r(2820302411, 3158454273), r(3259730800, 3505952657), r(3345764771, 106217008), r(3516065817, 3606008344), r(3600352804, 1432725776), r(4094571909, 1467031594), r(275423344, 851169720), r(430227734, 3100823752), r(506948616, 1363258195), r(659060556, 3750685593), r(883997877, 3785050280), r(958139571, 3318307427), r(1322822218, 3812723403), r(1537002063, 2003034995), r(1747873779, 3602036899), r(1955562222, 1575990012), r(2024104815, 1125592928), r(2227730452, 2716904306), r(2361852424, 442776044), r(2428436474, 593698344), r(2756734187, 3733110249), r(3204031479, 2999351573), r(3329325298, 3815920427), r(3391569614, 3928383900), r(3515267271, 566280711), r(3940187606, 3454069534), r(4118630271, 4000239992), r(116418474, 1914138554), r(174292421, 2731055270), r(289380356, 3203993006), r(460393269, 320620315), r(685471733, 587496836), r(852142971, 1086792851), r(1017036298, 365543100), r(1126000580, 2618297676), r(1288033470, 3409855158), r(1501505948, 4234509866), r(1607167915, 987167468), r(1816402316, 1246189591)],
+				l = [];
+			! function() {
+				for (var t = 0; t < 80; t++) l[t] = r()
+			}();
+			var f = c.SHA512 = n.extend({
+				_doReset: function() {
+					this._hash = new a.init([new s.init(1779033703, 4089235720), new s.init(3144134277, 2227873595), new s.init(1013904242, 4271175723), new s.init(2773480762, 1595750129), new s.init(1359893119, 2917565137), new s.init(2600822924, 725511199), new s.init(528734635, 4215389547), new s.init(1541459225, 327033209)])
+				},
+				_doProcessBlock: function(t, r) {
+					for (var e = this._hash.words, i = e[0], n = e[1], o = e[2], s = e[3], a = e[4], c = e[5], f = e[6], u = e[7], d = i.high, v = i.low, p = n.high, _ = n.low, y = o.high, g = o.low, B = s.high, w = s.low, k = a.high, S = a.low, m = c.high, x = c.low, b = f.high, H = f.low, z = u.high, A = u.low, C = d, D = v, R = p, E = _, M = y, F = g, P = B, W = w, O = k, U = S, I = m, K = x, X = b, L = H, j = z, N = A, T = 0; T < 80; T++) {
+						var Z = l[T];
+						if (T < 16) var q = Z.high = 0 | t[r + 2 * T],
+							G = Z.low = 0 | t[r + 2 * T + 1];
+						else {
+							var J = l[T - 15],
+								$ = J.high,
+								Q = J.low,
+								V = ($ >>> 1 | Q << 31) ^ ($ >>> 8 | Q << 24) ^ $ >>> 7,
+								Y = (Q >>> 1 | $ << 31) ^ (Q >>> 8 | $ << 24) ^ (Q >>> 7 | $ << 25),
+								tt = l[T - 2],
+								rt = tt.high,
+								et = tt.low,
+								it = (rt >>> 19 | et << 13) ^ (rt << 3 | et >>> 29) ^ rt >>> 6,
+								nt = (et >>> 19 | rt << 13) ^ (et << 3 | rt >>> 29) ^ (et >>> 6 | rt << 26),
+								ot = l[T - 7],
+								st = ot.high,
+								at = ot.low,
+								ct = l[T - 16],
+								ht = ct.high,
+								lt = ct.low,
+								G = Y + at,
+								q = V + st + (G >>> 0 < Y >>> 0 ? 1 : 0),
+								G = G + nt,
+								q = q + it + (G >>> 0 < nt >>> 0 ? 1 : 0),
+								G = G + lt,
+								q = q + ht + (G >>> 0 < lt >>> 0 ? 1 : 0);
+							Z.high = q, Z.low = G
+						}
+						var ft = O & I ^ ~O & X,
+							ut = U & K ^ ~U & L,
+							dt = C & R ^ C & M ^ R & M,
+							vt = D & E ^ D & F ^ E & F,
+							pt = (C >>> 28 | D << 4) ^ (C << 30 | D >>> 2) ^ (C << 25 | D >>> 7),
+							_t = (D >>> 28 | C << 4) ^ (D << 30 | C >>> 2) ^ (D << 25 | C >>> 7),
+							yt = (O >>> 14 | U << 18) ^ (O >>> 18 | U << 14) ^ (O << 23 | U >>> 9),
+							gt = (U >>> 14 | O << 18) ^ (U >>> 18 | O << 14) ^ (U << 23 | O >>> 9),
+							Bt = h[T],
+							wt = Bt.high,
+							kt = Bt.low,
+							St = N + gt,
+							mt = j + yt + (St >>> 0 < N >>> 0 ? 1 : 0),
+							St = St + ut,
+							mt = mt + ft + (St >>> 0 < ut >>> 0 ? 1 : 0),
+							St = St + kt,
+							mt = mt + wt + (St >>> 0 < kt >>> 0 ? 1 : 0),
+							St = St + G,
+							mt = mt + q + (St >>> 0 < G >>> 0 ? 1 : 0),
+							xt = _t + vt,
+							bt = pt + dt + (xt >>> 0 < _t >>> 0 ? 1 : 0);
+						j = X, N = L, X = I, L = K, I = O, K = U, U = W + St | 0, O = P + mt + (U >>> 0 < W >>> 0 ? 1 : 0) | 0, P = M, W = F, M = R, F = E, R = C, E = D, D = St + xt | 0, C = mt + bt + (D >>> 0 < St >>> 0 ? 1 : 0) | 0
+					}
+					v = i.low = v + D, i.high = d + C + (v >>> 0 < D >>> 0 ? 1 : 0), _ = n.low = _ + E, n.high = p + R + (_ >>> 0 < E >>> 0 ? 1 : 0), g = o.low = g + F, o.high = y + M + (g >>> 0 < F >>> 0 ? 1 : 0), w = s.low = w + W, s.high = B + P + (w >>> 0 < W >>> 0 ? 1 : 0), S = a.low = S + U, a.high = k + O + (S >>> 0 < U >>> 0 ? 1 : 0), x = c.low = x + K, c.high = m + I + (x >>> 0 < K >>> 0 ? 1 : 0), H = f.low = H + L, f.high = b + X + (H >>> 0 < L >>> 0 ? 1 : 0), A = u.low = A + N, u.high = z + j + (A >>> 0 < N >>> 0 ? 1 : 0)
+				},
+				_doFinalize: function() {
+					var t = this._data,
+						r = t.words,
+						e = 8 * this._nDataBytes,
+						i = 8 * t.sigBytes;
+					r[i >>> 5] |= 128 << 24 - i % 32, r[(i + 128 >>> 10 << 5) + 30] = Math.floor(e / 4294967296), r[(i + 128 >>> 10 << 5) + 31] = e, t.sigBytes = 4 * r.length, this._process();
+					var n = this._hash.toX32();
+					return n
+				},
+				clone: function() {
+					var t = n.clone.call(this);
+					return t._hash = this._hash.clone(), t
+				},
+				blockSize: 32
+			});
+			e.SHA512 = n._createHelper(f), e.HmacSHA512 = n._createHmacHelper(f)
+		}(),
+		function() {
+			var r = t,
+				e = r.x64,
+				i = e.Word,
+				n = e.WordArray,
+				o = r.algo,
+				s = o.SHA512,
+				a = o.SHA384 = s.extend({
+					_doReset: function() {
+						this._hash = new n.init([new i.init(3418070365, 3238371032), new i.init(1654270250, 914150663), new i.init(2438529370, 812702999), new i.init(355462360, 4144912697), new i.init(1731405415, 4290775857), new i.init(2394180231, 1750603025), new i.init(3675008525, 1694076839), new i.init(1203062813, 3204075428)])
+					},
+					_doFinalize: function() {
+						var t = s._doFinalize.call(this);
+						return t.sigBytes -= 16, t
+					}
+				});
+			r.SHA384 = s._createHelper(a), r.HmacSHA384 = s._createHmacHelper(a)
+		}(), t.lib.Cipher || function(r) {
+			var e = t,
+				i = e.lib,
+				n = i.Base,
+				o = i.WordArray,
+				s = i.BufferedBlockAlgorithm,
+				a = e.enc,
+				c = (a.Utf8, a.Base64),
+				h = e.algo,
+				l = h.EvpKDF,
+				f = i.Cipher = s.extend({
+					cfg: n.extend(),
+					createEncryptor: function(t, r) {
+						return this.create(this._ENC_XFORM_MODE, t, r)
+					},
+					createDecryptor: function(t, r) {
+						return this.create(this._DEC_XFORM_MODE, t, r)
+					},
+					init: function(t, r, e) {
+						this.cfg = this.cfg.extend(e), this._xformMode = t, this._key = r, this.reset()
+					},
+					reset: function() {
+						s.reset.call(this), this._doReset()
+					},
+					process: function(t) {
+						return this._append(t), this._process()
+					},
+					finalize: function(t) {
+						t && this._append(t);
+						var r = this._doFinalize();
+						return r
+					},
+					keySize: 4,
+					ivSize: 4,
+					_ENC_XFORM_MODE: 1,
+					_DEC_XFORM_MODE: 2,
+					_createHelper: function() {
+						function t(t) {
+							return "string" == typeof t ? m : w
+						}
+						return function(r) {
+							return {
+								encrypt: function(e, i, n) {
+									return t(i).encrypt(r, e, i, n)
+								},
+								decrypt: function(e, i, n) {
+									return t(i).decrypt(r, e, i, n)
+								}
+							}
+						}
+					}()
+				}),
+				u = (i.StreamCipher = f.extend({
+					_doFinalize: function() {
+						var t = this._process(!0);
+						return t
+					},
+					blockSize: 1
+				}), e.mode = {}),
+				d = i.BlockCipherMode = n.extend({
+					createEncryptor: function(t, r) {
+						return this.Encryptor.create(t, r)
+					},
+					createDecryptor: function(t, r) {
+						return this.Decryptor.create(t, r)
+					},
+					init: function(t, r) {
+						this._cipher = t, this._iv = r
+					}
+				}),
+				v = u.CBC = function() {
+					function t(t, e, i) {
+						var n = this._iv;
+						if (n) {
+							var o = n;
+							this._iv = r
+						} else var o = this._prevBlock;
+						for (var s = 0; s < i; s++) t[e + s] ^= o[s]
+					}
+					var e = d.extend();
+					return e.Encryptor = e.extend({
+						processBlock: function(r, e) {
+							var i = this._cipher,
+								n = i.blockSize;
+							t.call(this, r, e, n), i.encryptBlock(r, e), this._prevBlock = r.slice(e, e + n)
+						}
+					}), e.Decryptor = e.extend({
+						processBlock: function(r, e) {
+							var i = this._cipher,
+								n = i.blockSize,
+								o = r.slice(e, e + n);
+							i.decryptBlock(r, e), t.call(this, r, e, n), this._prevBlock = o
+						}
+					}), e
+				}(),
+				p = e.pad = {},
+				_ = p.Pkcs7 = {
+					pad: function(t, r) {
+						for (var e = 4 * r, i = e - t.sigBytes % e, n = i << 24 | i << 16 | i << 8 | i, s = [], a = 0; a < i; a += 4) s.push(n);
+						var c = o.create(s, i);
+						t.concat(c)
+					},
+					unpad: function(t) {
+						var r = 255 & t.words[t.sigBytes - 1 >>> 2];
+						t.sigBytes -= r
+					}
+				},
+				y = (i.BlockCipher = f.extend({
+					cfg: f.cfg.extend({
+						mode: v,
+						padding: _
+					}),
+					reset: function() {
+						f.reset.call(this);
+						var t = this.cfg,
+							r = t.iv,
+							e = t.mode;
+						if (this._xformMode == this._ENC_XFORM_MODE) var i = e.createEncryptor;
+						else {
+							var i = e.createDecryptor;
+							this._minBufferSize = 1
+						}
+						this._mode && this._mode.__creator == i ? this._mode.init(this, r && r.words) : (this._mode = i.call(e, this, r && r.words), this._mode.__creator = i)
+					},
+					_doProcessBlock: function(t, r) {
+						this._mode.processBlock(t, r)
+					},
+					_doFinalize: function() {
+						var t = this.cfg.padding;
+						if (this._xformMode == this._ENC_XFORM_MODE) {
+							t.pad(this._data, this.blockSize);
+							var r = this._process(!0)
+						} else {
+							var r = this._process(!0);
+							t.unpad(r)
+						}
+						return r
+					},
+					blockSize: 4
+				}), i.CipherParams = n.extend({
+					init: function(t) {
+						this.mixIn(t)
+					},
+					toString: function(t) {
+						return (t || this.formatter).stringify(this)
+					}
+				})),
+				g = e.format = {},
+				B = g.OpenSSL = {
+					stringify: function(t) {
+						var r = t.ciphertext,
+							e = t.salt;
+						if (e) var i = o.create([1398893684, 1701076831]).concat(e).concat(r);
+						else var i = r;
+						return i.toString(c)
+					},
+					parse: function(t) {
+						var r = c.parse(t),
+							e = r.words;
+						if (1398893684 == e[0] && 1701076831 == e[1]) {
+							var i = o.create(e.slice(2, 4));
+							e.splice(0, 4), r.sigBytes -= 16
+						}
+						return y.create({
+							ciphertext: r,
+							salt: i
+						})
+					}
+				},
+				w = i.SerializableCipher = n.extend({
+					cfg: n.extend({
+						format: B
+					}),
+					encrypt: function(t, r, e, i) {
+						i = this.cfg.extend(i);
+						var n = t.createEncryptor(e, i),
+							o = n.finalize(r),
+							s = n.cfg;
+						return y.create({
+							ciphertext: o,
+							key: e,
+							iv: s.iv,
+							algorithm: t,
+							mode: s.mode,
+							padding: s.padding,
+							blockSize: t.blockSize,
+							formatter: i.format
+						})
+					},
+					decrypt: function(t, r, e, i) {
+						i = this.cfg.extend(i), r = this._parse(r, i.format);
+						var n = t.createDecryptor(e, i).finalize(r.ciphertext);
+						return n
+					},
+					_parse: function(t, r) {
+						return "string" == typeof t ? r.parse(t, this) : t
+					}
+				}),
+				k = e.kdf = {},
+				S = k.OpenSSL = {
+					execute: function(t, r, e, i) {
+						i || (i = o.random(8));
+						var n = l.create({
+								keySize: r + e
+							}).compute(t, i),
+							s = o.create(n.words.slice(r), 4 * e);
+						return n.sigBytes = 4 * r, y.create({
+							key: n,
+							iv: s,
+							salt: i
+						})
+					}
+				},
+				m = i.PasswordBasedCipher = w.extend({
+					cfg: w.cfg.extend({
+						kdf: S
+					}),
+					encrypt: function(t, r, e, i) {
+						i = this.cfg.extend(i);
+						var n = i.kdf.execute(e, t.keySize, t.ivSize);
+						i.iv = n.iv;
+						var o = w.encrypt.call(this, t, r, n.key, i);
+						return o.mixIn(n), o
+					},
+					decrypt: function(t, r, e, i) {
+						i = this.cfg.extend(i), r = this._parse(r, i.format);
+						var n = i.kdf.execute(e, t.keySize, t.ivSize, r.salt);
+						i.iv = n.iv;
+						var o = w.decrypt.call(this, t, r, n.key, i);
+						return o
+					}
+				})
+		}(), t.mode.CFB = function() {
+			function r(t, r, e, i) {
+				var n = this._iv;
+				if (n) {
+					var o = n.slice(0);
+					this._iv = void 0
+				} else var o = this._prevBlock;
+				i.encryptBlock(o, 0);
+				for (var s = 0; s < e; s++) t[r + s] ^= o[s]
+			}
+			var e = t.lib.BlockCipherMode.extend();
+			return e.Encryptor = e.extend({
+				processBlock: function(t, e) {
+					var i = this._cipher,
+						n = i.blockSize;
+					r.call(this, t, e, n, i), this._prevBlock = t.slice(e, e + n)
+				}
+			}), e.Decryptor = e.extend({
+				processBlock: function(t, e) {
+					var i = this._cipher,
+						n = i.blockSize,
+						o = t.slice(e, e + n);
+					r.call(this, t, e, n, i), this._prevBlock = o
+				}
+			}), e
+		}(), t.mode.ECB = function() {
+			var r = t.lib.BlockCipherMode.extend();
+			return r.Encryptor = r.extend({
+				processBlock: function(t, r) {
+					this._cipher.encryptBlock(t, r)
+				}
+			}), r.Decryptor = r.extend({
+				processBlock: function(t, r) {
+					this._cipher.decryptBlock(t, r)
+				}
+			}), r
+		}(), t.pad.AnsiX923 = {
+			pad: function(t, r) {
+				var e = t.sigBytes,
+					i = 4 * r,
+					n = i - e % i,
+					o = e + n - 1;
+				t.clamp(), t.words[o >>> 2] |= n << 24 - o % 4 * 8, t.sigBytes += n
+			},
+			unpad: function(t) {
+				var r = 255 & t.words[t.sigBytes - 1 >>> 2];
+				t.sigBytes -= r
+			}
+		}, t.pad.Iso10126 = {
+			pad: function(r, e) {
+				var i = 4 * e,
+					n = i - r.sigBytes % i;
+				r.concat(t.lib.WordArray.random(n - 1)).concat(t.lib.WordArray.create([n << 24], 1))
+			},
+			unpad: function(t) {
+				var r = 255 & t.words[t.sigBytes - 1 >>> 2];
+				t.sigBytes -= r
+			}
+		}, t.pad.Iso97971 = {
+			pad: function(r, e) {
+				r.concat(t.lib.WordArray.create([2147483648], 1)), t.pad.ZeroPadding.pad(r, e)
+			},
+			unpad: function(r) {
+				t.pad.ZeroPadding.unpad(r), r.sigBytes--
+			}
+		}, t.mode.OFB = function() {
+			var r = t.lib.BlockCipherMode.extend(),
+				e = r.Encryptor = r.extend({
+					processBlock: function(t, r) {
+						var e = this._cipher,
+							i = e.blockSize,
+							n = this._iv,
+							o = this._keystream;
+						n && (o = this._keystream = n.slice(0), this._iv = void 0), e.encryptBlock(o, 0);
+						for (var s = 0; s < i; s++) t[r + s] ^= o[s]
+					}
+				});
+			return r.Decryptor = e, r
+		}(), t.pad.NoPadding = {
+			pad: function() {},
+			unpad: function() {}
+		},
+		function(r) {
+			var e = t,
+				i = e.lib,
+				n = i.CipherParams,
+				o = e.enc,
+				s = o.Hex,
+				a = e.format;
+			a.Hex = {
+				stringify: function(t) {
+					return t.ciphertext.toString(s)
+				},
+				parse: function(t) {
+					var r = s.parse(t);
+					return n.create({
+						ciphertext: r
+					})
+				}
+			}
+		}(),
+		function() {
+			var r = t,
+				e = r.lib,
+				i = e.BlockCipher,
+				n = r.algo,
+				o = [],
+				s = [],
+				a = [],
+				c = [],
+				h = [],
+				l = [],
+				f = [],
+				u = [],
+				d = [],
+				v = [];
+			! function() {
+				for (var t = [], r = 0; r < 256; r++) r < 128 ? t[r] = r << 1 : t[r] = r << 1 ^ 283;
+				for (var e = 0, i = 0, r = 0; r < 256; r++) {
+					var n = i ^ i << 1 ^ i << 2 ^ i << 3 ^ i << 4;
+					n = n >>> 8 ^ 255 & n ^ 99, o[e] = n, s[n] = e;
+					var p = t[e],
+						_ = t[p],
+						y = t[_],
+						g = 257 * t[n] ^ 16843008 * n;
+					a[e] = g << 24 | g >>> 8, c[e] = g << 16 | g >>> 16, h[e] = g << 8 | g >>> 24, l[e] = g;
+					var g = 16843009 * y ^ 65537 * _ ^ 257 * p ^ 16843008 * e;
+					f[n] = g << 24 | g >>> 8, u[n] = g << 16 | g >>> 16, d[n] = g << 8 | g >>> 24, v[n] = g, e ? (e = p ^ t[t[t[y ^ p]]], i ^= t[t[i]]) : e = i = 1
+				}
+			}();
+			var p = [0, 1, 2, 4, 8, 16, 32, 64, 128, 27, 54],
+				_ = n.AES = i.extend({
+					_doReset: function() {
+						if (!this._nRounds || this._keyPriorReset !== this._key) {
+							for (var t = this._keyPriorReset = this._key, r = t.words, e = t.sigBytes / 4, i = this._nRounds = e + 6, n = 4 * (i + 1), s = this._keySchedule = [], a = 0; a < n; a++)
+								if (a < e) s[a] = r[a];
+								else {
+									var c = s[a - 1];
+									a % e ? e > 6 && a % e == 4 && (c = o[c >>> 24] << 24 | o[c >>> 16 & 255] << 16 | o[c >>> 8 & 255] << 8 | o[255 & c]) : (c = c << 8 | c >>> 24, c = o[c >>> 24] << 24 | o[c >>> 16 & 255] << 16 | o[c >>> 8 & 255] << 8 | o[255 & c], c ^= p[a / e | 0] << 24), s[a] = s[a - e] ^ c
+								}
+							for (var h = this._invKeySchedule = [], l = 0; l < n; l++) {
+								var a = n - l;
+								if (l % 4) var c = s[a];
+								else var c = s[a - 4];
+								l < 4 || a <= 4 ? h[l] = c : h[l] = f[o[c >>> 24]] ^ u[o[c >>> 16 & 255]] ^ d[o[c >>> 8 & 255]] ^ v[o[255 & c]]
+							}
+						}
+					},
+					encryptBlock: function(t, r) {
+						this._doCryptBlock(t, r, this._keySchedule, a, c, h, l, o)
+					},
+					decryptBlock: function(t, r) {
+						var e = t[r + 1];
+						t[r + 1] = t[r + 3], t[r + 3] = e, this._doCryptBlock(t, r, this._invKeySchedule, f, u, d, v, s);
+						var e = t[r + 1];
+						t[r + 1] = t[r + 3], t[r + 3] = e
+					},
+					_doCryptBlock: function(t, r, e, i, n, o, s, a) {
+						for (var c = this._nRounds, h = t[r] ^ e[0], l = t[r + 1] ^ e[1], f = t[r + 2] ^ e[2], u = t[r + 3] ^ e[3], d = 4, v = 1; v < c; v++) {
+							var p = i[h >>> 24] ^ n[l >>> 16 & 255] ^ o[f >>> 8 & 255] ^ s[255 & u] ^ e[d++],
+								_ = i[l >>> 24] ^ n[f >>> 16 & 255] ^ o[u >>> 8 & 255] ^ s[255 & h] ^ e[d++],
+								y = i[f >>> 24] ^ n[u >>> 16 & 255] ^ o[h >>> 8 & 255] ^ s[255 & l] ^ e[d++],
+								g = i[u >>> 24] ^ n[h >>> 16 & 255] ^ o[l >>> 8 & 255] ^ s[255 & f] ^ e[d++];
+							h = p, l = _, f = y, u = g
+						}
+						var p = (a[h >>> 24] << 24 | a[l >>> 16 & 255] << 16 | a[f >>> 8 & 255] << 8 | a[255 & u]) ^ e[d++],
+							_ = (a[l >>> 24] << 24 | a[f >>> 16 & 255] << 16 | a[u >>> 8 & 255] << 8 | a[255 & h]) ^ e[d++],
+							y = (a[f >>> 24] << 24 | a[u >>> 16 & 255] << 16 | a[h >>> 8 & 255] << 8 | a[255 & l]) ^ e[d++],
+							g = (a[u >>> 24] << 24 | a[h >>> 16 & 255] << 16 | a[l >>> 8 & 255] << 8 | a[255 & f]) ^ e[d++];
+						t[r] = p, t[r + 1] = _, t[r + 2] = y, t[r + 3] = g
+					},
+					keySize: 8
+				});
+			r.AES = i._createHelper(_)
+		}(),
+		function() {
+			function r(t, r) {
+				var e = (this._lBlock >>> t ^ this._rBlock) & r;
+				this._rBlock ^= e, this._lBlock ^= e << t
+			}
+
+			function e(t, r) {
+				var e = (this._rBlock >>> t ^ this._lBlock) & r;
+				this._lBlock ^= e, this._rBlock ^= e << t;
+			}
+			var i = t,
+				n = i.lib,
+				o = n.WordArray,
+				s = n.BlockCipher,
+				a = i.algo,
+				c = [57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15, 7, 62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4],
+				h = [14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10, 23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2, 41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48, 44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32],
+				l = [1, 2, 4, 6, 8, 10, 12, 14, 15, 17, 19, 21, 23, 25, 27, 28],
+				f = [{
+					0: 8421888,
+					268435456: 32768,
+					536870912: 8421378,
+					805306368: 2,
+					1073741824: 512,
+					1342177280: 8421890,
+					1610612736: 8389122,
+					1879048192: 8388608,
+					2147483648: 514,
+					2415919104: 8389120,
+					2684354560: 33280,
+					2952790016: 8421376,
+					3221225472: 32770,
+					3489660928: 8388610,
+					3758096384: 0,
+					4026531840: 33282,
+					134217728: 0,
+					402653184: 8421890,
+					671088640: 33282,
+					939524096: 32768,
+					1207959552: 8421888,
+					1476395008: 512,
+					1744830464: 8421378,
+					2013265920: 2,
+					2281701376: 8389120,
+					2550136832: 33280,
+					2818572288: 8421376,
+					3087007744: 8389122,
+					3355443200: 8388610,
+					3623878656: 32770,
+					3892314112: 514,
+					4160749568: 8388608,
+					1: 32768,
+					268435457: 2,
+					536870913: 8421888,
+					805306369: 8388608,
+					1073741825: 8421378,
+					1342177281: 33280,
+					1610612737: 512,
+					1879048193: 8389122,
+					2147483649: 8421890,
+					2415919105: 8421376,
+					2684354561: 8388610,
+					2952790017: 33282,
+					3221225473: 514,
+					3489660929: 8389120,
+					3758096385: 32770,
+					4026531841: 0,
+					134217729: 8421890,
+					402653185: 8421376,
+					671088641: 8388608,
+					939524097: 512,
+					1207959553: 32768,
+					1476395009: 8388610,
+					1744830465: 2,
+					2013265921: 33282,
+					2281701377: 32770,
+					2550136833: 8389122,
+					2818572289: 514,
+					3087007745: 8421888,
+					3355443201: 8389120,
+					3623878657: 0,
+					3892314113: 33280,
+					4160749569: 8421378
+				}, {
+					0: 1074282512,
+					16777216: 16384,
+					33554432: 524288,
+					50331648: 1074266128,
+					67108864: 1073741840,
+					83886080: 1074282496,
+					100663296: 1073758208,
+					117440512: 16,
+					134217728: 540672,
+					150994944: 1073758224,
+					167772160: 1073741824,
+					184549376: 540688,
+					201326592: 524304,
+					218103808: 0,
+					234881024: 16400,
+					251658240: 1074266112,
+					8388608: 1073758208,
+					25165824: 540688,
+					41943040: 16,
+					58720256: 1073758224,
+					75497472: 1074282512,
+					92274688: 1073741824,
+					109051904: 524288,
+					125829120: 1074266128,
+					142606336: 524304,
+					159383552: 0,
+					176160768: 16384,
+					192937984: 1074266112,
+					209715200: 1073741840,
+					226492416: 540672,
+					243269632: 1074282496,
+					260046848: 16400,
+					268435456: 0,
+					285212672: 1074266128,
+					301989888: 1073758224,
+					318767104: 1074282496,
+					335544320: 1074266112,
+					352321536: 16,
+					369098752: 540688,
+					385875968: 16384,
+					402653184: 16400,
+					419430400: 524288,
+					436207616: 524304,
+					452984832: 1073741840,
+					469762048: 540672,
+					486539264: 1073758208,
+					503316480: 1073741824,
+					520093696: 1074282512,
+					276824064: 540688,
+					293601280: 524288,
+					310378496: 1074266112,
+					327155712: 16384,
+					343932928: 1073758208,
+					360710144: 1074282512,
+					377487360: 16,
+					394264576: 1073741824,
+					411041792: 1074282496,
+					427819008: 1073741840,
+					444596224: 1073758224,
+					461373440: 524304,
+					478150656: 0,
+					494927872: 16400,
+					511705088: 1074266128,
+					528482304: 540672
+				}, {
+					0: 260,
+					1048576: 0,
+					2097152: 67109120,
+					3145728: 65796,
+					4194304: 65540,
+					5242880: 67108868,
+					6291456: 67174660,
+					7340032: 67174400,
+					8388608: 67108864,
+					9437184: 67174656,
+					10485760: 65792,
+					11534336: 67174404,
+					12582912: 67109124,
+					13631488: 65536,
+					14680064: 4,
+					15728640: 256,
+					524288: 67174656,
+					1572864: 67174404,
+					2621440: 0,
+					3670016: 67109120,
+					4718592: 67108868,
+					5767168: 65536,
+					6815744: 65540,
+					7864320: 260,
+					8912896: 4,
+					9961472: 256,
+					11010048: 67174400,
+					12058624: 65796,
+					13107200: 65792,
+					14155776: 67109124,
+					15204352: 67174660,
+					16252928: 67108864,
+					16777216: 67174656,
+					17825792: 65540,
+					18874368: 65536,
+					19922944: 67109120,
+					20971520: 256,
+					22020096: 67174660,
+					23068672: 67108868,
+					24117248: 0,
+					25165824: 67109124,
+					26214400: 67108864,
+					27262976: 4,
+					28311552: 65792,
+					29360128: 67174400,
+					30408704: 260,
+					31457280: 65796,
+					32505856: 67174404,
+					17301504: 67108864,
+					18350080: 260,
+					19398656: 67174656,
+					20447232: 0,
+					21495808: 65540,
+					22544384: 67109120,
+					23592960: 256,
+					24641536: 67174404,
+					25690112: 65536,
+					26738688: 67174660,
+					27787264: 65796,
+					28835840: 67108868,
+					29884416: 67109124,
+					30932992: 67174400,
+					31981568: 4,
+					33030144: 65792
+				}, {
+					0: 2151682048,
+					65536: 2147487808,
+					131072: 4198464,
+					196608: 2151677952,
+					262144: 0,
+					327680: 4198400,
+					393216: 2147483712,
+					458752: 4194368,
+					524288: 2147483648,
+					589824: 4194304,
+					655360: 64,
+					720896: 2147487744,
+					786432: 2151678016,
+					851968: 4160,
+					917504: 4096,
+					983040: 2151682112,
+					32768: 2147487808,
+					98304: 64,
+					163840: 2151678016,
+					229376: 2147487744,
+					294912: 4198400,
+					360448: 2151682112,
+					425984: 0,
+					491520: 2151677952,
+					557056: 4096,
+					622592: 2151682048,
+					688128: 4194304,
+					753664: 4160,
+					819200: 2147483648,
+					884736: 4194368,
+					950272: 4198464,
+					1015808: 2147483712,
+					1048576: 4194368,
+					1114112: 4198400,
+					1179648: 2147483712,
+					1245184: 0,
+					1310720: 4160,
+					1376256: 2151678016,
+					1441792: 2151682048,
+					1507328: 2147487808,
+					1572864: 2151682112,
+					1638400: 2147483648,
+					1703936: 2151677952,
+					1769472: 4198464,
+					1835008: 2147487744,
+					1900544: 4194304,
+					1966080: 64,
+					2031616: 4096,
+					1081344: 2151677952,
+					1146880: 2151682112,
+					1212416: 0,
+					1277952: 4198400,
+					1343488: 4194368,
+					1409024: 2147483648,
+					1474560: 2147487808,
+					1540096: 64,
+					1605632: 2147483712,
+					1671168: 4096,
+					1736704: 2147487744,
+					1802240: 2151678016,
+					1867776: 4160,
+					1933312: 2151682048,
+					1998848: 4194304,
+					2064384: 4198464
+				}, {
+					0: 128,
+					4096: 17039360,
+					8192: 262144,
+					12288: 536870912,
+					16384: 537133184,
+					20480: 16777344,
+					24576: 553648256,
+					28672: 262272,
+					32768: 16777216,
+					36864: 537133056,
+					40960: 536871040,
+					45056: 553910400,
+					49152: 553910272,
+					53248: 0,
+					57344: 17039488,
+					61440: 553648128,
+					2048: 17039488,
+					6144: 553648256,
+					10240: 128,
+					14336: 17039360,
+					18432: 262144,
+					22528: 537133184,
+					26624: 553910272,
+					30720: 536870912,
+					34816: 537133056,
+					38912: 0,
+					43008: 553910400,
+					47104: 16777344,
+					51200: 536871040,
+					55296: 553648128,
+					59392: 16777216,
+					63488: 262272,
+					65536: 262144,
+					69632: 128,
+					73728: 536870912,
+					77824: 553648256,
+					81920: 16777344,
+					86016: 553910272,
+					90112: 537133184,
+					94208: 16777216,
+					98304: 553910400,
+					102400: 553648128,
+					106496: 17039360,
+					110592: 537133056,
+					114688: 262272,
+					118784: 536871040,
+					122880: 0,
+					126976: 17039488,
+					67584: 553648256,
+					71680: 16777216,
+					75776: 17039360,
+					79872: 537133184,
+					83968: 536870912,
+					88064: 17039488,
+					92160: 128,
+					96256: 553910272,
+					100352: 262272,
+					104448: 553910400,
+					108544: 0,
+					112640: 553648128,
+					116736: 16777344,
+					120832: 262144,
+					124928: 537133056,
+					129024: 536871040
+				}, {
+					0: 268435464,
+					256: 8192,
+					512: 270532608,
+					768: 270540808,
+					1024: 268443648,
+					1280: 2097152,
+					1536: 2097160,
+					1792: 268435456,
+					2048: 0,
+					2304: 268443656,
+					2560: 2105344,
+					2816: 8,
+					3072: 270532616,
+					3328: 2105352,
+					3584: 8200,
+					3840: 270540800,
+					128: 270532608,
+					384: 270540808,
+					640: 8,
+					896: 2097152,
+					1152: 2105352,
+					1408: 268435464,
+					1664: 268443648,
+					1920: 8200,
+					2176: 2097160,
+					2432: 8192,
+					2688: 268443656,
+					2944: 270532616,
+					3200: 0,
+					3456: 270540800,
+					3712: 2105344,
+					3968: 268435456,
+					4096: 268443648,
+					4352: 270532616,
+					4608: 270540808,
+					4864: 8200,
+					5120: 2097152,
+					5376: 268435456,
+					5632: 268435464,
+					5888: 2105344,
+					6144: 2105352,
+					6400: 0,
+					6656: 8,
+					6912: 270532608,
+					7168: 8192,
+					7424: 268443656,
+					7680: 270540800,
+					7936: 2097160,
+					4224: 8,
+					4480: 2105344,
+					4736: 2097152,
+					4992: 268435464,
+					5248: 268443648,
+					5504: 8200,
+					5760: 270540808,
+					6016: 270532608,
+					6272: 270540800,
+					6528: 270532616,
+					6784: 8192,
+					7040: 2105352,
+					7296: 2097160,
+					7552: 0,
+					7808: 268435456,
+					8064: 268443656
+				}, {
+					0: 1048576,
+					16: 33555457,
+					32: 1024,
+					48: 1049601,
+					64: 34604033,
+					80: 0,
+					96: 1,
+					112: 34603009,
+					128: 33555456,
+					144: 1048577,
+					160: 33554433,
+					176: 34604032,
+					192: 34603008,
+					208: 1025,
+					224: 1049600,
+					240: 33554432,
+					8: 34603009,
+					24: 0,
+					40: 33555457,
+					56: 34604032,
+					72: 1048576,
+					88: 33554433,
+					104: 33554432,
+					120: 1025,
+					136: 1049601,
+					152: 33555456,
+					168: 34603008,
+					184: 1048577,
+					200: 1024,
+					216: 34604033,
+					232: 1,
+					248: 1049600,
+					256: 33554432,
+					272: 1048576,
+					288: 33555457,
+					304: 34603009,
+					320: 1048577,
+					336: 33555456,
+					352: 34604032,
+					368: 1049601,
+					384: 1025,
+					400: 34604033,
+					416: 1049600,
+					432: 1,
+					448: 0,
+					464: 34603008,
+					480: 33554433,
+					496: 1024,
+					264: 1049600,
+					280: 33555457,
+					296: 34603009,
+					312: 1,
+					328: 33554432,
+					344: 1048576,
+					360: 1025,
+					376: 34604032,
+					392: 33554433,
+					408: 34603008,
+					424: 0,
+					440: 34604033,
+					456: 1049601,
+					472: 1024,
+					488: 33555456,
+					504: 1048577
+				}, {
+					0: 134219808,
+					1: 131072,
+					2: 134217728,
+					3: 32,
+					4: 131104,
+					5: 134350880,
+					6: 134350848,
+					7: 2048,
+					8: 134348800,
+					9: 134219776,
+					10: 133120,
+					11: 134348832,
+					12: 2080,
+					13: 0,
+					14: 134217760,
+					15: 133152,
+					2147483648: 2048,
+					2147483649: 134350880,
+					2147483650: 134219808,
+					2147483651: 134217728,
+					2147483652: 134348800,
+					2147483653: 133120,
+					2147483654: 133152,
+					2147483655: 32,
+					2147483656: 134217760,
+					2147483657: 2080,
+					2147483658: 131104,
+					2147483659: 134350848,
+					2147483660: 0,
+					2147483661: 134348832,
+					2147483662: 134219776,
+					2147483663: 131072,
+					16: 133152,
+					17: 134350848,
+					18: 32,
+					19: 2048,
+					20: 134219776,
+					21: 134217760,
+					22: 134348832,
+					23: 131072,
+					24: 0,
+					25: 131104,
+					26: 134348800,
+					27: 134219808,
+					28: 134350880,
+					29: 133120,
+					30: 2080,
+					31: 134217728,
+					2147483664: 131072,
+					2147483665: 2048,
+					2147483666: 134348832,
+					2147483667: 133152,
+					2147483668: 32,
+					2147483669: 134348800,
+					2147483670: 134217728,
+					2147483671: 134219808,
+					2147483672: 134350880,
+					2147483673: 134217760,
+					2147483674: 134219776,
+					2147483675: 0,
+					2147483676: 133120,
+					2147483677: 2080,
+					2147483678: 131104,
+					2147483679: 134350848
+				}],
+				u = [4160749569, 528482304, 33030144, 2064384, 129024, 8064, 504, 2147483679],
+				d = a.DES = s.extend({
+					_doReset: function() {
+						for (var t = this._key, r = t.words, e = [], i = 0; i < 56; i++) {
+							var n = c[i] - 1;
+							e[i] = r[n >>> 5] >>> 31 - n % 32 & 1
+						}
+						for (var o = this._subKeys = [], s = 0; s < 16; s++) {
+							for (var a = o[s] = [], f = l[s], i = 0; i < 24; i++) a[i / 6 | 0] |= e[(h[i] - 1 + f) % 28] << 31 - i % 6, a[4 + (i / 6 | 0)] |= e[28 + (h[i + 24] - 1 + f) % 28] << 31 - i % 6;
+							a[0] = a[0] << 1 | a[0] >>> 31;
+							for (var i = 1; i < 7; i++) a[i] = a[i] >>> 4 * (i - 1) + 3;
+							a[7] = a[7] << 5 | a[7] >>> 27
+						}
+						for (var u = this._invSubKeys = [], i = 0; i < 16; i++) u[i] = o[15 - i]
+					},
+					encryptBlock: function(t, r) {
+						this._doCryptBlock(t, r, this._subKeys)
+					},
+					decryptBlock: function(t, r) {
+						this._doCryptBlock(t, r, this._invSubKeys)
+					},
+					_doCryptBlock: function(t, i, n) {
+						this._lBlock = t[i], this._rBlock = t[i + 1], r.call(this, 4, 252645135), r.call(this, 16, 65535), e.call(this, 2, 858993459), e.call(this, 8, 16711935), r.call(this, 1, 1431655765);
+						for (var o = 0; o < 16; o++) {
+							for (var s = n[o], a = this._lBlock, c = this._rBlock, h = 0, l = 0; l < 8; l++) h |= f[l][((c ^ s[l]) & u[l]) >>> 0];
+							this._lBlock = c, this._rBlock = a ^ h
+						}
+						var d = this._lBlock;
+						this._lBlock = this._rBlock, this._rBlock = d, r.call(this, 1, 1431655765), e.call(this, 8, 16711935), e.call(this, 2, 858993459), r.call(this, 16, 65535), r.call(this, 4, 252645135), t[i] = this._lBlock, t[i + 1] = this._rBlock
+					},
+					keySize: 2,
+					ivSize: 2,
+					blockSize: 2
+				});
+			i.DES = s._createHelper(d);
+			var v = a.TripleDES = s.extend({
+				_doReset: function() {
+					var t = this._key,
+						r = t.words;
+					this._des1 = d.createEncryptor(o.create(r.slice(0, 2))), this._des2 = d.createEncryptor(o.create(r.slice(2, 4))), this._des3 = d.createEncryptor(o.create(r.slice(4, 6)))
+				},
+				encryptBlock: function(t, r) {
+					this._des1.encryptBlock(t, r), this._des2.decryptBlock(t, r), this._des3.encryptBlock(t, r)
+				},
+				decryptBlock: function(t, r) {
+					this._des3.decryptBlock(t, r), this._des2.encryptBlock(t, r), this._des1.decryptBlock(t, r)
+				},
+				keySize: 6,
+				ivSize: 2,
+				blockSize: 2
+			});
+			i.TripleDES = s._createHelper(v)
+		}(),
+		function() {
+			function r() {
+				for (var t = this._S, r = this._i, e = this._j, i = 0, n = 0; n < 4; n++) {
+					r = (r + 1) % 256, e = (e + t[r]) % 256;
+					var o = t[r];
+					t[r] = t[e], t[e] = o, i |= t[(t[r] + t[e]) % 256] << 24 - 8 * n
+				}
+				return this._i = r, this._j = e, i
+			}
+			var e = t,
+				i = e.lib,
+				n = i.StreamCipher,
+				o = e.algo,
+				s = o.RC4 = n.extend({
+					_doReset: function() {
+						for (var t = this._key, r = t.words, e = t.sigBytes, i = this._S = [], n = 0; n < 256; n++) i[n] = n;
+						for (var n = 0, o = 0; n < 256; n++) {
+							var s = n % e,
+								a = r[s >>> 2] >>> 24 - s % 4 * 8 & 255;
+							o = (o + i[n] + a) % 256;
+							var c = i[n];
+							i[n] = i[o], i[o] = c
+						}
+						this._i = this._j = 0
+					},
+					_doProcessBlock: function(t, e) {
+						t[e] ^= r.call(this)
+					},
+					keySize: 8,
+					ivSize: 0
+				});
+			e.RC4 = n._createHelper(s);
+			var a = o.RC4Drop = s.extend({
+				cfg: s.cfg.extend({
+					drop: 192
+				}),
+				_doReset: function() {
+					s._doReset.call(this);
+					for (var t = this.cfg.drop; t > 0; t--) r.call(this)
+				}
+			});
+			e.RC4Drop = n._createHelper(a)
+		}(), t.mode.CTRGladman = function() {
+			function r(t) {
+				if (255 === (t >> 24 & 255)) {
+					var r = t >> 16 & 255,
+						e = t >> 8 & 255,
+						i = 255 & t;
+					255 === r ? (r = 0, 255 === e ? (e = 0, 255 === i ? i = 0 : ++i) : ++e) : ++r, t = 0, t += r << 16, t += e << 8, t += i
+				} else t += 1 << 24;
+				return t
+			}
+
+			function e(t) {
+				return 0 === (t[0] = r(t[0])) && (t[1] = r(t[1])), t
+			}
+			var i = t.lib.BlockCipherMode.extend(),
+				n = i.Encryptor = i.extend({
+					processBlock: function(t, r) {
+						var i = this._cipher,
+							n = i.blockSize,
+							o = this._iv,
+							s = this._counter;
+						o && (s = this._counter = o.slice(0), this._iv = void 0), e(s);
+						var a = s.slice(0);
+						i.encryptBlock(a, 0);
+						for (var c = 0; c < n; c++) t[r + c] ^= a[c]
+					}
+				});
+			return i.Decryptor = n, i
+		}(),
+		function() {
+			function r() {
+				for (var t = this._X, r = this._C, e = 0; e < 8; e++) a[e] = r[e];
+				r[0] = r[0] + 1295307597 + this._b | 0, r[1] = r[1] + 3545052371 + (r[0] >>> 0 < a[0] >>> 0 ? 1 : 0) | 0, r[2] = r[2] + 886263092 + (r[1] >>> 0 < a[1] >>> 0 ? 1 : 0) | 0, r[3] = r[3] + 1295307597 + (r[2] >>> 0 < a[2] >>> 0 ? 1 : 0) | 0, r[4] = r[4] + 3545052371 + (r[3] >>> 0 < a[3] >>> 0 ? 1 : 0) | 0, r[5] = r[5] + 886263092 + (r[4] >>> 0 < a[4] >>> 0 ? 1 : 0) | 0, r[6] = r[6] + 1295307597 + (r[5] >>> 0 < a[5] >>> 0 ? 1 : 0) | 0, r[7] = r[7] + 3545052371 + (r[6] >>> 0 < a[6] >>> 0 ? 1 : 0) | 0, this._b = r[7] >>> 0 < a[7] >>> 0 ? 1 : 0;
+				for (var e = 0; e < 8; e++) {
+					var i = t[e] + r[e],
+						n = 65535 & i,
+						o = i >>> 16,
+						s = ((n * n >>> 17) + n * o >>> 15) + o * o,
+						h = ((4294901760 & i) * i | 0) + ((65535 & i) * i | 0);
+					c[e] = s ^ h
+				}
+				t[0] = c[0] + (c[7] << 16 | c[7] >>> 16) + (c[6] << 16 | c[6] >>> 16) | 0, t[1] = c[1] + (c[0] << 8 | c[0] >>> 24) + c[7] | 0, t[2] = c[2] + (c[1] << 16 | c[1] >>> 16) + (c[0] << 16 | c[0] >>> 16) | 0, t[3] = c[3] + (c[2] << 8 | c[2] >>> 24) + c[1] | 0, t[4] = c[4] + (c[3] << 16 | c[3] >>> 16) + (c[2] << 16 | c[2] >>> 16) | 0, t[5] = c[5] + (c[4] << 8 | c[4] >>> 24) + c[3] | 0, t[6] = c[6] + (c[5] << 16 | c[5] >>> 16) + (c[4] << 16 | c[4] >>> 16) | 0, t[7] = c[7] + (c[6] << 8 | c[6] >>> 24) + c[5] | 0
+			}
+			var e = t,
+				i = e.lib,
+				n = i.StreamCipher,
+				o = e.algo,
+				s = [],
+				a = [],
+				c = [],
+				h = o.Rabbit = n.extend({
+					_doReset: function() {
+						for (var t = this._key.words, e = this.cfg.iv, i = 0; i < 4; i++) t[i] = 16711935 & (t[i] << 8 | t[i] >>> 24) | 4278255360 & (t[i] << 24 | t[i] >>> 8);
+						var n = this._X = [t[0], t[3] << 16 | t[2] >>> 16, t[1], t[0] << 16 | t[3] >>> 16, t[2], t[1] << 16 | t[0] >>> 16, t[3], t[2] << 16 | t[1] >>> 16],
+							o = this._C = [t[2] << 16 | t[2] >>> 16, 4294901760 & t[0] | 65535 & t[1], t[3] << 16 | t[3] >>> 16, 4294901760 & t[1] | 65535 & t[2], t[0] << 16 | t[0] >>> 16, 4294901760 & t[2] | 65535 & t[3], t[1] << 16 | t[1] >>> 16, 4294901760 & t[3] | 65535 & t[0]];
+						this._b = 0;
+						for (var i = 0; i < 4; i++) r.call(this);
+						for (var i = 0; i < 8; i++) o[i] ^= n[i + 4 & 7];
+						if (e) {
+							var s = e.words,
+								a = s[0],
+								c = s[1],
+								h = 16711935 & (a << 8 | a >>> 24) | 4278255360 & (a << 24 | a >>> 8),
+								l = 16711935 & (c << 8 | c >>> 24) | 4278255360 & (c << 24 | c >>> 8),
+								f = h >>> 16 | 4294901760 & l,
+								u = l << 16 | 65535 & h;
+							o[0] ^= h, o[1] ^= f, o[2] ^= l, o[3] ^= u, o[4] ^= h, o[5] ^= f, o[6] ^= l, o[7] ^= u;
+							for (var i = 0; i < 4; i++) r.call(this)
+						}
+					},
+					_doProcessBlock: function(t, e) {
+						var i = this._X;
+						r.call(this), s[0] = i[0] ^ i[5] >>> 16 ^ i[3] << 16, s[1] = i[2] ^ i[7] >>> 16 ^ i[5] << 16, s[2] = i[4] ^ i[1] >>> 16 ^ i[7] << 16, s[3] = i[6] ^ i[3] >>> 16 ^ i[1] << 16;
+						for (var n = 0; n < 4; n++) s[n] = 16711935 & (s[n] << 8 | s[n] >>> 24) | 4278255360 & (s[n] << 24 | s[n] >>> 8), t[e + n] ^= s[n]
+					},
+					blockSize: 4,
+					ivSize: 2
+				});
+			e.Rabbit = n._createHelper(h)
+		}(), t.mode.CTR = function() {
+			var r = t.lib.BlockCipherMode.extend(),
+				e = r.Encryptor = r.extend({
+					processBlock: function(t, r) {
+						var e = this._cipher,
+							i = e.blockSize,
+							n = this._iv,
+							o = this._counter;
+						n && (o = this._counter = n.slice(0), this._iv = void 0);
+						var s = o.slice(0);
+						e.encryptBlock(s, 0), o[i - 1] = o[i - 1] + 1 | 0;
+						for (var a = 0; a < i; a++) t[r + a] ^= s[a]
+					}
+				});
+			return r.Decryptor = e, r
+		}(),
+		function() {
+			function r() {
+				for (var t = this._X, r = this._C, e = 0; e < 8; e++) a[e] = r[e];
+				r[0] = r[0] + 1295307597 + this._b | 0, r[1] = r[1] + 3545052371 + (r[0] >>> 0 < a[0] >>> 0 ? 1 : 0) | 0, r[2] = r[2] + 886263092 + (r[1] >>> 0 < a[1] >>> 0 ? 1 : 0) | 0, r[3] = r[3] + 1295307597 + (r[2] >>> 0 < a[2] >>> 0 ? 1 : 0) | 0, r[4] = r[4] + 3545052371 + (r[3] >>> 0 < a[3] >>> 0 ? 1 : 0) | 0, r[5] = r[5] + 886263092 + (r[4] >>> 0 < a[4] >>> 0 ? 1 : 0) | 0, r[6] = r[6] + 1295307597 + (r[5] >>> 0 < a[5] >>> 0 ? 1 : 0) | 0, r[7] = r[7] + 3545052371 + (r[6] >>> 0 < a[6] >>> 0 ? 1 : 0) | 0, this._b = r[7] >>> 0 < a[7] >>> 0 ? 1 : 0;
+				for (var e = 0; e < 8; e++) {
+					var i = t[e] + r[e],
+						n = 65535 & i,
+						o = i >>> 16,
+						s = ((n * n >>> 17) + n * o >>> 15) + o * o,
+						h = ((4294901760 & i) * i | 0) + ((65535 & i) * i | 0);
+					c[e] = s ^ h
+				}
+				t[0] = c[0] + (c[7] << 16 | c[7] >>> 16) + (c[6] << 16 | c[6] >>> 16) | 0, t[1] = c[1] + (c[0] << 8 | c[0] >>> 24) + c[7] | 0, t[2] = c[2] + (c[1] << 16 | c[1] >>> 16) + (c[0] << 16 | c[0] >>> 16) | 0, t[3] = c[3] + (c[2] << 8 | c[2] >>> 24) + c[1] | 0, t[4] = c[4] + (c[3] << 16 | c[3] >>> 16) + (c[2] << 16 | c[2] >>> 16) | 0, t[5] = c[5] + (c[4] << 8 | c[4] >>> 24) + c[3] | 0, t[6] = c[6] + (c[5] << 16 | c[5] >>> 16) + (c[4] << 16 | c[4] >>> 16) | 0, t[7] = c[7] + (c[6] << 8 | c[6] >>> 24) + c[5] | 0
+			}
+			var e = t,
+				i = e.lib,
+				n = i.StreamCipher,
+				o = e.algo,
+				s = [],
+				a = [],
+				c = [],
+				h = o.RabbitLegacy = n.extend({
+					_doReset: function() {
+						var t = this._key.words,
+							e = this.cfg.iv,
+							i = this._X = [t[0], t[3] << 16 | t[2] >>> 16, t[1], t[0] << 16 | t[3] >>> 16, t[2], t[1] << 16 | t[0] >>> 16, t[3], t[2] << 16 | t[1] >>> 16],
+							n = this._C = [t[2] << 16 | t[2] >>> 16, 4294901760 & t[0] | 65535 & t[1], t[3] << 16 | t[3] >>> 16, 4294901760 & t[1] | 65535 & t[2], t[0] << 16 | t[0] >>> 16, 4294901760 & t[2] | 65535 & t[3], t[1] << 16 | t[1] >>> 16, 4294901760 & t[3] | 65535 & t[0]];
+						this._b = 0;
+						for (var o = 0; o < 4; o++) r.call(this);
+						for (var o = 0; o < 8; o++) n[o] ^= i[o + 4 & 7];
+						if (e) {
+							var s = e.words,
+								a = s[0],
+								c = s[1],
+								h = 16711935 & (a << 8 | a >>> 24) | 4278255360 & (a << 24 | a >>> 8),
+								l = 16711935 & (c << 8 | c >>> 24) | 4278255360 & (c << 24 | c >>> 8),
+								f = h >>> 16 | 4294901760 & l,
+								u = l << 16 | 65535 & h;
+							n[0] ^= h, n[1] ^= f, n[2] ^= l, n[3] ^= u, n[4] ^= h, n[5] ^= f, n[6] ^= l, n[7] ^= u;
+							for (var o = 0; o < 4; o++) r.call(this)
+						}
+					},
+					_doProcessBlock: function(t, e) {
+						var i = this._X;
+						r.call(this), s[0] = i[0] ^ i[5] >>> 16 ^ i[3] << 16, s[1] = i[2] ^ i[7] >>> 16 ^ i[5] << 16, s[2] = i[4] ^ i[1] >>> 16 ^ i[7] << 16, s[3] = i[6] ^ i[3] >>> 16 ^ i[1] << 16;
+						for (var n = 0; n < 4; n++) s[n] = 16711935 & (s[n] << 8 | s[n] >>> 24) | 4278255360 & (s[n] << 24 | s[n] >>> 8), t[e + n] ^= s[n]
+					},
+					blockSize: 4,
+					ivSize: 2
+				});
+			e.RabbitLegacy = n._createHelper(h)
+		}(), t.pad.ZeroPadding = {
+			pad: function(t, r) {
+				var e = 4 * r;
+				t.clamp(), t.sigBytes += e - (t.sigBytes % e || e)
+			},
+			unpad: function(t) {
+				for (var r = t.words, e = t.sigBytes - 1; !(r[e >>> 2] >>> 24 - e % 4 * 8 & 255);) e--;
+				t.sigBytes = e + 1
+			}
+		}, t
+});
+// # sourceMappingURL=crypto-js.min.js.map
+! function(e, r, o) {
+	"object" == typeof exports ? module.exports = exports = r(require("./core"), require("./sha256"), require("./hmac")) : "function" == typeof define && define.amd ? define(["./core", "./sha256", "./hmac"], r) : r(e.CryptoJS)
+}(this, function(e) {
+	return e.HmacSHA256
+});
+// # sourceMappingURL=hmac-sha256.min.js.map
+! function(r, e) {
+	"object" == typeof exports ? module.exports = exports = e(require("./core")) : "function" == typeof define && define.amd ? define(["./core"], e) : e(r.CryptoJS)
+}(this, function(r) {
+	return function() {
+		function e(r, e, t) {
+			for (var a = [], o = 0, i = 0; i < e; i++)
+				if (i % 4) {
+					var f = t[r.charCodeAt(i - 1)] << i % 4 * 2,
+						c = t[r.charCodeAt(i)] >>> 6 - i % 4 * 2;
+					a[o >>> 2] |= (f | c) << 24 - o % 4 * 8, o++
+				}
+			return n.create(a, o)
+		}
+		var t = r,
+			a = t.lib,
+			n = a.WordArray,
+			o = t.enc;
+		o.Base64 = {
+			stringify: function(r) {
+				var e = r.words,
+					t = r.sigBytes,
+					a = this._map;
+				r.clamp();
+				for (var n = [], o = 0; o < t; o += 3)
+					for (var i = e[o >>> 2] >>> 24 - o % 4 * 8 & 255, f = e[o + 1 >>> 2] >>> 24 - (o + 1) % 4 * 8 & 255, c = e[o + 2 >>> 2] >>> 24 - (o + 2) % 4 * 8 & 255, s = i << 16 | f << 8 | c, h = 0; h < 4 && o + .75 * h < t; h++) n.push(a.charAt(s >>> 6 * (3 - h) & 63));
+				var p = a.charAt(64);
+				if (p)
+					for (; n.length % 4;) n.push(p);
+				return n.join("")
+			},
+			parse: function(r) {
+				var t = r.length,
+					a = this._map,
+					n = this._reverseMap;
+				if (!n) {
+					n = this._reverseMap = [];
+					for (var o = 0; o < a.length; o++) n[a.charCodeAt(o)] = o
+				}
+				var i = a.charAt(64);
+				if (i) {
+					var f = r.indexOf(i);
+					f !== -1 && (t = f)
+				}
+				return e(r, t, n)
+			},
+			_map: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+		}
+	}(), r.enc.Base64
+});
+// # sourceMappingURL=enc-base64.min.js.map
 if (GmCXt === undefined) var GmCXt = {};
 
 if (GmCXt.requestHandler === undefined) GmCXt.requestHandler = {};
@@ -946,7 +3404,7 @@ GmCXt.convertType = function(value) {
 };
 
 GmCXt.isMyGuideIframe = function(url) {
-    if (url.indexOf('side_panel/sidepanel_1749715345626.html') !== -1) {
+    if (url.indexOf('side_panel/sidepanel_1749722599831.html') !== -1) {
         return true;
     } else
         return false;
@@ -20078,6 +22536,2470 @@ var checkTime = function(condition, val) {
 			return false;
 	}
 };
+GmCXt.AUTOMATION_SUITE_PLAY = 'mi_suite_play';
+
+GmCXt.lastTrakerSync = 0;
+
+GmCXt.trackerV1 = {
+
+	getScreenSize: function() {
+		var screen = window.screen;
+		return {
+			width: (screen && screen.width) ? screen.width : '',
+			height: (screen && screen.height) ? screen.height : ''
+		};
+	},
+
+	v1Payload: function(e, date, url, user, eventTime) {
+
+		var objectId = e.objectId;
+		if (typeof(objectId) === 'number') objectId = objectId.toString();
+
+		return {
+			"user_id": user.user_id,
+			"org_id": user.organization_id,
+			"app_code": e.app_code,
+			"client_code": GmCXt.conf.appName + '_v' + GmCXt.conf.version,
+			"role_id": "",
+			"entity_code": objectId,
+			"event_time": eventTime,
+			"event_type": e.eventName,
+			"url": url,
+			"user_agent": GmCXt.browserApp || 'chrome',
+			"screen_size": e.screen_size,
+			"miscellaneous": e.miscellaneous
+		};
+	},
+
+	track: function(gPayload) {
+
+		GmCXt.log(38, "Fn. Track");
+
+		if (GmCXt.onPrem()) return;
+
+		if (!GmCXt.user) {
+
+			if (GmCXt.isBackgroundPage) {
+				GmCXt.sendMessageToPanel('mgPlayerJSTest_action:fetch_user');
+			}
+			GmCXt.log(45, "Events not Sent, User not found");
+			return;
+		}
+
+		function updateSecret(keys) {
+			if (keys && keys.registerClientId) {
+				GmCXt.trackerUtil.secrets = keys;
+				var jsonData = {
+					"app_client_id": keys.registerClientId,
+					"payload": [],
+					"signature": ''
+				};
+				if (gPayload.length) {
+					jsonData.payload = gPayload;
+					GmCXt.trackerV1.sendPayload(jsonData);
+				}
+
+			} else {
+				var msg = 'mgPlayerJSTest_action:update_registration_secret';
+				if (GmCXt.isBackgroundPage) {
+					GmCXt.sendMessageToPanel(msg);
+				} else {
+					GmCXt.sendMessageToApp(msg);
+				}
+
+				GmCXt.log(45, 'Secret keys are not present. Unable to track events');
+			}
+		}
+
+		if (!GmCXt.trackerUtil.secrets) {
+			GmCXt.storage().get([
+				'tracker_secrets'
+			]).then(function(res) {
+				var keys = res.tracker_secrets;
+				if (!keys.registerClientId) {
+					keys = GmCXt.parseJSON(keys);
+				}
+				updateSecret(keys);
+			});
+		} else {
+			var keys = GmCXt.trackerUtil.secrets;
+			updateSecret(keys);
+		}
+	},
+
+	sendClientVisit: function() {
+		GmCXt.trackerV1.trackClientVisit();
+		GmCXt.clientVisitSync = GmCXt.getCurrentTimeInSec();
+		GmCXt.storage().set({
+			'clientVisitSync': JSON.stringify(GmCXt.clientVisitSync)
+		});
+	},
+
+	sendPayload: function(jsonData) {
+
+		GmCXt.log(38, "Fn. SendPayload");
+		var keys = GmCXt.trackerUtil.secrets;
+
+		var date = new Date();
+		var currentTimestamp = date.getTime();
+
+		jsonData.event_chain_id = GmCXt.ANALYTICS_EVENT_CHAIN_ID;
+
+		var trackClientTimestamp = currentTimestamp;
+		if (keys && keys.track_client_timestamp) {
+			trackClientTimestamp = parseInt(keys.track_client_timestamp);
+		}
+		var clientSecretAge = parseInt((currentTimestamp - trackClientTimestamp) / 1000);
+
+		keys.track_client_timestamp = currentTimestamp;
+
+		/*
+		 In Push Event we do not have the 'keys.track_client_timestamp' first time.
+		 That time we need to register the client event.
+		*/
+		// event sent without delay
+		/*GmCXt.storage().get(['clientVisitSync']).then(function(res) {
+			if (res.clientVisitSync) {
+				if (GmCXt.getCurrentTimeInSec() - res.clientVisitSync > GmCXt.t.tracking12hr) {
+					GmCXt.trackerV1.sendClientVisit();
+				}
+			} else {
+				GmCXt.trackerV1.sendClientVisit();
+			}
+		});*/
+
+		if (keys.registerClientId) {
+
+			if (jsonData.payload[0].event_type === 'mi_mybot_run') {
+
+				jsonData.signature = md5(md5(JSON.stringify(jsonData.payload)) +
+					keys.app_client_secret).toString();
+
+				// We call an additional API as fallback if the save results API fail.
+				GmCXt.trackerV1.sendGuideAutomationEvent(jsonData);
+				return;
+			}
+
+			var sentimentEvents = jsonData.payload.filter(function(event) {
+				return event && event.event_type === 'mi_sentiment_response';
+			});
+
+			if (sentimentEvents.length) {
+
+				sentimentEvents.forEach(function(p) {
+
+					GmCXt.trackerV1.apiTrackSentiment(p);
+
+					var index = jsonData.payload.indexOf(p);
+					if (index !== -1) {
+						jsonData.payload.splice(index, 1);
+					}
+				});
+			}
+
+			if (jsonData.payload.length) {
+
+				jsonData.signature = md5(md5(JSON.stringify(jsonData.payload)) +
+					keys.app_client_secret).toString();
+
+				GmCXt.log(45, 'SENDING events', jsonData.payload);
+
+				GmCXt.trackerV1.apiV1(jsonData);
+			}
+		}
+	},
+
+	apiV1: function(data) {
+		return GmCXt.api.trackEventV1(data)
+			.then(function(response) {
+				GmCXt.log(45, 'SENT events');
+			})
+			.catch(function(error) {
+				GmCXt.trackerV1.updateTooltipTrackInfo(data);
+			});
+	},
+
+	apiTrackSentiment: function(data) {
+
+		GmCXt.api.trackSentiment(data)
+			.then(function(response) {
+				GmCXt.log(45, 'SENT events');
+			})
+			.catch(function(error) {
+				GmCXt.log(45, 'ERROR, events restored', data);
+				GmCXt.trackerV1.sendPayloadEventCall(data);
+			});
+	},
+
+	apiTrackConversation: function(data) {
+
+		GmCXt.api.trackConversation(data)
+			.then(function(response) {
+				GmCXt.log(45, 'SENT events');
+			})
+			.catch(function(error) {
+				GmCXt.log(45, 'ERROR, events restored', data);
+				GmCXt.trackerV1.sendPayloadEventCall(data);
+			});
+	},
+
+	updateTooltipTrackInfo: function(data) {
+		data.payload.forEach(function(p) {
+			if (p && p.event_type === "mi_tooltip_shown") {
+				sid = "step_" + p.miscellaneous.tooltips_details[0].tooltip_id;
+				GmCXt.tooltipTrackingList[sid].track = true;
+			}
+		});
+	},
+
+	setPayLoad: function(e) {
+
+		if (GmCXt.isAutomationRunning() && e.eventName !== "mi_mybot_run") {
+			GmCXt.log(45, "Tracker is currently stopped", e);
+			return;
+		}
+
+		// Track events only after login
+		if (!GmCXt.user) {
+			GmCXt.log(45, 'SKIP EVENT, no user found ' + e.eventName);
+			return;
+		}
+
+		if (!e.app_code) {
+			return;
+		}
+
+		if (!e) e = {};
+
+		var url = e.url || e.miscellaneous.url;
+
+		if (GmCXt.trackerUtil && GmCXt.trackerUtil.page_url) {
+			if (!url) url = GmCXt.urlParts ? GmCXt.urlParts.fullUrl : GmCXt.trackerUtil.page_url;
+		} else {
+			if (!url) url = GmCXt.urlParts ? GmCXt.urlParts.fullUrl : GmCXt._location().href;
+		}
+
+		var date = new Date();
+
+		if (e.eventName === 'mi_page_visit') {
+			date = new Date(GmCXt.pageVisit.timeStarted);
+			url = GmCXt.pageVisit.url;
+		}
+
+		if (!e.miscellaneous.env_code &&
+			e.eventName !== 'mi_tooltip_shown' &&
+			e.eventName !== 'mi_workflow_play') {
+			e.miscellaneous.env_code = GmCXt.trackerV1.getEnvCode(url);
+		}
+
+		var eventTime = "";
+		if (e.eventName === 'mi_user_pulse') {
+			eventTime = date.getUTCFullYear() + "-" +
+				('0' + (date.getUTCMonth() + 1)).slice(-2) + "-" +
+				('0' + date.getUTCDate()).slice(-2) + " " +
+				'00:00:00';
+		} else {
+			eventTime = date.getUTCFullYear() + "-" +
+				('0' + (date.getUTCMonth() + 1)).slice(-2) + "-" +
+				('0' + date.getUTCDate()).slice(-2) + " " +
+				('0' + date.getUTCHours()).slice(-2) + ":" +
+				('0' + date.getUTCMinutes()).slice(-2) + ":" +
+				('0' + date.getUTCSeconds()).slice(-2);
+		}
+
+		var user = false;
+
+		if (GmCXt.user) user = GmCXt.user;
+
+		var payload = GmCXt.trackerV1.v1Payload(e, date, url, user, eventTime);
+
+		if (GmCXt.trackerUtil.trackPI) {
+			payload.miscellaneous.unique_user_id = user.user_email;
+			payload.miscellaneous.display_name = user.first_name + ' ' + user.last_name;
+		}
+
+		if (payload.event_type !== 'mi_tooltip_shown' && payload.event_type !== 'mi_workflow_play' &&
+			payload.event_type !== "mi_mybot_run") {
+			payload.miscellaneous.env_code = GmCXt.trackerV1.getEnvCode(payload.url);
+		}
+
+		payload.miscellaneous.user_timezone = GmCXt.trackerV1.getTimeZone();
+
+		return payload;
+	},
+
+	sendGuideAutomationEvent: function(data) {
+
+		var onSave = function() {
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:myBot_report_saved');
+			GmCXt.log(37, "Automation Report saved. Init the tracker again.");
+			GmCXt.storage().get(['desktopReq']).then(function(st) {
+				if (st.desktopReq) {
+					GmCXt.deskReq = st.desktopReq;
+					GmCXt.sendMessageToDesktopApp('task_complete', {
+						entity_code: data.payload[0].entity_code
+					});
+				}
+			});
+		};
+
+		GmCXt.api.saveMyBotReport(data)
+			.then(function(response) {
+				GmCXt.log(45, 'SENT events');
+
+
+				onSave();
+			})
+			.catch(function(result) {
+
+				GmCXt.log(45, 'ERROR, events restored');
+
+				GmCXt.trackerV1.apiV1(data).finally(onSave);
+			});
+	},
+
+	getEnvCode: function(url) {
+
+		var env_code = GmCXt.checkDomainInApps(url).app_env;
+
+		if (!env_code) env_code = "";
+
+		return env_code;
+	},
+
+	getTimeZone: function() {
+		return Intl.DateTimeFormat().resolvedOptions().timeZone;
+	},
+
+	getAppCode: function() {
+
+		if (GmCXt.externalAppId) {
+			return GmCXt.externalAppId;
+		} else if (GmCXt.appList && GmCXt.activeAppId) {
+			return GmCXt.appList['app:' + GmCXt.activeAppId].external_id;
+		}
+	},
+
+	getAppSettings: function() {
+		if (GmCXt.appList && GmCXt.activeAppId) {
+			return GmCXt.appList['app:' + GmCXt.activeAppId].settings;
+		}
+	},
+
+	trackPanelOpen: function(s, a) {
+
+		if (GmCXt.trackingDisabled()) return;
+		var eventName = "mi_panel_open";
+		if (a === "chatbot") eventName = "mi_bot_panel_open";
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: eventName,
+			objectId: GmCXt.user.user_key,
+			miscellaneous: {
+				source: s,
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				url: GmCXt.urlParts.fullUrl
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	getPayloadForPlayEvent: function(e) {
+		var returnedPayload = GmCXt.trackerV1.setPayLoad(e);
+		if (returnedPayload) {
+			GmCXt.trackerV1.sendPayloadEventCall(returnedPayload);
+		}
+	},
+
+	sendPayloadEventCall: function(payload) {
+		if (!payload) return;
+
+		var m = {
+			action: "mgPlayerJSTest_action:payload_event_call",
+			data: payload
+		};
+		GmCXt.sendToParentWindow(m);
+	},
+
+	trackGuidePlayEvent: function() {
+		GmCXt.log(38, "Fn. trackGuidePlayEvent");
+		if (GmCXt.trackingDisabled()) return;
+
+		for (var key in GmCXt.guidePlayTracker) {
+
+			var g = GmCXt.guidePlayTracker[key];
+
+			var completeEventTracked = 0;
+			if (GmCXt.playerI && g.guide_id === GmCXt.playerI.tour.tour_id && GmCXt.playerI.completeEventTracked) {
+				completeEventTracked = 1;
+			}
+
+			g.guide_complete = completeEventTracked;
+
+			if (g.steps_details && g.steps_details.length) {
+
+				g.event_end_time = new Date().getTime();
+
+				var length = g.steps_details.length;
+				g.steps_details[length - 1].event_end_time = new Date().getTime();
+
+				var e = {
+					app_code: GmCXt.trackerV1.getAppCode(),
+					eventName: g.mode,
+					objectId: g.guide_id,
+					miscellaneous: g,
+					screen_size: GmCXt.trackerV1.getScreenSize()
+				};
+
+				GmCXt.trackerV1.getPayloadForPlayEvent(e);
+			}
+		}
+	},
+
+	trackGuideSearch: function(o) {
+
+		if (GmCXt.trackingDisabled()) return;
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_search',
+			objectType: 'global',
+			objectId: GmCXt.user.user_key,
+			miscellaneous: {
+				search_keyword: o.search_text,
+				results_returned: o.results_returned,
+				search_result_clicked: o.search_result_clicked,
+				event_start_time: o.startTime,
+				event_end_time: new Date().getTime(),
+				url: GmCXt.urlParts.fullUrl
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	trackGuideDownload: function(tour, type) {
+
+		if (GmCXt.trackingDisabled()) return;
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_guide_download',
+			objectId: tour.tour_id,
+			miscellaneous: {
+				guide_id: tour.tour_id,
+				type: type,
+				play_instance_id: GmCXt.getUUID(),
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				url: GmCXt.urlParts.fullUrl
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	trackBotInteraction: function(tours) {
+
+		if (GmCXt.trackingDisabled()) return;
+		if (tours && tours.length) {
+			for (var i = 0; i < tours.length; i++) {
+				var e = {
+					app_code: GmCXt.trackerV1.getAppCode(),
+					eventName: 'mi_bot_interaction',
+					objectId: tours[i].tour_id,
+					miscellaneous: {
+						guide_id: tours[i].tour_id,
+						play_instance_id: GmCXt.getUUID(),
+						event_start_time: new Date().getTime(),
+						event_end_time: new Date().getTime(),
+						url: GmCXt.urlParts.fullUrl
+					},
+					screen_size: GmCXt.trackerV1.getScreenSize()
+				};
+
+				var steps_details = [];
+				for (var j = 0; j < tours[i].steps.length; j++) {
+					var sd = {
+						step_id: tours[i].steps[j].step_id,
+						step_index: parseInt(tours[i].steps[j].step_order),
+						step_title: tours[i].steps[j].step_title,
+						event_start_time: new Date().getTime(),
+						event_end_time: new Date().getTime(),
+						page_url: GmCXt.urlParts.fullUrl,
+						error_type: "",
+						audio_muted: GmCXt.stepAudioRunningStatus ? 0 : 1
+					};
+
+					if (tours[i].steps[j].step_settings.automation.enableBot &&
+						tours[i].steps[j].step_settings.automation.botQuestion) {
+						sd.requires_human_intervention = 1;
+						sd.step_skipped = 0;
+						var ans = tours[i].steps[j].step_settings.automation.defaultData;
+						if (ans) {
+							sd.isAnswered = true;
+						} else {
+							sd.isAnswered = false;
+						}
+						sd.botQuestion = tours[i].steps[j].step_settings.automation.botQuestion;
+					} else {
+						sd.requires_human_intervention = 0;
+						sd.step_skipped = 0;
+					}
+					steps_details.push(sd);
+				}
+
+				e.miscellaneous.steps_details = steps_details;
+
+				var payload = GmCXt.trackerV1.setPayLoad(e);
+				GmCXt.trackerV1.sendPayloadEventCall(payload);
+			}
+		}
+	},
+
+	trackGuideShowMe: function(tour, type, i, isAudio, segs, taskId) {
+
+		if (GmCXt.trackingDisabled()) return;
+
+		var url = (tour.tour_url.indexOf('://') === -1) ? 'https://' + tour.tour_url : tour.tour_url;
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_showme_play',
+			objectId: tour.tour_id,
+			miscellaneous: {
+				guide_id: tour.tour_id,
+				type: type,
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				url: url,
+				trigger_source: GmCXt.getSource(i),
+				audio_muted: isAudio ? 0 : 1,
+				segment_group_id: segs
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		if (taskId) {
+			e.miscellaneous.task_list_id = taskId;
+		}
+
+		e.miscellaneous.play_instance_id = GmCXt.getUUID(tour.tour_id);
+		if (GmCXt.isLastStepPlayedOnShowme) {
+			e.miscellaneous.guide_complete = 1;
+		} else {
+			e.miscellaneous.guide_complete = 0;
+		}
+
+		if (GmCXt.isVideoEndedOnShowme) {
+			e.miscellaneous.guide_complete = 1;
+		}
+
+		if (GmCXt.isGiphyPlayedOnShowme) {
+			e.miscellaneous.guide_complete = 1;
+		}
+
+		GmCXt.trackerV1.getPayloadForPlayEvent(e);
+
+	},
+
+	trackTutGuide: function(tour, type, source, taskid) {
+
+		if (GmCXt.trackingDisabled()) return;
+		var url = (tour.tour_url.indexOf('://') === -1) ? 'https://' + tour.tour_url : tour.tour_url;
+		var segs = [];
+		if (!GmCXt.isEmpty(tour.tour_settings.segment_groups)) {
+			segs = GmCXt.getTourSegmentDetail(tour);
+		}
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_tutorial_guide_play',
+			objectId: tour.tour_id,
+			miscellaneous: {
+				guide_id: tour.tour_id,
+				type: type,
+				trigger_source: source,
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				url: url,
+				guide_open: 1,
+				segment_details: segs
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		if (source === "task_list") {
+			e.miscellaneous.task_list_id = taskid;
+		}
+
+		if (GmCXt.isLastStepPlayedOnCreateTutGuide) {
+			e.miscellaneous.guide_complete = 1;
+		} else {
+			e.miscellaneous.guide_complete = 0;
+		}
+
+		if (GmCXt.pdfPlayedOnUploadTut && GmCXt.fullPdfPlayedOnUploadTutGuide) {
+			e.miscellaneous.guide_complete = 1;
+		}
+
+		if (GmCXt.pdfPlayedOnUploadTutNewTab) {
+			e.miscellaneous.guide_complete = 1;
+		}
+
+		e.miscellaneous.play_instance_id = GmCXt.getUUID(tour.tour_id);
+
+		if (type === 'create_tutorial_guide') {
+
+			GmCXt.storage().get(['tutorial_steps']).then(function(st) {
+				var steps_details = [];
+
+				if (GmCXt.isEmpty(st) && source === "bot") {
+					st = {};
+					st.tutorial_steps = tour.steps;
+				}
+				st.tutorial_steps.forEach(function(step) {
+					var step_details = {
+						step_id: step.step_id,
+						step_index: parseInt(step.step_order),
+						step_title: step.step_description,
+						event_start_time: new Date().getTime(),
+						event_end_time: new Date().getTime(),
+						page_url: GmCXt.urlParts.fullUrl,
+						error_type: "",
+						audio_muted: GmCXt.stepAudioRunningStatus ? 0 : 1
+					};
+					steps_details.push(step_details);
+				});
+				e.miscellaneous.steps_details = steps_details;
+				e.miscellaneous.tutorial_rendered = 'inline';
+				GmCXt.trackerV1.getPayloadForPlayEvent(e);
+			});
+
+		} else if (type === 'upload_tutorial_guide_same_tab' ||
+			type === 'upload_tutorial_guide_new_tab') {
+			e.miscellaneous.tutorial_rendered = 'pdf';
+			var step_details = [{
+				step_id: tour.steps[0].step_id,
+				step_index: parseInt(tour.steps[0].step_order),
+				step_title: tour.steps[0].step_title,
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				page_url: GmCXt.urlParts.fullUrl,
+				error_type: "",
+				audio_muted: GmCXt.stepAudioRunningStatus ? 0 : 1
+			}];
+			e.miscellaneous.steps_details = step_details;
+			GmCXt.trackerV1.getPayloadForPlayEvent(e);
+		}
+	},
+
+	trackClientVisit: function() {
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_client_visit',
+			objectId: GmCXt.user.user_key,
+			miscellaneous: {
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				url: GmCXt.trackerUtil.page_url,
+				is_new_user: false
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	//test me tracker
+	trackTestMe: function(testMe) {
+
+		if (GmCXt.trackingDisabled()) return;
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_test',
+			objectId: testMe.tourId,
+			miscellaneous: {
+				guide_id: testMe.tourId,
+				test_result: testMe.testResult.toLowerCase(),
+				test_duration: testMe.userTime,
+				test_effectiveness: testMe.testEffectiveness || 0,
+				test_expected_steps: testMe.stepCount,
+				test_steps_performed: testMe.eventCount,
+				test_expected_time: testMe.expectedTime,
+				play_instance_id: GmCXt.getUUID(testMe.tourId),
+				event_start_time: testMe.startTime,
+				event_end_time: new Date().getTime(),
+				url: testMe.url
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	trackFeatureClick: function(tag) {
+
+		if (!GmCXt.trackerUtil.featureTracking) return;
+
+		GmCXt.log(16, 'TAG CLICK event ', tag);
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_feature_click',
+			objectId: tag.tour_id,
+			miscellaneous: {
+				step_id: tag.step_id,
+				tour_id: tag.tour_id,
+				group_id: tag.group_id,
+				event_start_time: new Date().getTime(),
+				event_end_time: new Date().getTime(),
+				page_url: GmCXt.urlParts.fullUrl,
+				play_instance_id: GmCXt.getUUID(),
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	trackPageVisit: function(onPageUnload) {
+
+		if (!GmCXt.trackerUtil.pageTracking) return;
+
+		if (!GmCXt.pageVisit) return;
+
+		var timeSpentOnPage = GmCXt.pageVisit.timeSpent ? GmCXt.pageVisit.timeSpent : (new Date().getTime() - GmCXt.pageVisit.timeStarted);
+
+		if (timeSpentOnPage < GmCXt.t_.sec5) return;
+
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_page_visit',
+			objectId: GmCXt.pageVisit.userKey,
+			miscellaneous: {
+				time_spend_on_page: timeSpentOnPage,
+				page_url: GmCXt.urlParts.fullUrl,
+				page_title: GmCXt.pageVisit.title,
+				page_load_time: GmCXt.pageVisit.pageLoadTime || 0,
+				referrer_url: document.referrer,
+				event_time: new Date().getTime(),
+				play_instance_id: GmCXt.getUUID()
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		GmCXt.log(2, "Page track event saved", e);
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+
+		if (onPageUnload) {
+			GmCXt.storage().set({
+				'trackPageVisit': JSON.stringify(payload)
+			});
+		} else {
+			GmCXt.trackerV1.sendPayloadEventCall(payload);
+		}
+
+	},
+
+	trackUserPulse: function() {
+		if (GmCXt.trackingDisabled() || GmCXt.isSumtotal() || GmCXt.isSbx() || GmCXt.isLXP()) return;
+
+		var date = new Date();
+		var currentTimestamp = date.getTime();
+
+		var currentPulsePayloadTime = {
+			time: currentTimestamp,
+			app_code: GmCXt.trackerV1.getAppCode()
+		};
+
+		var triggerPulseTrack = function() {
+			var e = {
+
+				app_code: GmCXt.trackerV1.getAppCode(),
+				eventName: 'mi_user_pulse',
+				objectId: GmCXt.user.user_key,
+				miscellaneous: {},
+				screen_size: GmCXt.trackerV1.getScreenSize()
+			};
+
+			var payload = GmCXt.trackerV1.setPayLoad(e);
+			GmCXt.trackerV1.sendPayloadEventCall(payload);
+		};
+
+		var getAppIndexIfExist = function(d, appCode) {
+			var ind = -1;
+			d.filter(function(value, index) {
+				if (appCode === value.app_code) {
+					ind = index;
+					return ind;
+				}
+
+			});
+			return ind;
+		};
+
+		GmCXt.storage().get([
+			'userPulsePayloadTime'
+		]).then(function(res) {
+			var pulselist = [];
+			if (GmCXt.isEmpty(res)) {
+				triggerPulseTrack();
+				pulselist.push(currentPulsePayloadTime);
+			} else {
+				if (!GmCXt.isEmpty(res) && res.userPulsePayloadTime) {
+
+					pulselist = GmCXt.parseJSON(res.userPulsePayloadTime);
+
+					var appIndex = getAppIndexIfExist(pulselist, GmCXt.trackerV1.getAppCode());
+
+					if (appIndex !== -1) {
+						if (pulselist[appIndex].app_code === GmCXt.trackerV1.getAppCode() &&
+							(currentTimestamp - pulselist[appIndex].time) > GmCXt.t.tracking8hr) {
+							triggerPulseTrack();
+							pulselist[appIndex].time = currentTimestamp;
+						}
+					} else {
+						triggerPulseTrack();
+						pulselist.push(currentPulsePayloadTime);
+					}
+				} else {
+					triggerPulseTrack();
+					pulselist.push(currentPulsePayloadTime);
+				}
+			}
+
+			GmCXt.storage().set({
+				'userPulsePayloadTime': JSON.stringify(pulselist)
+			});
+		});
+	},
+
+	trackTooltips: function(currentTooltip) {
+		if (GmCXt.trackingDisabled()) return;
+
+		if (GmCXt.isEmpty(GmCXt.tooltipTrackingList)) {
+			return;
+		}
+
+		var getCurrTTIndex = function(arr, stepId, actionType) {
+			var ind = -1;
+			arr.filter(function(value, index) {
+				if (stepId === value.ttStepId && actionType === value.ttActionType) {
+					ind = index;
+					return ind;
+				}
+
+			});
+			return ind;
+		};
+
+		var triggerTooltipTrack = function(tt, id) {
+			var e = {};
+			if (tt.track) {
+
+				if (GmCXt.isEmpty(currentTooltip.tooltip_play_instances)) {
+					currentTooltip.tooltip_play_instances.push({
+						event_start_time: GmCXt.getCurrentTimeInMilSec(),
+						event_end_time: GmCXt.getCurrentTimeInMilSec()
+					});
+				}
+
+				currentTooltip.play_instance_id = GmCXt.getUUID();
+
+				var segDet = [];
+				if (currentTooltip.segment_details) {
+					segDet = currentTooltip.segment_details;
+					delete currentTooltip.segment_details;
+				}
+
+				e = {
+					app_code: GmCXt.trackerV1.getAppCode(),
+					eventName: 'mi_tooltip_shown',
+					objectId: tt.tourId,
+					miscellaneous: {
+						url: tt.url,
+						event_start_time: GmCXt.getCurrentTimeInMilSec(),
+						event_end_time: GmCXt.getCurrentTimeInMilSec(),
+						tooltips_details: [currentTooltip],
+						env_code: GmCXt.trackerV1.getEnvCode(tt.url),
+						segment_details: segDet
+					},
+					url: GmCXt.trackerUtil.page_url || GmCXt.urlParts.fullUrl || tt.url,
+					screen_size: tt.screen_size
+				};
+
+
+				GmCXt.trackerUtil.ttPayload["tt_" + tt.tourId] = e;
+				var payload = GmCXt.trackerV1.setPayLoad(e);
+				GmCXt.trackerV1.sendPayloadEventCall(payload);
+
+
+				GmCXt.tooltipTrackingList[id].ttDetails.tooltip_play_instances = [];
+				GmCXt.tooltipTrackingList[id].track = false;
+			}
+		};
+
+		var cb = function() {
+
+			var list = [];
+			var step_id = "step_" + currentTooltip.tooltip_id;
+			var currentTTData = {
+				ttStepId: step_id,
+				ttTime: GmCXt.getCurrentTimeInMilSec(),
+				ttActionType: currentTooltip.action_type[0]
+			};
+
+			if (GmCXt.tooltipTrackingList[step_id].track) {
+				if (GmCXt.tooltipTrackData && !GmCXt.isEmpty(GmCXt.tooltipTrackData)) {
+					list = GmCXt.parseJSON(GmCXt.tooltipTrackData);
+					var ind = getCurrTTIndex(list, step_id, currentTooltip.action_type[0]);
+					if (ind !== -1) {
+						var timeDiff = GmCXt.getCurrentTimeInMilSec() - list[ind].ttTime;
+						if (list[ind].ttStepId === step_id &&
+							list[ind].ttActionType === currentTooltip.action_type[0] &&
+							timeDiff > GmCXt.t.tracking8hr) {
+							triggerTooltipTrack(GmCXt.tooltipTrackingList[step_id], step_id);
+							list[ind].ttTime = GmCXt.getCurrentTimeInMilSec();
+						}
+					} else {
+						triggerTooltipTrack(GmCXt.tooltipTrackingList[step_id], step_id);
+						list.push(currentTTData);
+					}
+				} else {
+					triggerTooltipTrack(GmCXt.tooltipTrackingList[step_id], step_id);
+					list.push(currentTTData);
+				}
+
+				GmCXt.tooltipTrackData = list;
+				GmCXt.storage().set({
+					'tooltipTrackData': JSON.stringify(list)
+				});
+			}
+		};
+
+		cb();
+
+	},
+
+	trackBeacons: function(currentBeaconTour, actionType) {
+		if (GmCXt.trackingDisabled()) return;
+
+		var bTrackList = [];
+
+		var bTrackData = {
+			beacon: currentBeaconTour.tour_id + "_" + actionType,
+			bTime: GmCXt.getCurrentTimeInMilSec(),
+		};
+
+		var segs = [];
+		if (!GmCXt.isEmpty(currentBeaconTour.tour_settings.segment_groups)) {
+			segs = GmCXt.getTourSegmentDetail(currentBeaconTour);
+		}
+
+		var beaconUrl = (currentBeaconTour.tour_url.indexOf('://') === -1) ? 'https://' + currentBeaconTour.tour_url : currentBeaconTour.tour_url;
+
+		GmCXt.storage().get(['beaconTrackData']).then(function(result) {
+			var blist = [];
+			if (!GmCXt.isEmpty(result)) blist = GmCXt.parseJSON(result.beaconTrackData);
+
+			if (GmCXt.isEmpty(blist)) {
+				bTrackList.push(bTrackData);
+				trackBeaconCB();
+			} else {
+				var currentBIndx = blist.findIndex(function(item) {
+					return item.beacon === bTrackData.beacon;
+				});
+				if (currentBIndx === -1) {
+					bTrackList = blist;
+					bTrackList.push(bTrackData);
+					trackBeaconCB();
+				} else {
+					var timeDiff = GmCXt.getCurrentTimeInMilSec() - blist[currentBIndx].bTime;
+					if (timeDiff > GmCXt.t.tracking8hr) {
+						blist[currentBIndx].bTime = GmCXt.getCurrentTimeInMilSec();
+						trackBeaconCB();
+					}
+				}
+			}
+		});
+
+		function trackBeaconCB() {
+			e = {
+				app_code: GmCXt.trackerV1.getAppCode(),
+				eventName: 'mi_beacon_shown',
+				objectId: currentBeaconTour.tour_id,
+				miscellaneous: {
+					env_code: GmCXt.trackerV1.getEnvCode(currentBeaconTour.tour_url),
+					url: beaconUrl,
+					play_instance_id: GmCXt.getUUID(),
+					action_type: [actionType],
+					segment_details: segs,
+					is_new_user: false,
+					event_start_time: GmCXt.getCurrentTimeInMilSec(),
+					event_end_time: GmCXt.getCurrentTimeInMilSec(),
+				},
+				url: GmCXt.trackerUtil.page_url || GmCXt.urlParts.fullUrl || currentBeaconTour.tour_url,
+				screen_size: GmCXt.trackerV1.getScreenSize()
+			};
+
+			var payload = GmCXt.trackerV1.setPayLoad(e);
+			GmCXt.trackerV1.sendPayloadEventCall(payload);
+
+			GmCXt.storage().set({
+				'beaconTrackData': JSON.stringify(bTrackList)
+			});
+		}
+
+	},
+
+	trackPushNotification: function(pTour, actionType) {
+		if (GmCXt.trackingDisabled()) return;
+
+
+		var segs = [];
+		if (!GmCXt.isEmpty(pTour.tour_settings.segment_groups)) {
+			segs = GmCXt.getTourSegmentDetail(pTour);
+		}
+
+		var pushUrl = (pTour.tour_url.indexOf('://') === -1) ? 'https://' + pTour.tour_url : pTour.tour_url;
+
+		e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_push_notification_shown',
+			objectId: pTour.tour_id,
+			miscellaneous: {
+				env_code: GmCXt.trackerV1.getEnvCode(pTour.tour_url),
+				url: pushUrl,
+				play_instance_id: GmCXt.getUUID(),
+				action_type: [actionType],
+				segment_details: segs,
+				is_new_user: false,
+				event_start_time: GmCXt.getCurrentTimeInMilSec(),
+				event_end_time: GmCXt.getCurrentTimeInMilSec(),
+			},
+			url: GmCXt.trackerUtil.page_url || GmCXt.urlParts.fullUrl || pTour.tour_url,
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.sendPayloadEventCall(payload);
+	},
+
+	trackSurveyInstantResponse: function(surveyAnswer, d) {
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_sentiment_response',
+			objectType: 'guide',
+			objectId: d.sentimentCode,
+			miscellaneous: {
+				response_code: GmCXt.getUUID(),
+				trigger_source_type: d.trigger_source_type,
+				trigger_source_id: d.trigger_source_id,
+				answers: surveyAnswer,
+				source_url: GmCXt.urlParts.fullUrl,
+				source_page_title: GmCXt.pageTitle
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.apiTrackSentiment(payload);
+	},
+
+	trackConversationResponse: function(convAnswer, d) {
+		var e = {
+			app_code: GmCXt.trackerV1.getAppCode(),
+			eventName: 'mi_conversation_response',
+			objectType: 'bot',
+			objectId: d.conversationCode,
+			miscellaneous: {
+				response_code: GmCXt.getUUID(),
+				trigger_source_type: d.trigger_source_type,
+				trigger_source_id: d.trigger_source_id,
+				answers: convAnswer,
+				source_url: GmCXt.urlParts.fullUrl,
+				source_page_title: GmCXt.pageTitle
+			},
+			screen_size: GmCXt.trackerV1.getScreenSize()
+		};
+
+		var payload = GmCXt.trackerV1.setPayLoad(e);
+		GmCXt.trackerV1.apiTrackConversation(payload);
+	},
+
+	trackMyBotEvents: function(data) {
+
+		if (data) {
+			var eventType = 'mi_mybot_run';
+			var e = {
+				app_code: GmCXt.trackerV1.getAppCode(),
+				eventName: eventType,
+				objectId: data.testCode,
+				miscellaneous: {
+					"run_type": data.runType,
+					"status": data.status,
+					"resultStatus": data.resultStatus,
+					"result_sequence": data.resultSequence
+				},
+				screen_size: GmCXt.trackerV1.getScreenSize()
+			};
+
+			var payload = GmCXt.trackerV1.setPayLoad(e);
+			GmCXt.trackerV1.sendGuideAutomationEvent(payload);
+		}
+	},
+
+	trackElNotFound: function(data) {
+
+		if (data) {
+
+			var p = {
+				page_url: GmCXt.urlParts.fullUrl,
+				page_title: GmCXt.pageTitle,
+				event_start_time: GmCXt.getCurrentTimeInMilSec(),
+				event_end_time: GmCXt.getCurrentTimeInMilSec(),
+				step_id: data.step_id || null,
+			};
+
+			var e = {
+				app_code: GmCXt.trackerV1.getAppCode(),
+				eventName: "mi_rule_enhancement",
+				objectId: data.tour_id,
+				miscellaneous: {
+					source: data.source,
+					play_instance_id: GmCXt.getUUID(),
+					element_player_instance: [p]
+				},
+				url: GmCXt.urlParts.fullUrl,
+				screen_size: GmCXt.trackerV1.getScreenSize()
+			};
+
+			GmCXt.trackerUtil.ePayload["el_" + data.tour_id] = e;
+			var payload = GmCXt.trackerV1.setPayLoad(e);
+			GmCXt.trackerV1.sendPayloadEventCall(payload);
+		}
+	},
+
+	sendEvents: function(forcePush) {
+		if (GmCXt.trackerUtil.guidePayload.length) {
+			GmCXt.trackerV1.track(GmCXt.trackerUtil.guidePayload);
+		}
+	}
+};
+
+GmCXt.trackingDisabled = function() {
+	if (GmCXt.trackerUtil.enableTracking)
+		return false;
+	else
+		return true;
+};
+
+GmCXt.trackerV1.startMyBotTracking = function() {
+	GmCXt.log(37, "Stop tracking events");
+	clearInterval(GmCXt.trackerV1.interval);
+	GmCXt.trackerV1.sendEvents();
+};
+/*global GmCXt, mg$ */
+var SMARTTIP_WAIT_TIME_TO_RENDER = 5000;
+
+GmCXt.auto = (function() {
+
+	var pub = {};
+	var self = {};
+	var FAILED = "Failed";
+	var PASSED = "Passed";
+	var SKIPPED = "Skipped";
+	var UNKNOWN = "UNKNOWN";
+	var isTourPlayingOnAnotherTab = false;
+
+	pub.init = function(app) {
+
+		GmCXt.log(36, 'START MYBOT', {
+			app: app
+		});
+		self = {};
+		self.tours = [];
+		self.ignoreTours = [];
+		self.current = 0;
+		self.app = app;
+		self.app.external_id = GmCXt.appList['app:' + self.app.application_id].external_id;
+		self.app.settings = {
+			domains: GmCXt.appList['app:' + self.app.application_id].settings.domains
+		};
+		self.startURLDomain = window.location.host;
+		self.testResultsDataArray = [];
+		self.apiPayloadResultSequence = [];
+		self.trackerObj = {};
+		self.shouldRedirectToTourPage = true;
+		self.smartTipSteps = [];
+		self.showDetailedProgressbar = false;
+
+		pub.setEndTime();
+		pub.startWatcher();
+
+		if (!self.app.categories || self.app.categories.length < 1) {
+			GmCXt.log(36, 'NO DATA FOUND TO RUN MYBOT', 1);
+		}
+		getTours();
+
+		self.totalTours = self.tours.length;
+
+		if (self.totalTours < 1) {
+			GmCXt.log(36, 'NO GUIDE FOUND', 1);
+		}
+
+		GmCXt.testResultsFromCreator = {
+			show: false,
+		};
+
+		pub.showProgress();
+		resetStorageData(function() {
+			redirectToTourPage();
+		});
+
+	};
+
+	var resetStorageData = function(cb) {
+		if (GmCXt.onScreenTooltipGuideInfo) {
+			pub.setTooltipAutoDataToStorage(GmCXt.onScreenTooltipGuideInfo);
+		}
+		var notificationData = getNotificationData();
+		self.automationInProgress = true;
+		GmCXt.storage().set({
+			'testAuto': self,
+			'testNotificationAuto': notificationData,
+			'testAutoResultsFromCreator': GmCXt.testResultsFromCreator
+		}).then(function() {
+			cb();
+		});
+	};
+
+	pub.isAutomationRunning = function() {
+		if (self) {
+			return self.automationInProgress;
+		}
+		return false;
+	};
+
+	pub.getAutomatedCurrentTour = function() {
+		if (self && self.tours.length > 0) {
+			return self.tours[self.current];
+		}
+		return false;
+	};
+
+	pub.fail = function(step, message) {
+		if (!step) {
+			step = {};
+		}
+
+		GmCXt.log(36, "FAILED: STEP TEST AUTOMATION", {
+			stepTitle: step.step_title
+		});
+
+		var errorMessage = message ? message.errorMessage : '';
+		pub.get(function() {
+			if (!self) {
+				return;
+			}
+			var stepTitle = cleanCommasAndHTMLTagsFromString(step.step_title);
+			self.tours[self.current].test = {
+				status: FAILED,
+				stepTitle: stepTitle ? stepTitle : '',
+				stepOrder: step.step_order ? step.step_order : '',
+				errorMessage: errorMessage
+			};
+			self.smartTipSteps = [];
+			step.errorMessage = errorMessage;
+			pub.updateTrackerObj(self.tours[self.current].tour_id, FAILED, step, function() {
+				pub.next();
+			});
+		});
+	};
+
+	pub.newTabStepFound = function(option, isNextStep) {
+		if (option === "new_tab") {
+			isTourPlayingOnAnotherTab = true;
+			mg$('.mgPlayerJSTest_auto-prog-wrapper').remove();
+		} else {
+			isTourPlayingOnAnotherTab = false;
+			pub.showProgress();
+			if (!isNextStep && option === "reload") {
+				GmCXt.playerI.isPageReloadByLastStep = true;
+
+				GmCXt.storage().set({
+					'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+					'guide_play_event': GmCXt.guidePlayTracker
+				});
+			}
+		}
+	};
+
+	pub.setCurrentBranchDetail = function(stepId, branchIndex, branchName, branchStepId, cb) {
+		GmCXt.log(36, "SET CURRENTLY PLAYING BRANCH DETAIL");
+		var branchTestData = self.tours[self.current].branchTest;
+		if (!branchTestData || branchTestData.length === 0) {
+			branchTestData = [];
+		}
+		branchTestData.push({
+			branchName: branchName,
+			branchStepId: branchStepId,
+			branchIndex: branchIndex,
+			stepId: stepId
+		});
+		self.branchStack.push({
+			branchName: branchName,
+			branchStepId: branchStepId,
+			branchIndex: branchIndex,
+			stepId: stepId
+		});
+		self.tours[self.current].branchTest = branchTestData;
+		pub.set(cb);
+	};
+
+	pub.branchPlaySuccess = function(stepId, cb) {
+		GmCXt.log(36, "TOUR BRANCH PLAYED SUCCESS");
+		var autoBranchTestStatus = self.tours[self.current].branchTest;
+		for (var i = 0; i < autoBranchTestStatus.length; i++) {
+			if (autoBranchTestStatus[i].stepId === stepId) {
+				autoBranchTestStatus[i].status = PASSED;
+				break;
+			}
+		}
+		self.branchStack.pop();
+		pub.set(cb);
+	};
+
+	pub.branchPlayFailed = function(step) {
+		GmCXt.log(36, "TOUR BRANCH PLAYED FAILED");
+		var autoBranchTestStatus = self.tours[self.current].branchTest;
+		for (var i = 0; i < autoBranchTestStatus.length; i++) {
+			if (autoBranchTestStatus[i].stepId === step.step_id) {
+				autoBranchTestStatus[i].status = FAILED;
+				pub.fail(step, {
+					errorMessage: 'Failed at branch - ' + autoBranchTestStatus[i].branchName
+				});
+				break;
+			}
+		}
+	};
+	pub.getPreviousBranch = function() {
+		var previousBranch = {};
+		if (self.branchStack && self.branchStack.length > 0) {
+			previousBranch.index = self.branchStack[self.branchStack.length - 1].branchIndex;
+			previousBranch.step = GmCXt.getCurrentStep(self.branchStack[self.branchStack.length - 1].branchStepId);
+		}
+		return previousBranch;
+	};
+
+	/*
+		*	Both params are optional
+		*/
+	pub.succeed = function() {
+		GmCXt.log(36, "TOUR PLAY SUCCESS");
+		self.tours[self.current].test = {
+			status: PASSED
+		};
+		self.smartTipSteps = [];
+		self.playNext = true;
+		GmCXt.log(37, "Tour Marked as Success");
+		pub.updateTrackerObj(self.tours[self.current].tour_id, PASSED, null, function() {
+			GmCXt.log(37, "Automation - Play Next");
+			pub.next();
+		});
+	};
+
+	pub.skipped = function(step) {
+		GmCXt.log(36, "STEP PLAY SKIPPED");
+		pub.get(function() {
+			self.tours[self.current].test = {
+				status: SKIPPED,
+				stepTitle: step.step_title
+			};
+			self.smartTipSteps = [];
+			pub.updateTrackerObj(self.tours[self.current].tour_id, SKIPPED, step, function() {
+				pub.next();
+			});
+		});
+	};
+
+	pub.updateTrackerObj = function(tour_id, status, step, cb) {
+		if (!cb) {
+			cb = function() {};
+		}
+		tour_id = Number(tour_id);
+
+		var errorMessage = step ? (step.errorMessage || '') : '';
+
+		var trackerCurrentTour = self.trackerObj[tour_id];
+
+		if (!trackerCurrentTour) {
+			GmCXt.log(37, 'INCORRECT GUIDE - This step might open in a new tab/window.' +
+				' Please make sure you have the right option selected while step creation.', 1);
+			return;
+		}
+
+		var totalSteps = trackerCurrentTour.totalSteps;
+		var statusText = status;
+
+		var stepOrder = step ? step.step_order : 0;
+		var stepTitle = step ? cleanCommasAndHTMLTagsFromString(step.step_title) : '';
+
+		if (status === FAILED && stepOrder) {
+			statusText = "Failed at step [" + stepOrder + "). " + stepTitle + "]";
+		} else if (status === SKIPPED) {
+			statusText = "Skipped at step [" + stepOrder + "). " + stepTitle + "]";
+		} else if (status === PASSED) {
+			statusText = (totalSteps + "/" + totalSteps + " Step(s) " + status);
+			if (self.tours[self.current].branchTest && self.tours[self.current].branchTest.length > 0) {
+				var noOfBranchPassed = getNoOfBranchPassed();
+				statusText += '[Played ' + noOfBranchPassed + ' branches in this guide]';
+			}
+			if (self.message) {
+				errorMessage += ' ' + self.message;
+			}
+		} else if (status === UNKNOWN) {
+			statusText = '';
+		}
+
+		self.trackerObj[tour_id].index = self.current;
+		self.trackerObj[tour_id].test = {
+			statusText: statusText,
+			status: status,
+			stepTitle: stepTitle,
+			stepOrder: stepOrder,
+			errorMessage: errorMessage
+		};
+
+		GmCXt.log(37, "TRACKER OBJ UPDATED", self.trackerObj);
+		if (GmCXt.playerI) {
+			var jobId = GmCXt.playerI.currentStepId;
+			GmCXt.tourPlayerI.closeStep(jobId, false);
+			GmCXt.cleanPlayer();
+		}
+
+		// Set to storage so that it can be later hydrated on next pages.
+		pub.set(cb);
+	};
+
+	pub.updateAutomationMessage = function(message, cb) {
+		if (self.message && self.message.includes(message)) {
+			pub.set(cb);
+			return;
+		}
+		if (!self.message) {
+			self.message = "";
+		} else if (self.message !== "") {
+			self.message += ", ";
+		}
+		self.message += message;
+		pub.set(cb);
+	};
+
+	var getNoOfBranchPassed = function() {
+		var autoBranchTestStatus = self.tours[self.current].branchTest;
+		var noOfBranchPassed = 0;
+		for (var i = 0; i < autoBranchTestStatus.length; i++) {
+			if (autoBranchTestStatus[i].status === PASSED) {
+				noOfBranchPassed += 1;
+			}
+		}
+		return noOfBranchPassed;
+	};
+
+	pub.pushCurrentTourToTrackerObj = function(tour, steps, index, cb) {
+
+		GmCXt.log(36, "PUSH CURRENT TOUR TO TRACKER OBJECT");
+
+		self.branchStack = [];
+		var totalSteps = 0;
+		if (steps && steps.length > 0) {
+			steps = GmCXt.filterOutAutomationSteps(steps);
+			totalSteps = steps ? steps.length : 0;
+		}
+
+		self.trackerObj[tour.tour_id] = {
+			index: index,
+			totalSteps: totalSteps,
+			test: {
+				status: UNKNOWN
+			}
+		};
+		self.message = "";
+		// Set to storage so that it can be later hydrated on next pages.
+		pub.set(cb);
+
+		GmCXt.log(37, "PUSHED TO TRACKER OBJ", self.trackerObj);
+	};
+
+	pub.playNextAfterRedirection = function() {
+		if (!self.automationInProgress) {
+			return;
+		}
+		pub.set(function() {
+			if (self.current < self.totalTours) {
+				GmCXt.log(36, "PLAY NEXT TOUR AFTER REDIRECTION");
+				var oldTour = self.tours[self.current - 1];
+				testTour(oldTour.tour_type);
+			} else {
+				pub.stop();
+			}
+		});
+	};
+
+	pub.next = function() {
+		if (!self.automationInProgress) {
+			return;
+		}
+		pub.set(function() {
+			if (self.current < self.totalTours && !isTourPlayingOnAnotherTab) {
+				GmCXt.log(36, "TOUR PLAY NEXT");
+				self.current = self.current + 1;
+
+				redirectToTourPage();
+
+			} else {
+				pub.stop();
+			}
+		});
+	};
+
+	pub.stop = function(isInterrupted) {
+		GmCXt.log(36, "STOP MYBOT");
+		if (!isTourPlayingOnAnotherTab && GmCXt.isAutomationRunning()) {
+			if (GmCXt.playerI) GmCXt.cleanPlayer();
+			pub.get(function() {
+				pub.printReport(isInterrupted);
+				GmCXt.storage().remove(['testAuto']);
+			});
+		}
+	};
+
+	pub.set = function(cb, testAuto) {
+		GmCXt.storage().set({
+			'testAuto': self || testAuto
+		}).then(function() {
+			if (cb) {
+				cb();
+			}
+		});
+	};
+
+	pub.get = function(cb) {
+		GmCXt.storage().get(['testAuto'])
+			.then(function(st) {
+				self = st.testAuto;
+				if (cb) {
+					cb(self);
+				}
+			});
+	};
+
+	pub.setTooltipAutoDataToStorage = function(tooltips) {
+		GmCXt.log(43, "STORE TOOLTIPS", tooltips);
+		pub.getTooltipAutoDataFromStorage(function(tData) {
+			tData = Object.assign(tData, tooltips);
+
+			GmCXt.storage().set({
+				'testTooltipAuto': tData
+			});
+		});
+	};
+
+	pub.getTooltipAutoDataFromStorage = function(cb) {
+		GmCXt.storage().get(['testTooltipAuto'])
+			.then(function(st) {
+				cb(st.testTooltipAuto || {});
+			});
+	};
+
+	pub.setBeaconsAutoDataToStorage = function(beacons) {
+		GmCXt.log(49, "STORE BEACONS", beacons);
+		getBeaconsAutoDataFromStorage(function(data) {
+			if (!data) {
+				data = [];
+			}
+			data = data.concat(beacons);
+			GmCXt.storage().set({
+				'testBeaconsAuto': data
+			});
+		});
+	};
+
+	pub.trackDoNotShowNotificationsForAutomation = function(doNotShowTours, testNotificationAuto, self) {
+		if (!doNotShowTours) {
+			return;
+		}
+		Object.keys(doNotShowTours).forEach(function(tId) {
+			if (self.tours[self.current].tour_id == tId) {
+				testNotificationAuto.all[tId] = {
+					status: PASSED,
+					statusText: 'Notification marked as DO NOT SHOW'
+				};
+				GmCXt.auto.setNotificationAutoDataToStorage(testNotificationAuto);
+			}
+		});
+	};
+
+	pub.trackNotificationForAutomation = function(data) {
+
+		pub.get(function(self) {
+			if (data.isVisible) {
+				pub.trackRenderedNotificationsForAutomation(data.tours, self);
+			} else {
+				pub.getNotificationAutoDataFromStorage(function(testNoti) {
+					var snoozedTours = getSnoozedTours(data.tours, self.tours);
+					GmCXt.auto.trackSnoozedNotificationsForAutomation(snoozedTours, testNoti, self);
+					GmCXt.auto.trackDoNotShowNotificationsForAutomation(data.doNotShowTours, testNoti, self);
+				});
+			}
+		});
+	};
+
+	function getSnoozedTours(toursClosedByUser, tours) {
+		return tours.filter(function(t) {
+			if (toursClosedByUser[parseInt(t.tour_id)]) {
+				return t;
+			}
+		});
+	}
+
+	pub.trackSnoozedNotificationsForAutomation = function(snoozedTours, testNotificationAuto, self) {
+		if (snoozedTours && snoozedTours.length > 0) {
+			snoozedTours.forEach(function(t) {
+				if (self.tours[self.current].tour_id == t.tour_id) {
+					testNotificationAuto.all[t.tour_id] = {
+						status: PASSED,
+						statusText: 'Notification Snoozed'
+					};
+					GmCXt.auto.setNotificationAutoDataToStorage(testNotificationAuto);
+				}
+			});
+		}
+	};
+
+	pub.trackRenderedNotificationsForAutomation = function(tours, self) {
+		pub.getNotificationAutoDataFromStorage(function(data) {
+			if (tours && tours.length > 0) {
+				tours.forEach(function(t) {
+					if (self.tours[self.current].tour_id == t.tour_id) {
+						data.all[t.tour_id] = {
+							status: PASSED,
+							statusText: 'Notification Rendered'
+						};
+						GmCXt.auto.setNotificationAutoDataToStorage(data);
+					}
+				});
+			}
+		});
+
+	};
+
+	pub.setNotificationAutoDataToStorage = function(notAutoData, cb) {
+		pub.getNotificationAutoDataFromStorage(function(d) {
+			if (notAutoData && notAutoData.all) {
+				d.all = Object.assign(d.all || {}, notAutoData.all || {});
+			}
+			GmCXt.storage().set({
+				'testNotificationAuto': d
+			}).then(function() {
+				if (cb) {
+					cb();
+				}
+			});
+		});
+	};
+
+	pub.getNotificationAutoDataFromStorage = function(cb) {
+		GmCXt.storage().get(['testNotificationAuto'])
+			.then(function(st) {
+				if (cb) {
+					cb(st.testNotificationAuto || {});
+				}
+			});
+	};
+
+	pub.resetBeaconsAutoDataToStorage = function() {
+		GmCXt.storage().set({
+			'testBeaconsAuto': []
+		});
+	};
+
+	pub.resetTooltipAutoDataToStorage = function() {
+		GmCXt.storage().set({
+			'testTooltipAuto': {}
+		});
+	};
+
+	pub.resetNotificationAutoDataToStorage = function() {
+		GmCXt.storage().set({
+			'testNotificationAuto': {
+				all: {}
+			}
+		});
+	};
+
+	pub.onCloseTour = function() {
+		pub.get(function(self) {
+			var tourType = self.tours[self.current].tour_type;
+			if (tourType.includes("smartTip")) {
+				pub.trackTooltipStep(self.smartTipSteps);
+			} else if (tourType.includes("onboarding_tour")) {
+				pub.trackTutorialGuide();
+			} else {
+				pub.succeed();
+			}
+		});
+	};
+
+	pub.trackTutorialGuide = function() {
+		// Wait for the notifications to render when Automation is running.
+		GmCXt.timeout(function() {
+			pub.succeed();
+		}, GmCXt.t.waitForNotifications);
+	};
+
+	pub.trackTooltipStep = function(steps) {
+		// Wait for the tooltips to render when Automation is running.
+		GmCXt.timeout(function() {
+			GmCXt.auto.getTooltipAutoDataFromStorage(function(tooltipAutoData) {
+				for (var i = 0; i < steps.length; i++) {
+					var step = steps[i];
+
+					var status = FAILED;
+					if (tooltipAutoData) {
+						var tooltipGuidesStatus = tooltipAutoData['tour_' + step.tour_id];
+						if (tooltipGuidesStatus) {
+							if (tooltipGuidesStatus.visible.indexOf(step.step_id.toString()) !== -1) {
+								status = PASSED;
+							} else {
+								status = FAILED;
+							}
+						}
+					}
+					if (status === FAILED) {
+						pub.fail(step, {
+							errorMessage: 'Tooltip Failed'
+						});
+						break;
+					}
+				}
+				if (status === PASSED) {
+					pub.succeed();
+				}
+			});
+		}, SMARTTIP_WAIT_TIME_TO_RENDER);
+	};
+
+	function getBeaconsAutoDataFromStorage(cb) {
+		GmCXt.storage().get(['testBeaconsAuto'])
+			.then(function(st) {
+				cb(st.testBeaconsAuto || []);
+			});
+	}
+
+	pub.getBranchTestStatus = function() {
+		return self.tours[self.current].branchTest || [];
+	};
+
+	function getContextAutoDataFromStorage(cb) {
+		GmCXt.storage().get(['testTooltipAuto', 'testBeaconsAuto', 'testNotificationAuto'])
+			.then(function(st) {
+				cb(st.testTooltipAuto || {}, st.testBeaconsAuto || [], st.testNotificationAuto || {});
+			});
+	}
+
+	function setTestResultsToStorage(data, cb) {
+		GmCXt.storage().set({
+			'testAutoResultsFromCreator': data
+		}).then(cb || function() {});
+	}
+
+	pub.getTestResultsFromStorage = function(cb) {
+		GmCXt.storage().get(['testAutoResultsFromCreator', 'testAuto'])
+			.then(function(st) {
+				// Rehydrate the object state from storage on page refresh
+				self = st.testAuto;
+				cb(st.testAutoResultsFromCreator);
+			});
+	};
+
+	pub.onRedirectToTourPage = function() {
+		self.shouldRedirectToTourPage = false;
+		if (self.current === 0) {
+			testTour();
+		} else {
+			pub.playNextAfterRedirection();
+		}
+	};
+
+	function redirectToTourPage(linkedTourId, originalTour) {
+		if (!linkedTourId) {
+			var t = self.tours[self.current];
+		} else {
+			var t = {
+				tour_id: linkedTourId,
+			};
+		}
+
+		if (!t) {
+			pub.next();
+			return;
+		}
+		GmCXt.getTourDetails({
+			tour_id: t.tour_id,
+			category_id: t.category_id,
+			isPublic: false
+		}).then(function(tour) {
+			if (!tour || !tour.is_published) {
+
+				GmCXt.log(37, "Tour is not published or might have been deleted");
+				self.ignoreTours.push(t.tour_id); // Ignore Tours if they are not Published or deleted
+				self.totalTours = self.totalTours - 1;
+				self.tours.splice(self.current, 1);
+				redirectToTourPage();
+				return;
+			}
+			if (!originalTour) {
+				originalTour = tour;
+			}
+
+			var firstStepId = tour.tour_settings.play_structure[0].id;
+			var firstStep = GmCXt.getStepFromSteps(firstStepId, tour.steps);
+			if (firstStep.step_type === "guide") {
+				redirectToTourPage(firstStep.step_settings.tour_id.toString(), originalTour);
+				return;
+			}
+			self.shouldRedirectToTourPage = true;
+			self.playNext = false;
+			pub.pushCurrentTourToTrackerObj(originalTour, originalTour.steps, self.current, function() {
+				tour.allDomains = self.app.settings.domains;
+				GmCXt.changeUrl(firstStep.step_url, tour, self.startURLDomain);
+			});
+		});
+	}
+
+	function testTour(previousTourType) {
+		var t = self.tours[self.current];
+
+		if (!t) {
+			pub.next();
+			return;
+		}
+
+		GmCXt.log(36, "START TOUR", {
+			tourTitle: t.tour_title,
+			tour_type: t.tour_type
+		});
+
+		function getAutomationSteps(steps) {
+			return steps.filter(function(s) {
+				return (GmCXt.isAutomationStep(s));
+			});
+		}
+
+		pub.setEndTime();
+
+		GmCXt.getTourDetails({
+			tour_id: t.tour_id,
+			category_id: t.category_id,
+			isPublic: false
+		}).then(function(tour) {
+
+			if (tour.tour_type.includes("smartTip")) {
+				self.smartTipSteps = GmCXt.filterOutAutomationSteps(tour.steps);
+			}
+			tour.previousTourType = previousTourType;
+			var delay = 8000;
+			var automationSteps = getAutomationSteps(tour.steps);
+
+			if (!(tour.tour_type.includes("smartTip")) && !(tour.tour_type.includes("onboarding_tour"))) {
+				GmCXt.timeout(function() {
+					if (self.automationInProgress) {
+						GmCXt.getTourDetailsCallback(tour, self.app.settings.domains, 'automation', 'live');
+					}
+				}, delay);
+			} else {
+				var automationSteps = getAutomationSteps(tour.steps);
+				var ruleMatchDelayTime = tour.tour_settings.ruleDelayTime;
+				if (automationSteps.length > 0) {
+					tour.steps = automationSteps;
+					GmCXt.timeout(function() {
+						GmCXt.getTourDetailsCallback(tour, self.app.settings.domains, 'automation', 'live');
+					}, ruleMatchDelayTime + delay);
+				} else if (tour.tour_type.includes("smartTip")) {
+					pub.showProgress();
+					GmCXt.timeout(function() {
+						pub.trackTooltipStep(self.smartTipSteps);
+					}, ruleMatchDelayTime);
+				} else {
+					pub.trackTutorialGuide();
+				}
+				pub.set();
+			}
+		});
+
+	}
+
+	/*
+		* Set timeout for automation and increment it on every step played.
+		* So that results are always shown even if due to some reasons automation hangs in between
+		*/
+	pub.setEndTime = function() {
+		GmCXt.log(37, "Automation: Set End Time: ", GmCXt.t.autoWaitTime);
+		var t = GmCXt.t.autoWaitTime + GmCXt.t.autoEndTime;
+		self.endTime = new Date().getTime() + t;
+		pub.set();
+	};
+
+	/* 
+		* Watch every 10 seconds for endTime and stop automation for current guide if time exceeds
+		*/
+	pub.startWatcher = function() {
+		var itr = function() {
+			if (!self.automationInProgress) {
+				return;
+			}
+			if ((new Date()).valueOf() < self.endTime) {
+				if (!isTourPlayingOnAnotherTab) {
+					pub.showProgress();
+				}
+				setTimeout(itr, GmCXt.t.guideAutoWatch);
+			} else {
+				GmCXt.log(37, "Stop automation for current guide due to timeout");
+				if (isTourPlayingOnAnotherTab) {
+					return;
+				}
+				pub.setEndTime();
+				var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+				pub.fail(step, {
+					errorMessage: "Stop automation for current guide due to timeout"
+				});
+			}
+		};
+		itr();
+	};
+
+	pub.getDetailedProgressBar = function() {
+		var html =
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_auto-prog-wrapper mgPlayerJSTest_inline-block-vm'>" +
+			getProgressBarHeader() +
+			"  	<wmgPlayerJSTest_ class='mgPlayerJSTest_auto-prog-container-label'>" + GmCXt.label.active + "</wmgPlayerJSTest_>" +
+			" 	<wmgPlayerJSTest_ class='mgPlayerJSTest_active-progress-bar-container'>" +
+			"   	<wmgPlayerJSTest_ class='mgPlayerJSTest_auto-progress-bar-loader'></wmgPlayerJSTest_>" +
+			" 		<span style='padding-left: 10px; margin-top:5px;'>" + GmCXt.label.guide + (self.current + 1) + " : " + self.tours[self.current].tour_title + "</span>" +
+			"	</wmgPlayerJSTest_>" +
+			"  	<wmgPlayerJSTest_ class='mgPlayerJSTest_auto-prog-container-label'>" + GmCXt.label.completed + "</wmgPlayerJSTest_>" +
+			"  	<wmgPlayerJSTest_ class='mgPlayerJSTest_completed-progress-bar-container' style='max-height: 250px'>";
+		for (var i = 1; i < self.current + 1; i++) {
+			html += "<div class='mgPlayerJSTest_progr-bar-guide-item' style='padding: 5px;'>";
+			if (self.tours[i - 1].test.status === "Passed") {
+				html += "<span>&#9989;</span>";
+			} else {
+				html += "<span>&#10060;</span>";
+			}
+			html += "<span style='padding-left: 10px;'>" + GmCXt.label.guide + i + " : " + self.tours[i - 1].tour_title + "</span> ";
+			html += "</div>";
+		}
+		html += "</wmgPlayerJSTest_>" +
+			getProgressBarFooter(true) +
+			"</wmgPlayerJSTest_>";
+
+		return html;
+	};
+
+	pub.getShortProgressBar = function() {
+		return "<wmgPlayerJSTest_ class='mgPlayerJSTest_auto-prog-wrapper mgPlayerJSTest_inline-block-vm' style='height:90px;'>" +
+			getProgressBarHeader() +
+			getProgressBarFooter(false) +
+			"</wmgPlayerJSTest_>";
+	};
+
+	var getProgressBarHeader = function() {
+		return "" +
+			"  <wmgPlayerJSTest_ class='mgPlayerJSTest_auto-progress-bar-container'>" +
+			"	 <wmgPlayerJSTest_ class='mgPlayerJSTest_prog-count mgPlayerJSTest_inline-block-vm'>" +
+			GmCXt.label.running + " " + (self.current + 1) + "/" + self.totalTours +
+			"	 </wmgPlayerJSTest_>" +
+			"    <wmgPlayerJSTest_ class='mgPlayerJSTest_auto-progress-bar-loader'></wmgPlayerJSTest_>" +
+			"  </wmgPlayerJSTest_>";
+	};
+
+	var getProgressBarFooter = function(showLess) {
+		var html = "" +
+			"  <wmgPlayerJSTest_ style='display:flex; flex-direction:row; justify-content:space-between; height:38px; margin-top:5px; padding:10px; '>";
+
+		if (showLess) {
+			html += "<wmgPlayerJSTest_ id='mgPlayerJSTest_btn-showless' class='mgPlayerJSTest_auto-prog-expand-options'><a>" + GmCXt.label.lessDetails + "</a></wmgPlayerJSTest_>";
+		} else {
+			html += "<wmgPlayerJSTest_ id='mgPlayerJSTest_btn-showmore' class='mgPlayerJSTest_auto-prog-expand-options'><a>" + GmCXt.label.viewMoreDetails + "</a></wmgPlayerJSTest_>";
+		}
+		html += "<wmgPlayerJSTest_ id='mgPlayerJSTest_btn-default' class='action-btn mgPlayerJSTest_auto-prog-btn'>" + GmCXt.label.stop + "</wmgPlayerJSTest_></wmgPlayerJSTest_>";
+		return html;
+	};
+
+	pub.showProgress = function() {
+
+		if (!self.automationInProgress) {
+			return;
+		}
+
+		// First remove any previously existing element
+		mg$(".mgPlayerJSTest_auto-prog-wrapper").remove();
+
+		if (self.showDetailedProgressbar) {
+			var progressBar = pub.getDetailedProgressBar();
+
+			mg$("body").append(progressBar);
+			document.getElementById("mgPlayerJSTest_btn-showless").onmouseup = function() {
+				self.showDetailedProgressbar = false;
+				pub.showProgress();
+			};
+
+		} else {
+			progressBar = pub.getShortProgressBar();
+
+			mg$("body").append(progressBar);
+			document.getElementById("mgPlayerJSTest_btn-showmore").onmouseup = function() {
+				self.showDetailedProgressbar = true;
+				pub.showProgress();
+			};
+		}
+		pub.set();
+
+		document.getElementById("mgPlayerJSTest_btn-default").onmouseup = function() {
+			mg$('.mgPlayerJSTest_auto-prog-wrapper').remove();
+			pub.set();
+			if (GmCXt.tourPlayerI) {
+				GmCXt.tourPlayerI.closeGuide(true);
+			} else {
+				pub.stop(true);
+			}
+		};
+	};
+
+	var onCloseResultPopup = function(e) {
+		mg$('.mgPlayerJSTest_auto-results-wrapper').remove();
+		pub.destroyAutomation();
+	};
+
+	pub.renderResults = function(data, url) {
+
+		if (data) {
+			GmCXt.testResultsFromCreator = data;
+		}
+
+		// Hydrate the state, so that we can rehydrate it when page is refreshed.
+		// Ideally it should be there already, but it got removed somewhere. So let's add it back.
+		pub.set();
+
+		if (GmCXt.testResultsFromCreator && GmCXt.testResultsFromCreator.show) {
+
+			var showLoader = function() {
+				mg$('#mgPlayerJSTest_auto-results-loader').show();
+				mg$('#insights_link').hide();
+			};
+
+			var hideLoader = function() {
+				mg$('#mgPlayerJSTest_auto-results-loader').hide();
+			};
+
+			var onClickInsightsLink = function() {
+
+				showLoader();
+
+				var testCode = GmCXt.testResultsFromCreator.testCode;
+				GmCXt.api.getHandOffToken().then(function(response) {
+
+					if (!response.error && response.data && response.data['handoff-token']) {
+						var token = response.data['handoff-token'];
+						var appCode = self.app.external_id;
+
+						var url = GmCXt.conf.analyticsPortalUrl.replace('v4', 'v3') + '#/automation-insights/automation-detail/' + testCode +
+							'?app_id=' + GmCXt.activeAppId + '&app_code=' + appCode + '&handoff-token=' + token;
+
+						hideLoader();
+						onCloseResultPopup();
+						window.open(url, '_blank');
+					}
+				}).catch(function(e) {
+					GmCXt.log(36, "Unable to get onetime access token for Insights portal");
+					console.error(e);
+					hideLoader();
+				});
+
+			};
+
+			// Remove if already exists
+			mg$('.mgPlayerJSTest_auto-results-wrapper').remove();
+			mg$('.mgPlayerJSTest_auto-prog-wrapper').remove();
+
+			var resultMessage = (data.testResultsDataArray[0].status === 'fail') ? GmCXt.label.automationFail : GmCXt.label.automationSuccess;
+			var errorMessage = data.testResultsDataArray[0].message_text ? data.testResultsDataArray[0].message_text : '';
+
+			var html =
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_auto-results-wrapper mgPlayerJSTest_inline-block-vm'>" +
+				"	<wmgPlayerJSTest_ class='mgPlayerJSTest_inline-block-vm mgPlayerJSTest_auto-results-header'>" +
+				"      <wmgPlayerJSTest_ class='mgPlayerJSTest_auto-results-header-title'>" + GmCXt.label.testResults + "</wmgPlayerJSTest_>" +
+				"	   <wmgPlayerJSTest_ class='mgPlayerJSTest_auto-results-close-btn'>" +
+				"         <wmgPlayerJSTest_ id='mgPlayerJSTest_auto-test-result-close-btn'>" + GmCXt.label.close + "</wmgPlayerJSTest_>" +
+				"      </wmgPlayerJSTest_>" +
+				"   </wmgPlayerJSTest_>" +
+				"   <wmgPlayerJSTest_ id='mgPlayerJSTest_auto-results-loader' class='mgPlayerJSTest_auto-insights-link-loader-wrapper'>" +
+				"       <wmgPlayerJSTest_ class='mgPlayerJSTest_auto-progress-bar-loader mgPlayerJSTest_auto-insights-link-loader'></wmgPlayerJSTest_>" +
+				"   </wmgPlayerJSTest_>" +
+				"   <wmgPlayerJSTest_ id='insights_link' class='mgPlayerJSTest_insights-link-wrapper'>" +
+				"       <wmgPlayerJSTest_ class='mgPlayerJSTest_automation-success-img-wrapper'>" +
+				"           <img src='" + GmCXt.getExtUrl('common/img/test-success.png') + "' alt='success'/>" +
+				"       </wmgPlayerJSTest_>" +
+				"       <wmgPlayerJSTest_ class='mgPlayerJSTest_automation-success-link-wrapper'>" +
+				"           <div>" + resultMessage + "</div>" +
+				(errorMessage ? 
+					"           <div>" + errorMessage + "</div>" : 
+					""
+				) +
+				"           <div>" + GmCXt.label.viewResult + "</div>" +
+				"           <a>" + GmCXt.label.autoTestResult + "</a>" +
+				"       </wmgPlayerJSTest_>" +
+				"   </wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>";
+
+			// Remove any previously existing element
+			mg$(".mgPlayerJSTest_auto-results-wrapper").remove();
+			mg$("body").append(html);
+			mg$('.mgPlayerJSTest_result-table-wrapper').hide();
+			mg$('#mgPlayerJSTest_auto-export').hide();
+			hideLoader();
+			mg$('#insights_link').on('click', 'a', onClickInsightsLink);
+			document.getElementById("mgPlayerJSTest_auto-test-result-close-btn").onmouseup = onCloseResultPopup;
+		}
+	};
+
+	pub.reportSaved = function() {
+		GmCXt.testResultsFromCreator.show = true;
+		setTestResultsToStorage(GmCXt.testResultsFromCreator, function() {
+			pub.showResults(GmCXt.testResultsFromCreator);
+		});
+	};
+
+	function getNotificationData() {
+		var data = {
+			all: {}
+		};
+		self.tours.forEach(function(t) {
+			if (t.tour_type.indexOf('overlay_tour') > -1) {
+				data.all[String(t.tour_id)] = {
+					status: "Failed",
+					statusText: 'Notification Failed'
+				};
+			}
+		});
+		return data;
+	}
+
+	function getTours() {
+		loopCategories(self.app.categories);
+	}
+
+	function loopCategories(categories) {
+
+		for (var i = 0, j = categories.length; i < j; i++) {
+			var cat = categories[i];
+			cat = GmCXt.validateDataModel(cat, GmCXt.model.category);
+
+			if (cat.sub_categories && cat.sub_categories.length > 0) {
+				loopCategories(cat.sub_categories);
+			} else {
+				self.tours = self.tours.concat(getReducedTour(cat.tours));
+			}
+		}
+	}
+
+	function getReducedTour(tours) {
+		var reducedTour = [];
+		tours.forEach(function(t) {
+			reducedTour.push({
+				tour_id: t.tour_id,
+				tour_type: t.tour_type,
+				tour_title: t.tour_title,
+				category_id: t.category_id
+			});
+		});
+		return reducedTour;
+	}
+
+	pub.showResults = function(testResultsFromCreator) {
+		pub.renderResults(testResultsFromCreator);
+	};
+
+	pub.printReport = function(isInterrupted) {
+		console.dir("**************** Test automation report ****************");
+		getContextAutoDataFromStorage(function(TooltipAutoData, beaconsAutoData, testNotificationAuto) {
+
+			GmCXt.log(37, "From Storage: Tooltip data         : ", TooltipAutoData);
+			GmCXt.log(37, "From Storage: Beacons data         : ", beaconsAutoData);
+			GmCXt.log(37, "From Storage: Notification data    : ", testNotificationAuto);
+
+			if (!self || !self.app) {
+				GmCXt.log(37, "Automation data not available");
+				return;
+			}
+			self.automationInProgress = false;
+
+			var finalResult = {
+				status: 'pass'
+			};
+			var categoryInsights = printCategories(
+				self.app.categories,
+				0,
+				TooltipAutoData,
+				beaconsAutoData,
+				testNotificationAuto, [],
+				finalResult
+			);
+			self.apiPayloadResultSequence = categoryInsights;
+
+			console.dir("-----------------End of test results---------------------");
+
+			// Hide the progress bar
+			mg$('.mgPlayerJSTest_auto-prog-wrapper').remove();
+
+			if (GmCXt.isEmpty(GmCXt.conf.analyticsPath)) {
+				GmCXt.log(36, "Analytic Path is not configured.");
+
+				GmCXt.storage().remove(['testAutoResultsFromCreator']);
+				pub.destroyAutomation();
+				return;
+			}
+
+			var eventStartTime = formatDateObjForInsights(new Date());
+			var testCode = GmCXt.getUUID();
+			var msg = "mgPlayerJSTest_action:mybot_results";
+			var data = {
+				resultSequence: categoryInsights,
+				url: window.location.protocol + "//" + window.location.hostname,
+				eventStartTime: eventStartTime,
+				runType: 'manual',
+				status: isInterrupted ? 'interrupted' : 'complete',
+				resultStatus: isInterrupted ? '' : finalResult.status,
+				testCode: testCode
+			};
+			GmCXt.trackerV1.trackMyBotEvents(data);
+
+			GmCXt.testResultsFromCreator.testCode = testCode;
+			setTestResultsToStorage(GmCXt.testResultsFromCreator);
+
+			GmCXt.closeNotificationPopup();
+			GmCXt.clearBeaconsAndTooltips();
+			GmCXt.showWidget();
+		});
+	};
+
+	// Format the date object to "YYYY-MM-DD HH-MM-SS"
+	var formatDateObjForInsights = function(date) {
+		var prependZero = function(d) {
+			if (d < 10) {
+				return "0" + d;
+			}
+			return d;
+		};
+		return date.getFullYear() +
+			"-" + prependZero(date.getMonth() + 1) +
+			"-" + prependZero(date.getDate()) +
+			" " + prependZero(date.getHours()) +
+			"-" + prependZero(date.getMinutes()) +
+			"-" + prependZero(date.getSeconds());
+	};
+
+	function printCategories(categories, level, TooltipAutoData, beaconsAutoData,
+		testNotificationAuto, categoryInsights, finalResult) {
+		for (var i = 0, j = categories.length; i < j; i++) {
+			var cat = categories[i];
+			cat = GmCXt.validateDataModel(cat, GmCXt.model.category);
+			var categoryId = cat.category_id;
+			var resultObj = {
+				"catgory_id": categoryId,
+				"catgory_title": cat.category_title,
+				"guides_tested": [],
+				"children_categories": []
+			};
+
+			if (cat.sub_categories && cat.sub_categories.length > 0) {
+				var childrenInsights = [];
+				childrenInsights = printCategories(cat.sub_categories, level + 1, TooltipAutoData,
+					beaconsAutoData, testNotificationAuto, childrenInsights, finalResult);
+				resultObj.children_categories = childrenInsights;
+			} else if (cat.tours && cat.tours.length > 0) {
+				console.dir("Category: " + cat.category_title);
+				printTours(cat, level, TooltipAutoData, beaconsAutoData, testNotificationAuto, finalResult);
+				var catFilter = function(categoryId, t) {
+					return (t.category_id === categoryId);
+				};
+				catFilter = catFilter.bind(null, categoryId);
+				resultObj.guides_tested = self.testResultsDataArray.filter(catFilter);
+			}
+			categoryInsights.push(resultObj);
+		}
+		return categoryInsights;
+	}
+
+	function getTour(id) {
+		for (var i = 0, j = self.tours.length; i < j; i++) {
+			if (self.tours[i].tour_id === id) {
+				return self.tours[i];
+			}
+		}
+		return null;
+	}
+
+	function getOriginalTour(tours, id) {
+		for (var i = 0, j = tours.length; i < j; i++) {
+			if (tours[i].tour_id === id) {
+				return tours[i];
+			}
+		}
+		return null;
+	}
+
+	function getTestStatus(id, tourType, currentTourTracker, TooltipAutoData, beaconsAutoData, testNotificationAuto) {
+
+		id = String(id);
+
+		if (!currentTourTracker) {
+			return {
+				status: FAILED,
+				statusText: ''
+			};
+		}
+
+		var test = currentTourTracker.test;
+		var status = test.status;
+		var statusText = test.statusText;
+
+		if (beaconsAutoData && GmCXt.inArray(Number(id), beaconsAutoData)) {
+			statusText += " [Beacon Passed]";
+		} else if (tourType.includes("beacon_tour")) {
+			statusText += " [Beacon Failed]";
+			status = FAILED;
+		}
+
+		if (testNotificationAuto && testNotificationAuto.all &&
+			testNotificationAuto.all[id]) {
+			var notificationTourResult = testNotificationAuto.all[id];
+			if (notificationTourResult.status !== PASSED) {
+				status = notificationTourResult.status;
+			}
+			statusText += " [" + notificationTourResult.statusText + "]";
+		}
+
+		return {
+			status: status || FAILED,
+			statusText: statusText || ''
+		};
+	}
+
+	function printTours(category, level, TooltipAutoData, beaconsAutoData, testNotificationAuto, finalResult) {
+
+		var tours = category.tours;
+		for (var i = 0, j = tours.length; i < j; i++) {
+			var currentTour = tours[i];
+			if (self.ignoreTours.includes(currentTour.tour_id)) {
+				continue;
+			}
+			var title = currentTour.tour_title;
+			var tourType = currentTour.tour_type;
+			if (title) {
+				title = title.replaceAll(",", " ");
+				// Clean HTML tags from the string
+				title = mg$('<div>' + title + '</div>').text();
+			}
+			var id = currentTour.tour_id;
+			var currentTourTracker = self.trackerObj[Number(id)];
+
+			var message = '';
+			if (currentTourTracker) {
+				var test = currentTourTracker.test;
+				if (test) {
+					message = test.errorMessage || '';
+				}
+			}
+			var statusObj = getTestStatus(id, tourType, currentTourTracker, TooltipAutoData, beaconsAutoData, testNotificationAuto);
+			var sts = statusObj.status === PASSED ? 'pass' : 'fail';
+
+			if (sts === 'fail') {
+				finalResult.status = sts;
+			}
+			console.dir("Status: " + sts + " | Title: " + title + " | StatusText: " + statusObj.statusText + " | Message: " + message);
+
+			self.testResultsDataArray.push({
+				'category_id': category.category_id,
+				'guide_id': id,
+				'guide_title': title,
+				'status': sts,
+				'status_text': statusObj.statusText,
+				'message_text': message
+			});
+		}
+
+		GmCXt.testResultsFromCreator = {
+			show: false,
+			testResultsDataArray: self.testResultsDataArray
+		};
+		setTestResultsToStorage(GmCXt.testResultsFromCreator);
+	}
+
+	var cleanCommasAndHTMLTagsFromString = function(str) {
+		// Clean HTML tags from the string
+		str = mg$('<div>' + str + '</div>').text();
+		str = str.replaceAll(",", " ");
+		return str;
+	};
+
+	pub.resumeState = function(d) {
+		self = d;
+
+		// After page refresh extension doesn't redirect to route in extension
+		// Application needs to be on home route while guide rules are running
+		GmCXt.sendMessageToApp("mgPlayerJSTest_action:go_to_route");
+	};
+
+	pub.destroyAutomation = function() {
+		if (GmCXt.tourPlayerI) {
+			GmCXt.tourPlayerI.closeGuide(true);
+		}
+		setTestResultsToStorage({
+			show: false,
+		});
+
+		pub.resetBeaconsAutoDataToStorage();
+		pub.resetNotificationAutoDataToStorage();
+		pub.resetTooltipAutoDataToStorage();
+
+		GmCXt.cleanPlayer();
+		self = {};
+		pub.cleanAllStorageDataForGuideAutomation();
+	};
+
+	pub.cleanAllStorageDataForGuideAutomation = function() {
+		GmCXt.storage().remove(['testAuto']);
+	};
+
+	return pub;
+})();
 GmCXt.model = {};
 
 GmCXt.model.api = {
@@ -23457,6 +28379,13984 @@ GmCXt.model.applications = {
 	_obj: mg$.extend({}, GmCXt.model.application)
 };
 /**
+ * @file Guideme blackout viewport module
+ * @author Nilesh Pachpande
+ */
+
+/**
+ * @function Blackout remaining area outside of highlighted elements,
+ * we will call it only 'elements'. 
+ * Remaining area contains many rectangles that need to blackout, we 
+ * call it 'rectangles' in comments inside the function. 
+ * @param {object} data - array of Elements highlighted inside DOM
+ * @param {object} container - Jquery container object 
+ */
+
+if (GmCXt === undefined) {
+	var GmCXt = {};
+}
+
+GmCXt.screenOverlay = function(options) {
+	var pub = {};
+	options = options || {};
+
+	var data = options.data,
+		myContainer = options.containerOffset,
+		stepType = options.stepType;
+
+	pub.start = function() {
+		/**
+		 * Array of rectangles to blackout. 
+		 */
+		var rectangles = [];
+
+		/**
+		 * Array of 0's and 1's. It is a matrix myContainer.width X myContainer.height
+		 * Initialization: 
+		 * Elements corresponding to highlighted area are 1's and remaining elements are all 0's
+		 * After initialization, elements are set to 1 when they are occupied by a rectangle. 
+		 */
+		var containerMatrix = [];
+
+		/**
+		 * @function
+		 * @param {number} left - x coordinate while traversing container
+		 * @param {number} top - y coordinate
+		 * @returns true if (x, y) coordinate is occupied, 
+		 * false if (x, y) coordinate is outside of highlighted area
+		 */
+
+		var checkIfOccupied = function(top, left) {
+
+			var decrementBy = 1;
+
+			for (var i = 0, j = data.length; i < j; i++) {
+				if (data[i] && top > (data[i].top - decrementBy) &&
+					top <= (data[i].top + data[i].height - decrementBy) &&
+					left > (data[i].left - decrementBy) &&
+					left <= (data[i].left + data[i].width - decrementBy)
+				) {
+					return true;
+				}
+			}
+			return false;
+		};
+
+		/**
+		 * @function Saves rectangle
+		 * @param {object} top
+		 * @param {object} left
+		 */
+		var saveRectangle = function(top, left) {
+
+			var countX = 0,
+				countY = 0,
+				width = 0;
+			var decrementWidth = false;
+			for (var i = top; i < myContainer.height; i++) {
+				countX = 0;
+				for (var j = left; j < myContainer.width; j++) {
+					countX++;
+					if (containerMatrix[i][j] == 1 || j == (myContainer.width - 1)) {
+						// Initialize width
+						if (width === 0) {
+							if (containerMatrix[i][j] == 1) {
+								decrementWidth = true;
+							}
+							width = countX;
+						}
+						break;
+					}
+				}
+
+				// If width is set and is changed 
+				if (width > 0 && width != countX) {
+					break;
+				} else {
+					// Start from left until j
+					for (m = left; m < j; m++) {
+						// Set 1 for cells occupied by the rectangle
+						containerMatrix[i][m] = 1;
+					}
+				}
+				countY++;
+			}
+
+			if (decrementWidth === true) {
+				width = width - 1;
+			}
+
+			var rect = {
+				top: top,
+				left: left,
+				width: width,
+				height: countY
+			};
+
+			if (myContainer !== undefined) {
+				rect.top += myContainer.top;
+				rect.left += myContainer.left;
+			}
+
+			var windowScrollTop = mg$('.mgPlayerJSTest_screen').scrollTop();
+			if (windowScrollTop > 0) {
+				rect.top -= windowScrollTop;
+			}
+			var windowScrollLeft = mg$('.mgPlayerJSTest_screen').scrollLeft();
+			if (windowScrollLeft > 0) {
+				rect.left -= windowScrollLeft;
+			}
+
+			if (!(rect.width === 0 || rect.height === 0)) {
+				adjustPixels(rect);
+				rectangles.push(rect);
+			}
+		};
+
+		function adjustPixels(rect) {
+			if (GmCXt.browserApp === 'ie') {
+				var ratio = window.devicePixelRatio;
+				var deviceWidth = rect.width * ratio;
+				var diff = deviceWidth - Math.floor(deviceWidth);
+				if (diff >= 0.5) {
+					rect.width = rect.width + 0.5;
+				}
+
+				var deviceHeight = rect.height * ratio;
+				var diff = deviceHeight - Math.floor(deviceHeight);
+				if (diff >= 0.5) {
+					rect.height = rect.height + 0.5;
+				}
+			}
+		}
+
+		/**
+		 * i is traversing from top to bottom. So it represents the top coordinate of any point.
+		 * j is traversing from left to right. So it represents the left coordinate of any point.
+		 */
+
+		function multipleAreaHighlight() {
+			for (var i = 0; i < myContainer.height; i++) {
+				containerMatrix[i] = [];
+				for (var j = 0; j < myContainer.width; j++) {
+					if (checkIfOccupied(i, j)) {
+						containerMatrix[i][j] = 1;
+					} else {
+						containerMatrix[i][j] = 0;
+					}
+				}
+			}
+
+			for (var i = 0; i < myContainer.height; i++) {
+				for (var j = 0; j < (myContainer.width - 1); j++) {
+					/**
+					 * If element is 0, initialize rectangle from the elements 
+					 * (x, y) coordinate as rectangle's top, left coordinates. 
+					 */
+					if (containerMatrix[i][j] === 0) {
+						saveRectangle(i, j);
+					}
+				}
+			}
+		} 
+
+		function singleAreaHighlight(){
+			var el =  data[0];
+
+			var rect1 = {
+				top: 0,
+				left: 0,
+				width: mg$(window).width(),
+				height: el.top
+			};
+			var rect2 = {
+				top: el.top,
+				left: 0,
+				width: el.left,
+				height: el.height
+			}; 
+			var rect3 = {
+				top: el.top,
+				left: el.left+el.width,
+				width: (mg$(window).width() - (el.left + el.width)),
+				height: el.height
+			}; 
+			var rect4 = {
+				top: el.top+el.height,
+				left: 0,
+				width: mg$(window).width(),
+				height: (mg$(document).height() - (el.height + el.top))
+			};   
+
+			rectangles.push(rect1, rect2, rect3, rect4);
+		}
+
+		if(data.length === 1){
+			singleAreaHighlight(); 
+		}else{
+			multipleAreaHighlight(); 
+		}
+
+		var overlayObj = mg$('.mgPlayerJSTest_screen-blackout');
+		var html = '';
+		var wmgPlayerJSTest_OverPosition = '';
+		if (stepType === GmCXt.STEP_TYPE_IMAGE) {
+			wmgPlayerJSTest_OverPosition = 'fixed';
+		}
+		for (var i = 0; i < rectangles.length; i++) {
+			html = html + "<wmgPlayerJSTest_over style='position:" + wmgPlayerJSTest_OverPosition + ";top: " + rectangles[i].top + "px;" +
+				"left: " + rectangles[i].left + "px; width: " + rectangles[i].width + "px;" +
+				" height: " + rectangles[i].height + "px;'></wmgPlayerJSTest_over>";
+		}
+		overlayObj.html(html);
+
+		var cssPosition = "absolute";
+		if (options && options.cssPosition) {
+			cssPosition = "fixed";
+		}
+
+		mg$('.mgPlayerJSTest_screen-blackout').css({
+			'top': 0,
+			'left': 0,
+			'position': cssPosition
+		});
+		mg$('.mgPlayerJSTest_screen-blackout').show();
+
+		if (myContainer !== undefined) {
+			mg$('.mgPlayerJSTest_screen-blackout').css({
+				'top': myContainer.top,
+				'left': myContainer.left
+			});
+		}
+
+		/* Add overlay opacity while playing step*/
+
+		// TODO:- Tested
+		if (GmCXt.playerI && GmCXt.playerI.tour) {
+			var stepCurrentlyPlaying = GmCXt.getStepFromPlayerI(GmCXt.playerI.currentStepId);
+			if (stepCurrentlyPlaying) {
+				var stepSettings = stepCurrentlyPlaying.step_settings;
+				var overlayOpacity = -1;
+				if (GmCXt.isNumeric(stepSettings.overlayOpacity)) {
+					overlayOpacity = parseInt(stepSettings.overlayOpacity);
+					overlayOpacity = (overlayOpacity * 10) / 100;
+					mg$('wmgPlayerJSTest_over').css('opacity', overlayOpacity);
+				}
+			}
+		}
+
+	};
+
+	return pub;
+};
+/**
+ * @file Guideme Popup align module
+ * @author Nilesh Pachpande
+ */
+
+/** @function 
+ * Sets up a popup alignment with respect to highlighted area, if an alignment (see below
+ * for supported alignment types) is known. By default, it sets up alignment which fits 
+ * first in the order.
+ * If none of the supported alignment is set then it aligns popup in the center.
+ * 
+ * @param {object} options - having properties
+ *  1. popup: popup jquery object (used to fetch properties (such as width and height) and 
+ *      to set up its css properties)
+ *  2. highlightedArea: has properties, left, top, width and height 
+ *  3. alignment: any one of the supported alignment types namely left-top, left-bottom,
+ *      right-top, right-bottom, top-left, top-right, bottom-left, bottom-right
+ *  4. containerOffset: container offset in which popup should be aligned. for example 
+ *      image canvas for image type step
+ *  5. hardApply: If input alignment should be applied. If not possible then, do nothing.
+ *      By default, it is false, tries to set a default alignment if it is not possible
+ *      to set the input alignment.
+ */
+
+if (GmCXt === undefined) {
+	var GmCXt = {};
+}
+
+GmCXt.alignPopup = function(options) {
+	options = options || {};
+
+	var pub = {};
+	var self = {
+		popup: options.popup,
+		highlightedArea: options.highlightedArea || {},
+		containerOffset: options.containerOffest || {
+			left: 0,
+			top: 0
+		},
+		alignment: options.alignment || '',
+		hardApply: options.hardApply || false,
+		doNotApplyArrow: options.doNotApplyArrow || false,
+		arrowClass: '',
+		left: null,
+		top: null,
+		isSet: false,
+		arrowId: options.tooltipArrowId || "",
+		arrowWidth: options.isBeacon ? 5 : 12, // true after alignment is set
+		isGuidance: options.isGuidance,
+		customPos: options.customPos,
+		isBeacon: options.isBeacon,
+		dynamicPositioning: options.dynamicPositioning
+	};
+
+	if (!self.arrowId) {
+		self.doNotApplyArrow = true;
+	}
+
+	// This value gets set in tour player only
+	// Hence assigning whenever it's not set
+	if (!self.highlightedArea.origTop) {
+		self.highlightedArea.origTop = self.highlightedArea.top;
+	}
+
+	/**
+	 * Verify popup should be a valid jquery selector object
+	 */
+	if (self.popup.length === 0) {
+		return;
+	}
+
+	if (self.arrowId && mg$('#' + self.arrowId).length) {
+		mg$('#' + self.arrowId).remove();
+	}
+
+	if (self.isGuidance && (self.alignment === "top" || self.alignment === "bottom")) {
+		self.arrowWidth = 8;
+	}
+
+	self.popupWidth = self.popup.outerWidth() || 310;
+	self.popupHeight = self.popup.outerHeight() || 50;
+
+	self.highlightedArea.width = self.highlightedArea.width ? self.highlightedArea.width : 0;
+	self.highlightedArea.height = self.highlightedArea.height ? self.highlightedArea.height : 0;
+	self.highlightedArea.left = self.highlightedArea.left ? self.highlightedArea.left : 0;
+	self.highlightedArea.top = self.highlightedArea.top ? self.highlightedArea.top : 0;
+
+	var winHeight = mg$(window).height();
+	var winWidth = mg$(window).width();
+
+	// Available space surrounding highlighted area
+	if (self.highlightedArea.width > 0 && self.highlightedArea.height > 0) {
+		self.availableSpace = {
+			top: self.highlightedArea.origTop,
+			left: self.highlightedArea.left,
+			right: winWidth - (self.highlightedArea.left + self.highlightedArea.width),
+			bottom: winHeight - (self.highlightedArea.origTop + self.highlightedArea.height)
+		};
+	} else {
+		self.availableSpace = {
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0
+		};
+	}
+
+	if (!self.highlightedArea.left && !self.highlightedArea.top) {
+		self.availableSpace.top = (self.availableSpace.top) ? self.availableSpace.top : 0;
+		self.availableSpace.left = (self.availableSpace.left) ? self.availableSpace.left : 0;
+		self.availableSpace.right = (self.availableSpace.right) ? self.availableSpace.right : 0;
+		self.availableSpace.bottom = (self.availableSpace.bottom) ? self.availableSpace.bottom : 0;
+	}
+
+	if (self.containerOffset !== undefined) {
+		if (self.containerOffset.top < 0) {
+			self.containerOffset.top = 0;
+		}
+		if (self.containerOffset.left < 0) {
+			self.containerOffset.left = 0;
+		}
+		self.availableSpace.top += self.containerOffset.top;
+		self.availableSpace.left += self.containerOffset.left;
+		self.availableSpace.right -= self.containerOffset.left;
+		self.availableSpace.bottom -= self.containerOffset.top;
+	}
+
+	if (options.playingTour) {
+		GmCXt.log(33, "SURROUNDING SPACE of element", self.availableSpace);
+	} else {
+		GmCXt.log(43, "SURROUNDING SPACE of element", self.availableSpace);
+	}
+
+	if (self.availableSpace.top >= 0) {
+		self.totalHeightMinusTop = winHeight - self.availableSpace.top;
+	}
+	if (self.availableSpace.left >= 0) {
+		self.totalWidthMinusLeft = winWidth - self.availableSpace.left;
+	}
+	if (self.availableSpace.bottom >= 0) {
+		self.totalHeightMinusBottom = winHeight - self.availableSpace.bottom;
+	}
+	if (self.availableSpace.right >= 0) {
+		self.totalWidthMinusRight = winWidth - self.availableSpace.right;
+	}
+
+	function checkLeftMiddle() {
+		if(self.dynamicPositioning){
+			if (Math.abs(self.availableSpace.left) > self.popupWidth && self.highlightedArea.height / 2 < screen.height) {
+				if ((Math.abs(self.availableSpace.top) + self.highlightedArea.height / 2 > self.popupHeight / 2) &&
+					(Math.abs(self.availableSpace.bottom) + self.highlightedArea.height / 2 > self.popupHeight / 2)
+				) {
+					return true;
+	
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignLeftMiddle() {
+		if (checkLeftMiddle()) {
+			self.left = self.highlightedArea.left - self.popupWidth - self.arrowWidth;
+			self.top = (self.highlightedArea.top + self.highlightedArea.height / 2) - (self.popupHeight / 2);
+			self.arrowClass = 'mgPlayerJSTest_arrow-right';
+			self.arrowLeft = self.highlightedArea.left - 12;
+			self.arrowTop = self.top + (self.popupHeight / 2) - 10;
+			self.isSet = true;
+			self.alignment = 'left-middle';
+		}
+	}
+
+	function checkLeftTop() {
+		if(self.dynamicPositioning){
+			if (Math.abs(self.availableSpace.left) > self.popupWidth && self.totalHeightMinusTop > self.popupHeight) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+
+	}
+
+	function alignLeftTop() {
+		if (checkLeftTop()) {
+			self.left = self.highlightedArea.left - self.popupWidth - self.arrowWidth;
+			self.top = self.highlightedArea.top;
+			self.arrowClass = 'mgPlayerJSTest_arrow-right';
+			self.arrowLeft = self.highlightedArea.left - 12;
+			self.arrowTop = self.top + 7;
+			self.isSet = true;
+			self.alignment = 'left-top';
+		}
+	}
+
+	function checkLeftBottom() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.left) > self.popupWidth && self.totalHeightMinusBottom > self.popupHeight) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignLeftBottom() {
+		if (checkLeftBottom()) {
+			self.left = self.highlightedArea.left - self.popupWidth - self.arrowWidth;
+			self.top = (self.highlightedArea.top + self.highlightedArea.height) - self.popupHeight;
+			self.arrowClass = 'mgPlayerJSTest_arrow-right';
+			self.arrowLeft = self.highlightedArea.left - 12;
+			self.arrowTop = self.top + (self.popupHeight - 30);
+			self.isSet = true;
+			self.alignment = 'left-bottom';
+		}
+	}
+
+	function checkRightMiddle() {
+		if(self.dynamicPositioning) {
+			if (self.availableSpace.right > self.popupWidth && self.highlightedArea.height / 2 < screen.height) {
+				if ((Math.abs(self.availableSpace.top) + self.highlightedArea.height / 2 > self.popupHeight / 2) &&
+					(Math.abs(self.availableSpace.bottom) + self.highlightedArea.height / 2 > self.popupHeight / 2)
+				) {
+					return true;
+	
+				} else {
+					return false;
+				}
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignRightMiddle() {
+		if (checkRightMiddle()) {
+			self.left = self.highlightedArea.left + self.highlightedArea.width + self.arrowWidth;
+			self.top = (self.highlightedArea.top + self.highlightedArea.height / 2) - (self.popupHeight / 2);
+			self.arrowClass = 'mgPlayerJSTest_arrow-left';
+			self.arrowLeft = self.left - 10;
+			self.arrowTop = self.top + (self.popupHeight / 2) - 10;
+			self.isSet = true;
+			self.alignment = 'right-middle';
+		}
+	}
+
+	function checkRightTop() {
+		if(self.dynamicPositioning) {
+			if (self.availableSpace.right > self.popupWidth && self.totalHeightMinusTop > self.popupHeight) {
+				return true;
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignRightTop() {
+		if (checkRightTop()) {
+			self.left = self.highlightedArea.left + self.highlightedArea.width + self.arrowWidth;
+			self.top = self.highlightedArea.top;
+			self.arrowClass = 'mgPlayerJSTest_arrow-left';
+			self.arrowLeft = self.left - 10;
+			self.arrowTop = self.top + 7;
+			self.isSet = true;
+			self.alignment = 'right-top';
+		}
+	}
+
+	function checkRightBottom() {
+		if(self.dynamicPositioning) {
+			if (self.availableSpace.right > self.popupWidth && self.totalHeightMinusBottom > self.popupHeight) {
+				return true;
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignRightBottom() {
+		if (checkRightBottom()) {
+			self.left = self.highlightedArea.left + self.highlightedArea.width + self.arrowWidth;
+			self.top = (self.highlightedArea.top + self.highlightedArea.height) - self.popupHeight;
+			self.arrowClass = 'mgPlayerJSTest_arrow-left';
+			self.arrowLeft = self.left - 10;
+			self.arrowTop = self.top + (self.popupHeight - 30);
+			self.isSet = true;
+			self.alignment = 'right-bottom';
+		}
+	}
+
+	function checkTopMiddle() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.top) > (self.popupHeight + 15) && self.totalWidthMinusLeft > self.popupWidth / 2) {
+				if ((Math.abs(self.availableSpace.left) + self.highlightedArea.width / 2 > self.popupWidth / 2) &&
+					(self.availableSpace.right + self.highlightedArea.width / 2 > self.popupWidth / 2)
+				) {
+					return true;
+	
+				} else {
+					return false;
+				}
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignTopMiddle() {
+		if (checkTopMiddle()) {
+			self.left = (self.highlightedArea.left + self.highlightedArea.width / 2) - self.popupWidth / 2;
+			self.top = self.highlightedArea.top - self.popupHeight - self.arrowWidth;
+			self.arrowClass = 'mgPlayerJSTest_arrow-down';
+			self.arrowLeft = (self.highlightedArea.left + self.highlightedArea.width / 2) - 8;
+			self.arrowTop = self.highlightedArea.top - 12;
+			self.isSet = true;
+			self.alignment = 'top-middle';
+		}
+	}
+
+	function checkTopLeft() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.top) > (self.popupHeight + 15) && self.totalWidthMinusLeft > self.popupWidth) {
+				return true;
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignTopLeft() {
+		if (checkTopLeft()) {
+			self.left = self.highlightedArea.left;
+			self.top = self.highlightedArea.top - self.popupHeight - self.arrowWidth;
+			self.arrowClass = 'mgPlayerJSTest_arrow-down';
+			self.arrowLeft = self.highlightedArea.left + 7;
+			self.arrowTop = self.highlightedArea.top - 12;
+			self.isSet = true;
+			self.alignment = 'top-left';
+		}
+	}
+
+	function checkTopRight() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.top) > (self.popupHeight + 15) && self.totalWidthMinusRight > self.popupWidth) {
+				return true;
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignTopRight() {
+		if (checkTopRight()) {
+			self.left = (self.highlightedArea.left + self.highlightedArea.width) - self.popupWidth;
+			self.top = self.highlightedArea.top - self.popupHeight - self.arrowWidth;
+			self.arrowClass = 'mgPlayerJSTest_arrow-down';
+			self.arrowLeft = (self.highlightedArea.left + self.highlightedArea.width) - (20 + 7); // 20 is arrow width
+			self.arrowTop = self.highlightedArea.top - 12;
+			self.isSet = true;
+			self.alignment = 'top-right';
+		}
+	}
+
+	function checkBottomMiddle() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.bottom) > self.popupHeight && self.totalWidthMinusLeft > self.popupWidth / 2) {
+				if ((Math.abs(self.availableSpace.left) + self.highlightedArea.width / 2 > self.popupWidth / 2) &&
+					(self.availableSpace.right + self.highlightedArea.width / 2 > self.popupWidth / 2)
+				) {
+					return true;
+	
+				} else {
+					return false;
+				}
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignBottomMiddle() {
+		if (checkBottomMiddle()) {
+			self.left = (self.highlightedArea.left + self.highlightedArea.width / 2) - self.popupWidth / 2;
+			self.top = self.highlightedArea.top + self.highlightedArea.height + self.arrowWidth;
+			self.arrowClass = 'mgPlayerJSTest_arrow-up';
+			self.arrowLeft = (self.highlightedArea.left + self.highlightedArea.width / 2) - 8;
+			self.arrowTop = self.highlightedArea.top + self.highlightedArea.height + 2;
+			self.isSet = true;
+			self.alignment = 'bottom-middle';
+		}
+	}
+
+	function checkBottomLeft() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.bottom) > self.popupHeight && self.totalWidthMinusLeft > self.popupWidth) {
+				return true;
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignBottomLeft() {
+		if (checkBottomLeft()) {
+			self.left = self.highlightedArea.left;
+			self.top = self.highlightedArea.top + self.highlightedArea.height + self.arrowWidth;
+			self.arrowClass = 'mgPlayerJSTest_arrow-up';
+			self.arrowLeft = self.highlightedArea.left + 7;
+			self.arrowTop = self.highlightedArea.top + self.highlightedArea.height + 2;
+			self.isSet = true;
+			self.alignment = 'bottom-left';
+		}
+	}
+
+	function checkBottomRight() {
+		if(self.dynamicPositioning) {
+			if (Math.abs(self.availableSpace.bottom) > self.popupHeight && self.totalWidthMinusRight > self.popupWidth) {
+				return true;
+	
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	function alignBottomRight() {
+		if (checkBottomRight()) {
+			self.left = (self.highlightedArea.left + self.highlightedArea.width) - self.popupWidth;
+			self.top = self.highlightedArea.top + self.highlightedArea.height + self.arrowWidth;
+			self.arrowClass = 'mgPlayerJSTest_arrow-up';
+			self.arrowLeft = (self.highlightedArea.left + self.highlightedArea.width) - (20 + 7); // 20 is arrow width
+			self.arrowTop = self.highlightedArea.top + self.highlightedArea.height + 2;
+			self.isSet = true;
+			self.alignment = 'bottom-right';
+		}
+	}
+
+	function alignCenter() {
+		self.left = (winWidth - self.popupWidth) / 2;
+		self.left += mg$(window).scrollLeft();
+
+		self.top = (winHeight - self.popupHeight) / 2;
+		self.top += mg$(window).scrollTop();
+
+		self.isSet = true;
+		self.alignment = 'center';
+	}
+
+	function alignCustom() {
+		if(self.customPos.left_pos === "px") {
+			self.left = self.highlightedArea.left + self.customPos.left;
+		} else if(self.customPos.left_pos === "%") {
+			self.left = (self.highlightedArea.left + ((self.highlightedArea.width * self.customPos.left) / 100));
+			if(self.isBeacon) {
+				self.left = self.left - (self.popupWidth/2);
+			}
+		}
+		if(self.customPos.top_pos === "px") {
+			self.top = self.highlightedArea.top + self.customPos.top;
+		} else if(self.customPos.top_pos === "%") {
+			self.top = (self.highlightedArea.top + ((self.highlightedArea.height * self.customPos.top) / 100));
+			if(self.isBeacon) {
+				self.top = self.top - (self.popupHeight/2);
+			}
+		}
+
+		self.isSet = true;
+		self.alignment = 'custom';
+	}
+
+	pub.getAvailablePositions = function() {
+		return {
+			'left-middle': checkLeftMiddle(),
+			'left-top': checkLeftTop(),
+			'left-bottom': checkLeftBottom(),
+
+			'right-middle': checkRightMiddle(),
+			'right-top': checkRightTop(),
+			'right-bottom': checkRightBottom(),
+
+			'top-middle': checkTopMiddle(),
+			'top-left': checkTopLeft(),
+			'top-right': checkTopRight(),
+
+			'bottom-middle': checkBottomMiddle(),
+			'bottom-left': checkBottomLeft(),
+			'bottom-right': checkBottomRight()
+		};
+	};
+
+	pub.start = function() {
+
+		switch (self.alignment) {
+			case 'left':
+				alignLeftMiddle();
+				if (!self.isSet) alignLeftTop();
+				if (!self.isSet) alignLeftBottom();
+				break;
+
+			case 'left-middle':
+				alignLeftMiddle();
+				if (!self.isSet) alignLeftTop();
+				if (!self.isSet) alignLeftBottom();
+				break;
+
+			case 'left-top':
+				alignLeftTop();
+				if (!self.isSet) alignLeftBottom();
+				break;
+
+			case 'left-bottom':
+				alignLeftBottom();
+				if (!self.isSet) alignLeftTop();
+				break;
+
+			case 'right':
+				alignRightMiddle();
+				if (!self.isSet) alignRightTop();
+				if (!self.isSet) alignRightBottom();
+
+				break;
+
+			case 'right-middle':
+				alignRightMiddle();
+				if (!self.isSet) alignRightTop();
+				if (!self.isSet) alignRightBottom();
+				break;
+
+			case 'right-top':
+				alignRightTop();
+				if (!self.isSet) alignRightBottom();
+				break;
+
+			case 'right-bottom':
+				alignRightBottom();
+				if (!self.isSet) alignRightTop();
+				break;
+
+			case 'top':
+				alignTopMiddle();
+				if (!self.isSet) alignTopLeft();
+				if (!self.isSet) alignTopRight();
+				break;
+
+			case 'top-middle':
+				alignTopMiddle();
+				break;
+
+			case 'top-left':
+				alignTopLeft();
+				break;
+
+			case 'top-right':
+				alignTopRight();
+				break;
+
+			case 'bottom':
+				alignBottomMiddle();
+				if (!self.isSet) alignBottomLeft();
+				if (!self.isSet) alignBottomRight();
+				break;
+
+			case 'bottom-middle':
+				alignBottomMiddle();
+				break;
+
+			case 'bottom-left':
+				alignBottomLeft();
+				break;
+
+			case 'bottom-right':
+				alignBottomRight();
+				break;
+
+			case 'center':
+				alignCenter();
+				break;
+
+			case 'custom':
+				alignCustom();
+				break;
+			default:
+		}
+
+		if (self.hardApply === false) {
+
+			if (!self.isSet) alignRightMiddle();
+
+			if (!self.isSet) alignRightTop();
+
+			if (!self.isSet) alignRightBottom();
+
+			if (!self.isSet) alignLeftMiddle();
+
+			if (!self.isSet) alignLeftTop();
+
+			if (!self.isSet) alignLeftBottom();
+
+			if (!self.isSet) alignTopMiddle();
+
+			if (!self.isSet) alignTopLeft();
+
+			if (!self.isSet) alignTopRight();
+
+			if (!self.isSet) alignBottomMiddle();
+
+			if (!self.isSet) alignBottomLeft();
+
+			if (!self.isSet) alignBottomRight();
+
+			if (!self.isSet) alignCenter();
+		}
+
+		if (self.left !== null && self.top !== null) {
+
+			if (self.top < 0) self.top = 10;
+
+			var windowScrollTop = mg$('.mgPlayerJSTest_screen').scrollTop();
+			if (windowScrollTop > 0) {
+				self.top -= windowScrollTop;
+			}
+			var windowScrollLeft = mg$('.mgPlayerJSTest_screen').scrollLeft();
+			if (windowScrollLeft > 0) {
+				self.left -= windowScrollLeft;
+			}
+
+			self.popup.css({
+				'left': self.left + self.containerOffset.left,
+				'top': self.top + self.containerOffset.top
+			});
+		}
+
+		if (self.arrowId) {
+			self.arrowClass = self.arrowClass + " mgPlayerJSTest_tooltip-arrow";
+		}
+
+		mg$(".mgPlayerJSTest_arrow-down").not(".mgPlayerJSTest_tooltip-arrow").remove();
+		mg$(".mgPlayerJSTest_arrow-up").not(".mgPlayerJSTest_tooltip-arrow").remove();
+		mg$(".mgPlayerJSTest_arrow-left").not(".mgPlayerJSTest_tooltip-arrow").remove();
+		mg$(".mgPlayerJSTest_arrow-right").not(".mgPlayerJSTest_tooltip-arrow").remove();
+
+		self.arrowLeft += self.containerOffset.left;
+		self.arrowLeft += mg$(window).scrollLeft();
+
+		self.arrowTop += self.containerOffset.top;
+		self.arrowTop += mg$(window).scrollTop();
+
+		if (!self.doNotApplyArrow) {
+			mg$('html').append('<div id= "' + self.arrowId + '" class="' + self.arrowClass + '" style="left:' + self.arrowLeft + 'px;top:' + self.arrowTop + 'px;"></div>');
+		}
+
+		if (self.isSet) return self.alignment;
+		else return false;
+	};
+
+	pub.checkHeight = function() {
+		var popupHeightNew = self.popup.outerHeight();
+
+		if (self.popupHeight !== popupHeightNew)
+			pub.redo();
+	};
+
+	pub.redo = function() {
+		if (self.isGuidance) {
+			self.arrowWidth = 8;
+		}
+		self.popupWidth = self.popup.outerWidth();
+		self.popupHeight = self.popup.outerHeight();
+		pub.start();
+	};
+
+	pub.clear = function() {
+
+		GmCXt.clearPreviewPopupAlignment(self.popup);
+		mg$(".mgPlayerJSTest_arrow-down").not(".mgPlayerJSTest_tooltip-arrow").remove();
+		mg$(".mgPlayerJSTest_arrow-up").not(".mgPlayerJSTest_tooltip-arrow").remove();
+		mg$(".mgPlayerJSTest_arrow-left").not(".mgPlayerJSTest_tooltip-arrow").remove();
+		mg$(".mgPlayerJSTest_arrow-right").not(".mgPlayerJSTest_tooltip-arrow").remove();
+
+		self.popup.css({
+			'left': 0,
+			'top': 0
+		});
+	};
+
+	return pub;
+};
+/**
+	* @file Guideme preview step popup
+	* @author Nilesh Pachpande
+	*/
+
+GmCXt.previewStepPopup = function(options) {
+	options = options || {};
+	var pub = {};
+
+	var self = {
+		id: options.step.step_id,
+		type: options.step.step_type,
+		title: GmCXt.replaceVariableWithValue(options.step.step_title),
+		description: GmCXt.replaceVariableWithValue(options.step.step_description),
+		audioTrack: options.step.step_audio,
+		highlightedArea: options.step.highlightedArea,
+		settings: options.step.step_settings,
+		serialNumber: options.step.order || 0,
+		container: options.container,
+		containerOffest: options.containerOffest || {
+			left: 0,
+			top: 0
+		},
+		totalStepCount: options.totalStepCount,
+		playingTour: options.playingTour || false
+	};
+
+	if (self.playingTour && options.tour) {
+		self.tour = options.tour;
+	} else {
+		self.tour = false;
+	}
+
+	pub.load = function() {
+		GmCXt.addStepPreviewHtml(self);
+
+		if (GmCXt.isMediaPlayerOn) {
+			mg$(".mgPlayerJSTest_preview-step-popup-container").addClass("mgPlayerJSTest_preview-step-popup-container-mp");
+		}
+
+		GmCXt.addDragPopUpFunction();
+
+		var promise = new Promise(function(resolve, reject) {
+			var hideStepIcon = false;
+			if (GmCXt.getOrgLevelBrandLogoSetting()) {
+				var hideStepIcon = true;
+			}
+
+			GmCXt.hideWidgetIcon();
+
+			if (GmCXt.isPlayer()) {
+				GmCXt.hideBeacons();
+				GmCXt.hideSmartTipsIfOptionON();
+			}
+
+			var os = GmCXt.getStepSettings();
+			if (options.step.type === GmCXt.STEP_TYPE_WEB_INLINE) {
+				os = options.step.orgSettings;
+			}
+			var popupDesign = os.popupDesign;
+
+			if (popupDesign) {
+				if (popupDesign.type === 'default') {
+					mg$('.preview-step-popup-navigation-wrapper').css({
+						'display': 'none'
+					});
+					mg$('.mgPlayerJSTest_preview-step-popup-container').removeClass('preview-step-popup-classic-design');
+					mg$('.mgPlayerJSTest_play-step-popup-logo').css({
+						'display': ''
+					});
+					mg$('.mgPlayerJSTest_play-total-step-cont').css({
+						'display': ''
+					});
+					mg$('.mgPlayerJSTest_play-step-navigation').css({
+						'display': ''
+					});
+					mg$(".mgPlayerJSTest_play-step-popup-footer").css("height", "auto");
+
+				} else if (popupDesign.type === 'classic') {
+					mg$('.preview-step-popup-navigation-wrapper').css({
+						'display': ''
+					});
+					mg$('.mgPlayerJSTest_preview-step-popup-container').addClass('preview-step-popup-classic-design');
+					mg$('.mgPlayerJSTest_play-step-popup-logo').css({
+						'display': 'none'
+					});
+					mg$('.mgPlayerJSTest_play-total-step-cont').css({
+						'display': 'none'
+					});
+					mg$('.mgPlayerJSTest_play-step-navigation').css({
+						'display': 'none'
+					});
+					mg$(".mgPlayerJSTest_play-step-popup-footer").css("height", "42px");
+				}
+
+				// For backward compatibility
+				if (popupDesign.popupActiveSettings) {
+					popupDesign.current = popupDesign.popupActiveSettings;
+				}
+
+				var bgColor = popupDesign.current.bgColor;
+				var borderColor = popupDesign.current.borderColor;
+				var closeIconColor = popupDesign.current.closeIconColor;
+				var prevBtnColor = popupDesign.current.prevBtnColor;
+				var nextBtnColor = popupDesign.current.nextBtnColor;
+				var nextBtnBackground = popupDesign.current.nextBtnBackground;
+				var stepTitleColor = popupDesign.current.stepTitleColor;
+				var stepDescColor = popupDesign.current.stepDescColor;
+
+				if (GmCXt.accessibility) {
+					bgColor = "#ffffff";
+					prevBtnColor = "#ffffff";
+					nextBtnColor = "#ffffff";
+					nextBtnBackground = '#276157';
+					borderColor = '#276157';
+					stepTitleColor = '#276157';
+					closeIconColor = '#26273B';
+					stepDescColor = '#a6a6a6';
+
+					mg$(".mgPlayerJSTest_play-step-navigation").addClass("mgPlayerJSTest_accessibility-theme");
+					mg$('.mgPlayerJSTest_play-step-prev').addClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_play-step-next').addClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_play-step-pause').addClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.popup-classic-design-navigation-prev').addClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_popup-classic-navigation-next').addClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_popup-classic-navigation-pause').addClass("mgPlayerJSTest_ass-default-btn");
+
+				} else {
+
+					mg$(".mgPlayerJSTest_play-step-navigation").removeClass("mgPlayerJSTest_accessibility-theme");
+					mg$('.mgPlayerJSTest_play-step-prev').removeClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_play-step-next').removeClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_play-step-pause').removeClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.popup-classic-design-navigation-prev').removeClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_popup-classic-navigation-next').removeClass("mgPlayerJSTest_ass-default-btn");
+					mg$('.mgPlayerJSTest_popup-classic-navigation-pause').removeClass("mgPlayerJSTest_ass-default-btn");
+
+					mg$('.mgPlayerJSTest_play-step-prev').css({
+						"background-color": popupDesign.current.prevBtnBackground,
+						"color": popupDesign.current.prevBtnColor,
+						"border-color": popupDesign.current.prevBtnColor
+					});
+
+					mg$('.mgPlayerJSTest_play-step-next').css({
+						"background-color": popupDesign.current.nextBtnBackground,
+						"color": popupDesign.current.nextBtnColor,
+						"border-color": popupDesign.current.nextBtnColor
+					});
+
+					mg$('.mgPlayerJSTest_play-step-pause').css({
+						"background-color": popupDesign.current.nextBtnBackground,
+						"color": popupDesign.current.nextBtnColor,
+						"border-color": popupDesign.current.nextBtnColor
+					});
+
+					mg$('.popup-classic-design-navigation-prev').css({
+						"background-color": popupDesign.current.prevBtnBackground,
+						"color": popupDesign.current.prevBtnColor
+					});
+
+					mg$('.popup-classic-design-navigation-prev').css({
+						"background-color": popupDesign.current.prevBtnBackground,
+						"color": popupDesign.current.prevBtnColor
+					});
+
+					mg$('.mgPlayerJSTest_popup-classic-navigation-next').css({
+						"background-color": popupDesign.current.nextBtnBackground,
+						"color": popupDesign.current.nextBtnColor
+					});
+
+					mg$('.mgPlayerJSTest_popup-classic-navigation-pause').css({
+						"background-color": popupDesign.current.nextBtnBackground,
+						"color": popupDesign.current.nextBtnColor
+					});
+				}
+
+				mg$('.mgPlayerJSTest_preview-step-popup-container').css({
+					"background-color": bgColor,
+					"border-radius": popupDesign.current.borderRadius,
+					"border-color": borderColor,
+					"border-width": popupDesign.current.borderWidth,
+					"border-style": "solid",
+					"padding-top": popupDesign.current.padding.top,
+					"padding-bottom": popupDesign.current.padding.bottom,
+					"padding-left": popupDesign.current.padding.left,
+					"padding-right": popupDesign.current.padding.right
+				});
+				mg$('.mgPlayerJSTest_play-step-popup').css({
+					"border-radius": popupDesign.current.borderRadius
+				});
+				mg$('.mgPlayerJSTest_play-step-popup-s-title').css({
+					"color": stepTitleColor
+				});
+				mg$('.mgPlayerJSTest_play-step-popup-s-title').css({
+					"font-size": popupDesign.current.stepTitleFontSize
+				});
+				mg$('.mgPlayerJSTest_play-step-popup-s-title').css({
+					"font-family": popupDesign.current.stepTitleFontFamily
+				});
+				mg$('.mgPlayerJSTest_play-step-popup-s-title').css({
+					"font-weight": popupDesign.current.stepTitleFontWeight
+				});
+
+				mg$('.mgPlayerJSTest_play-step-popup-description').css({
+					"color": stepDescColor
+				});
+				mg$('.mgPlayerJSTest_play-step-popup-description').css({
+					"font-size": popupDesign.current.stepDesFontSize
+				});
+				mg$('.mgPlayerJSTest_play-step-popup-description').css({
+					"font-family": popupDesign.current.stepDesFontFamily
+				});
+				mg$('.mgPlayerJSTest_play-total-step-cont').css({
+					"background-color": bgColor,
+					"color": stepTitleColor
+				});
+				mg$('.mgPlayerJSTest_play-total-step').css({
+					"color": popupDesign.current.stepCountColor
+				});
+
+				if (mg$('#mgPlayerJSTest_popup-arrow').length) {
+					mg$('#mgPlayerJSTest_popup-arrow').remove();
+				}
+
+				var popUpCSS = "<style id='mgPlayerJSTest_popup-arrow' type='text/css'>" +
+					".mgPlayerJSTest_preview-step-popup-container.right-top:after,.mgPlayerJSTest_preview-step-popup-container.right-middle:after,.mgPlayerJSTest_preview-step-popup-container.right-bottom:after {" +
+					"border-right-color:" + bgColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.right-top:before,.mgPlayerJSTest_preview-step-popup-container.right-middle:before, .mgPlayerJSTest_preview-step-popup-container.right-bottom:before {" +
+					"border-right-color:" + borderColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.left-top:after,.mgPlayerJSTest_preview-step-popup-container.left-middle:after,.mgPlayerJSTest_preview-step-popup-container.left-bottom:after {" +
+					"border-left-color:" + bgColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.left-top:before,.mgPlayerJSTest_preview-step-popup-container.left-middle:before, .mgPlayerJSTest_preview-step-popup-container.left-bottom:before {" +
+					"border-left-color:" + borderColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.top-left:after,.mgPlayerJSTest_preview-step-popup-container.top-middle:after,.mgPlayerJSTest_preview-step-popup-container.top-right:after {" +
+					"border-top-color:" + bgColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.top-left:before,.mgPlayerJSTest_preview-step-popup-container.top-middle:before, .mgPlayerJSTest_preview-step-popup-container.top-right:before {" +
+					"border-top-color:" + borderColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.bottom-left:after,.mgPlayerJSTest_preview-step-popup-container.bottom-middle:after,.mgPlayerJSTest_preview-step-popup-container.bottom-right:after {" +
+					"border-bottom-color:" + bgColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_preview-step-popup-container.bottom-left:before,.mgPlayerJSTest_preview-step-popup-container.bottom-middle:before, .mgPlayerJSTest_preview-step-popup-container.bottom-right:before {" +
+					"border-bottom-color:" + borderColor + " !important;" +
+					"} " +
+					".mgPlayerJSTest_play-step-audio i {" +
+					"color:" + closeIconColor + " !important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-audio svg path {" +
+					"fill:" + closeIconColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-popup-close i {" +
+					"color:" + closeIconColor + "!important;" +
+					"-webkit-text-stroke-color:" + bgColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-popup-close svg path {" +
+					"fill:" + closeIconColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-popup-drag svg path {" +
+					"fill:" + closeIconColor + "!important;" +
+					"stroke:" + closeIconColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-popup-edit svg path{" +
+					"fill:" + closeIconColor + "!important;" +
+					"stroke:" + closeIconColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-prev svg path {" +
+					"fill:" + prevBtnColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-next svg path {" +
+					"fill:" + nextBtnColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_play-step-pause svg path{" +
+					"fill:" + nextBtnColor + "!important;" +
+					"}" +
+					".popup-classic-design-navigation-prev svg path {" +
+					"fill:" + prevBtnColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_popup-classic-navigation-next svg path {" +
+					"fill:" + nextBtnColor + "!important;" +
+					"}" +
+					".mgPlayerJSTest_popup-classic-navigation-pause svg path {" +
+					"fill:" + nextBtnColor + "!important;" +
+					"}" +
+					"</style>";
+				mg$("html:first").append(popUpCSS);
+
+			} else {
+				mg$('.preview-step-popup-navigation-wrapper').css({
+					'display': 'none'
+				});
+				mg$('.mgPlayerJSTest_preview-step-popup-container').removeClass('preview-step-popup-classic-design');
+				mg$('.mgPlayerJSTest_play-step-popup-logo').css({
+					'display': ''
+				});
+				mg$('.mgPlayerJSTest_play-total-step-cont').css({
+					'display': ''
+				});
+				mg$('.mgPlayerJSTest_play-step-navigation').css({
+					'display': ''
+				});
+			}
+
+			var tipPosition = "absolute";
+			if (GmCXt.tourPlayerI && GmCXt.tourPlayerI.cssPosition && self.type !== GmCXt.STEP_TYPE_MESSAGE) {
+				var tipPosition = "fixed";
+			}
+
+			mg$('.mgPlayerJSTest_preview-step-popup-container, wmgPlayerJSTest_over').css({
+				'position': tipPosition
+			});
+
+			mg$(".mgPlayerJSTest_preview-step-popup-container").show();
+
+			mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-s-num').html(self.serialNumber);
+
+			self.title = GmCXt.handleHtmlAssets(self.title);
+
+			mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_step-title').html(self.title);
+
+			if (!GmCXt.replaceVariableInText(self.title).trim()) {
+				mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_step-title').remove();
+			}
+
+			self.description = GmCXt.restoreAssetSrc(self.description);
+
+			mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-description').html(self.description);
+			mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-curr-step').html(self.serialNumber);
+			mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-total-step').html(self.totalStepCount);
+
+			var brandLogoEl = mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-logo img');
+			brandLogoEl.attr('src', GmCXt.brandLogo());
+			var len = mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-description img').length;
+			if (len) {
+				for (var i = 0; i < len; i++) {
+					var imgW = mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-description img')[i].getAttribute('width');
+					var imgH = mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-description img')[i].getAttribute('height');
+
+					mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-description img')[i].style.setProperty('width', imgW + 'px', 'important');
+					mg$('.mgPlayerJSTest_preview-step-popup-container .mgPlayerJSTest_play-step-popup-description img')[i].style.setProperty('height', imgH + 'px', 'important');
+				}
+			}
+
+			// //GmCXt.timeout(function(){
+			// mg$(".mgPlayerJSTest_play-step-popup-drag").focus();
+			// //},500);
+
+			var os = GmCXt.getOrgSettings();
+			var cdnSign = GmCXt.getCdnSign();
+
+			if (os.logo && cdnSign) {
+				brandLogoEl.show();
+			} else {
+				brandLogoEl.hide();
+			}
+
+			if (GmCXt.enforceGuideMePopup) {
+				mg$('.mgPlayerJSTest_preview-step-popup-container').css({
+					'z-index': '2147483646'
+				});
+			}
+
+			GmCXt.zoomImage(self.description, ".mgPlayerJSTest_play-step-popup-description");
+
+			GmCXt.setLinkClickhandler(self.title, ".mgPlayerJSTest_step-title");
+			GmCXt.setLinkClickhandler(self.description, ".mgPlayerJSTest_play-step-popup-description");
+
+			if (self.description && self.description.indexOf('target = "gssPlayGuide"' !== -1)) {
+				GmCXt.setLinkGuidePlay(self.description, ".mgPlayerJSTest_play-step-popup-description");
+			}
+			if (self.title && self.title.indexOf('target = "gssPlayGuide"' !== -1)) {
+				GmCXt.setLinkGuidePlay(self.title, ".mgPlayerJSTest_step-title");
+			}
+
+			if (!hideStepIcon) {
+				brandLogoEl.show();
+			} else {
+				brandLogoEl.hide();
+			}
+
+			var popupWrapper = mg$('.mgPlayerJSTest_play-step-popup-content-wrapper');
+
+			if (self.settings.stepPopupWidth) {
+				popupWrapper.css({
+					"width": self.settings.stepPopupWidth
+				});
+			} else {
+				popupWrapper.css({
+					"width": GmCXt.stepPopupWidth + "px"
+				});
+			}
+
+			if (self.settings.stepPopupHeight) {
+				popupWrapper.css({
+					"max-height": self.settings.stepPopupHeight
+				});
+			} else {
+				popupWrapper.css({
+					"max-height": GmCXt.stepPopupMaxHeight + "px"
+				});
+			}
+			attachDOMEvents();
+
+			if (!self.playingTour) {
+				mg$('.mgPlayerJSTest_play-step-popup-description').css({
+					'font-size': '16px',
+					'line-height': '19px;'
+				});
+
+				mg$('.mgPlayerJSTest_play-step-prev').css({
+					'font-size': '15px'
+				});
+
+				mg$('.mgPlayerJSTest_play-step-next').css({
+					'font-size': '15px'
+				});
+			}
+
+			/**
+				* Blackout area surrounding step DOM element for inline step
+				* and surrounding highlighted areas for image steps.
+				*/
+			if (self.settings.screenBlackout === true) {
+				var hideIEOverlay = false;
+				if ((self.type == GmCXt.STEP_TYPE_MESSAGE || self.type == GmCXt.STEP_TYPE_IMAGE) && !self.highlightedArea) {
+					self.highlightedArea = [{
+						left: 0,
+						top: 0,
+						height: 0,
+						width: 0
+					}];
+					hideIEOverlay = true;
+				}
+
+				if (self.highlightedArea) {
+
+					var opts = {
+						data: self.highlightedArea,
+						containerOffset: GmCXt.getContainerOffSet(false),
+						stepType: self.type,
+						overlay: true,
+						tour: self.tour,
+						stepIndex: self.serialNumber
+					};
+
+					if (self.type == GmCXt.STEP_TYPE_IMAGE) {
+
+						opts.containerOffset = GmCXt.getContainerOffSet(mg$('#mgPlayerJSTest_image-canvas'));
+
+						if (self.container) {
+							opts.container = self.container;
+							opts.containerOffset = GmCXt.getContainerOffSet(self.container);
+						}
+					}
+
+					if (self.playingTour === true) {
+						opts.overlay = false;
+					}
+
+					GmCXt.removeScreenOverlay();
+
+					opts.cssPosition = GmCXt.tourPlayerI.cssPosition;
+
+					if (GmCXt.playerI && GmCXt.playerI.tour) {
+
+						var step_ = GmCXt.getStepFromPlayerI(GmCXt.playerI.currentStepId);
+
+						var overlayOpacity = GmCXt.getOpacity(step_);
+
+						if (step_) {
+							var stepSettings = step_.step_settings;
+
+							// Add overlay if force guide mode is ON
+							if (GmCXt.playerI.forceGuideMe === true &&
+								stepSettings.doNotForceGuide !== true &&
+								!stepSettings.onClickAnywhere &&
+								!stepSettings.onPageClickNext &&
+								overlayOpacity === 0
+							) {
+								opts.overlay = true;
+								overlayOpacity = 0.1;
+								opts = forSalesforceCol(stepSettings, opts, true);
+							}
+						}
+
+						if (overlayOpacity) {
+							if (GmCXt.browserApp === 'ie') {
+								if (!hideIEOverlay) {
+									blackoutIEViewPort(self.highlightedArea, overlayOpacity, opts.cssPosition);
+								}
+							} else {
+								GmCXt.screenOverlayI = GmCXt.screenOverlay(opts);
+								GmCXt.screenOverlayI.start();
+							}
+						}
+					} else {
+						GmCXt.screenOverlayI = GmCXt.screenOverlay(opts);
+						GmCXt.screenOverlayI.start();
+					}
+				}
+			}
+
+			/**
+				* Audio button, step serial number is not available
+				* when preview is shown after step is saved.
+				* Availale in tour play is active.
+				*/
+
+			if (self.playingTour === true) {
+				mg$('.mgPlayerJSTest_play-step-popup-s-title').show();
+			} else {
+				mg$('#mgPlayerJSTest_play_step_audio').hide();
+				mg$('.mgPlayerJSTest_play-total-step-cont').hide();
+				mg$('.mgPlayerJSTest_play-step-popup-s-num').hide();
+				mg$('.mgPlayerJSTest_play-step-navigation').hide();
+				mg$('.mgPlayerJSTest_play-step-popup-close').hide();
+				mg$('.mgPlayerJSTest_play-step-audio-loader').hide();
+				mg$('.popup-classic-design-navigation').hide();
+				/*mg$('.mgPlayerJSTest_play-step-popup-description').css({'font-size': '18px', 'line-height': '21px;'});
+				//mg$('.mgPlayerJSTest_play-step-popup-s-title').css({'font-size': '22px'});
+				mg$('.mgPlayerJSTest_play-step-prev').css({'font-size': '18px'});
+				mg$('.mgPlayerJSTest_play-step-next').css({'font-size': '18px'});*/
+			}
+
+			// Align popup
+			var $popup = mg$(".mgPlayerJSTest_step-popup");
+			var doAlign = false;
+
+			if (self.type === GmCXt.STEP_TYPE_INLINE || self.type === GmCXt.STEP_TYPE_WEB_INLINE ||
+				self.type === GmCXt.STEP_TYPE_EXTERNAL_AUTOMATION) {
+				doAlign = true;
+				if (self.settings.headerNext && GmCXt.playerI.forceGuideMe) {
+					options = forSalesforceCol(self.settings, options, false);
+				}
+
+			} else if (self.type == GmCXt.STEP_TYPE_MESSAGE || self.type == GmCXt.STEP_TYPE_IMAGE) {
+				GmCXt.alignMessagePreview($popup, mg$(window), self.settings.alignment, self.settings);
+			}
+
+			if (doAlign) {
+				GmCXt.alignPopupI = GmCXt.alignPopup({
+					popup: $popup,
+					highlightedArea: self.highlightedArea[0],
+					containerOffest: self.containerOffest,
+					alignment: self.settings.alignment,
+					playingTour: self.playingTour,
+					dynamicPositioning: self.settings.dynamicPositioning
+				});
+
+				GmCXt.alignPopupI.clear();
+
+				var alignment = GmCXt.alignPopupI.start();
+
+				if (alignment) {
+					$popup.addClass(alignment);
+				}
+				if (GmCXt.alignPopupI) {
+					GmCXt.timeout(GmCXt.alignPopupI.checkHeight, 1000);
+				}
+			}
+
+			stopMouseOutEvent();
+			resolve();
+		});
+
+		GmCXt.onPopupRerender();
+
+		return promise;
+	};
+
+	var forSalesforceCol = function(settings, opt, flag) {
+		if (settings.headerNext) {
+			var customSettings = settings.element.customSettings;
+			if (flag && customSettings.salesforce.tableHeight) {
+				var tableHeight = customSettings.salesforce.tableHeight;
+				opt.data[0].height = tableHeight;
+			} else if (customSettings.salesforce.tableHeight) {
+				opt.data[0].height = settings.element.position.height;
+			}
+		}
+		return opt;
+	};
+
+	var stopMouseOutEvent = function() {
+
+		if (GmCXt.playerI && GmCXt.playerI.tour) {
+			var previousStepId = GmCXt.playerI.lastPlayedStepId;
+			if (previousStepId) {
+				var prevStep = GmCXt.createDeepCopy(GmCXt.getStepFromPlayerI(previousStepId));
+				if (prevStep) {
+					var settings = prevStep.step_settings;
+					if (settings && (settings.hoverNext === true)) {
+						window.addEventListener('mouseout', stopEventPropagation, true);
+					}
+				}
+			}
+		}
+	};
+
+	var stopEventPropagation = function(e) {
+		GmCXt.stopEventPropagation(e);
+	};
+
+	pub.close = function() {
+
+		GmCXt.previewStepPopupInstance = null;
+
+		window.removeEventListener('mouseout', stopEventPropagation, true);
+		mg$('.mgPlayerJSTest_play-step-audio-iframe').remove();
+		mg$('.mgPlayerJSTest_preview-step-popup-container').remove();
+
+		mg$('.mgPlayerJSTest_play-step-audio').show();
+		mg$('.mgPlayerJSTest_play-step-popup-close').show();
+		mg$('.mgPlayerJSTest_play-total-step-cont').show();
+		mg$('.mgPlayerJSTest_play-step-popup-s-num').show();
+
+		//show start button
+		GmCXt.displayWidget();
+
+		if (GmCXt.alignPopupI) {
+			GmCXt.alignPopupI.clear();
+			GmCXt.alignPopupI = null;
+		}
+	};
+
+	var attachDOMEvents = function() {
+		if (self.playingTour === true) {
+			if (document.getElementById('mgPlayerJSTest_play_step_popup_drag')) {
+				document.getElementById('mgPlayerJSTest_play_step_popup_drag').addEventListener('touchmove', dragElementOnTouch);
+			}
+		}
+	};
+
+	var dragElementOnTouch = function(e) {
+		var elmnt = document.getElementById("mgPlayerJSTest_preview-step-popup-container");
+
+		var touch = event.targetTouches[0];
+
+		// set the element's new position:
+		elmnt.style.top = (touch.pageY - 24) + 'px';
+		elmnt.style.left = (touch.pageX - (document.getElementById("mgPlayerJSTest_preview-step-popup-container").offsetWidth - 76)) + 'px';
+		mg$(elmnt)
+			.removeClass('top-left')
+			.removeClass('top-middle')
+			.removeClass('top-right')
+			.removeClass('right-top')
+			.removeClass('right-middle')
+			.removeClass('right-bottom')
+			.removeClass('bottom-left')
+			.removeClass('bottom-middle')
+			.removeClass('bottom-right')
+			.removeClass('left-top')
+			.removeClass('left-middle')
+			.removeClass('left-bottom');
+	};
+
+	var blackoutIEViewPort = function(rect, opacity, cssPos) {
+		if (!rect || !rect.length) return;
+		if (opacity) opacity = opacity / 10;
+
+		var cssPosition = "absolute";
+		if (cssPos) {
+			cssPosition = "fixed";
+		}
+
+		var overlayObj = mg$('.mgPlayerJSTest_screen-blackout');
+
+		var html = "<wmgPlayerJSTest_over style='top:0px; " +
+			"left:0px;" +
+			"width:100%;" +
+			"height: " + rect[0].top + "px;'>" +
+			"</wmgPlayerJSTest_over>" +
+			"<wmgPlayerJSTest_over style='top:" + rect[0].top + "px;" +
+			"left: 0px;" +
+			"width: " + rect[0].left + "px;" +
+			"height: " + rect[0].height + "px;'>" +
+			"</wmgPlayerJSTest_over>" +
+			"<wmgPlayerJSTest_over style='top:" + rect[0].top + "px;" +
+			"left: " + (rect[0].left + rect[0].width) + "px;" +
+			"width: " + (mg$(window).width() - (rect[0].left + rect[0].width)) + "px;" +
+			"height: " + rect[0].height + "px;'>" +
+			"</wmgPlayerJSTest_over>" +
+			"<wmgPlayerJSTest_over style='top:" + (rect[0].top + rect[0].height) + "px;" +
+			"left:0px;" +
+			"width:100%;" +
+			"height: " + (mg$(document).height() - (rect[0].height + rect[0].top)) + "px;'>" +
+			"</wmgPlayerJSTest_over>";
+
+		overlayObj.html(html);
+
+		mg$('.mgPlayerJSTest_screen-blackout').css({
+			'top': 0,
+			'left': 0,
+			'width': '100%',
+			'position': cssPosition
+		}).show();
+		mg$('wmgPlayerJSTest_over').css('opacity', opacity);
+	};
+
+	var setOnAudioMode = function() {
+		GmCXt.playAudioTrack({
+			audioTrack: self.audioTrack
+		});
+		GmCXt.setOnAudioMode();
+
+		GmCXt.stepAudioRunningStatus = true;
+		GmCXt.storage().set({
+			'stepAudioRunningStatus': true
+		});
+	};
+
+	var setOffAudioMode = function() {
+		GmCXt.stopAudioTrack();
+		GmCXt.setOffAudioMode();
+		GmCXt.stepAudioRunningStatus = false;
+		GmCXt.storage().set({
+			'stepAudioRunningStatus': false
+		});
+	};
+
+	pub.forSalesforceCol = forSalesforceCol;
+	pub.stopMouseOutEvent = stopMouseOutEvent;
+	pub.stopEventPropagation = stopEventPropagation;
+	pub.attachDOMEvents = attachDOMEvents;
+	pub.dragElementOnTouch = dragElementOnTouch;
+	pub.blackoutIEViewPort = blackoutIEViewPort;
+	pub.setOnAudioMode = setOnAudioMode;
+	pub.setOffAudioMode = setOffAudioMode;
+
+	return pub;
+};
+/**
+ * @file Guideme User guide module
+ * @author Nilesh Pachpande
+ */
+
+GmCXt.userGuide = function(options) {
+
+	options = options || {};
+	var pub = {};
+
+	var self = {
+		highlightedArea: options.highlightedArea,
+		type: options.type
+	};
+
+	function stepNotFound(stepTitle, stepImage, processedImage) {
+		var popupType = 'mgPlayerJSTest_popup-info';
+		var popupHeaderIcon = '<svg  width="24" height="24" viewBox="0 0 24 24" fill="none">' +
+			'<circle cx="12" cy="12" r="11.1" stroke="white" stroke-width="1.8"/>' +
+			'<rect x="11" y="11" width="2" height="9" rx="1" fill="white"/>' +
+			'<circle cx="12" cy="7.5" r="1.5" fill="white"/>' +
+			'</svg>';
+
+		var popupTitle = GmCXt.label.elmNotFound;
+		var info = "<div class='mgPlayerJSTest_popup-content-info'>" + GmCXt.label.elmNotFoundInfo + "</div>";
+
+		if (GmCXt.isWestpac()) {
+			stepTitle = null;
+			popupTitle = GmCXt.label.elmNotFoundWestpac;
+			info = (processedImage) ?
+				"<img class='mgPlayerJSTest_step-not-found-image' src='" + stepImage.split(".png")[0] + "_cropped.png" + GmCXt.getCdnSign() + "'>" :
+				"<img class='mgPlayerJSTest_step-not-found-image' src='" + stepImage + "'>";
+		}
+		var str =
+			"<div class='mgPlayerJSTest_step-not-found-notification mgPlayerJSTest_popup " + popupType + "'> " +
+			"       <div class='mgPlayerJSTest_popup-header-wrapper'>" +
+			"	       	<div class='mgPlayerJSTest_popup-header-icon-wrapper'><div class='mgPlayerJSTest_popup-header-icon'>" + popupHeaderIcon +
+			"		   	</div>" +
+			"			</div>" +
+			"       </div>" +
+			"		<div class='mgPlayerJSTest_popup-content-wrapper mgPlayerJSTest_font-size-17'>" + popupTitle + "</div>" +
+			(stepTitle ? ('   <wmgPlayerJSTest_ class="mgPlayerJSTest_no-element-guide-title">' + stepTitle + '</wmgPlayerJSTest_>') : '') + info +
+			"		<div class='mgPlayerJSTest_popup-btn-wrapper mgPlayerJSTest_step-not-found-close-btn'>" +
+			"			<wmgPlayerJSTest_ class='mgPlayerJSTest_btn-default mgPlayerJSTest_no-element-guide-ok mgPlayerJSTest_ok-btn mgPlayerJSTest_inline-block-vt'>" + GmCXt.label.close +
+			"			</wmgPlayerJSTest_>" +
+			"		</div>" +
+			" </div> ";
+
+		return str;
+	}
+
+	function attachDOMEvents() {
+		mg$('.mgPlayerJSTest_no-element-guide-ok').on('click', function(e) {
+			pub.close();
+			e.stopPropagation();
+		});
+
+		mg$('.mgPlayerJSTest_overlay-container').on('click', function(e) {
+			pub.close();
+			e.stopPropagation();
+		});
+
+		mg$('.mgPlayerJSTest_step-not-found-notification').on('click', function(e) {
+			e.stopPropagation();
+		});
+	}
+
+	function hoverTipPlayStepGuide() {
+		return "<ul>" +
+			"<li>" + GmCXt.label.stepPlayIsdefinedPopover + "</li>" +
+			"<li>" + GmCXt.label.kindlyHoverPopup + "</li>" +
+			"</ul>";
+	}
+
+	function hoverTipEditStepGuide() {
+		return "<ul>" +
+			"<li>" + GmCXt.label.stepDefinedPopover + "</li>" +
+			"<li>" + GmCXt.label.kindlyHoverPopup + "</li>" +
+			"</ul>";
+	}
+
+	pub.open = function(stepTitle, stepImage, processedImage, number, stepId, rca, elAttributes) {
+		if (self.type === 'step_not_found') {
+			if (mg$("body").find('.mgPlayerJSTest_overlay-container').length === 0) {
+				mg$("<wmgPlayerJSTest_></wmgPlayerJSTest_>").addClass('mgPlayerJSTest_overlay-container').appendTo('body');
+			}
+			var overlay = mg$(".mgPlayerJSTest_overlay-container").empty();
+			overlay.append(stepNotFound(stepTitle, stepImage, processedImage)).show();
+
+		} else if (self.type === 'hoverTipEditStepGuide') {
+			if (mg$("body").find('.mgPlayerJSTest_user-tip-guide-container').length === 0) {
+				mg$("<wmgPlayerJSTest_></wmgPlayerJSTest_>").addClass('mgPlayerJSTest_user-tip-guide-container').appendTo('body');
+			}
+			mg$(".mgPlayerJSTest_user-tip-guide-container").empty().append(hoverTipEditStepGuide()).show();
+
+			/**
+			 * Align popup
+			 */
+			GmCXt.alignPopup({
+				popup: mg$(".mgPlayerJSTest_user-tip-guide-container"),
+				highlightedArea: self.highlightedArea[0]
+			}).start();
+
+		} else if (self.type === 'hoverTipPlayStepGuide') {
+			if (mg$("body").find('.mgPlayerJSTest_user-tip-guide-container').length === 0) {
+				mg$("<wmgPlayerJSTest_></wmgPlayerJSTest_>").addClass('mgPlayerJSTest_user-tip-guide-container').appendTo('body');
+			}
+			mg$(".mgPlayerJSTest_user-tip-guide-container").empty().append(hoverTipPlayStepGuide()).show();
+
+			/**
+			 * Align popup
+			 */
+			GmCXt.alignPopup({
+				popup: mg$(".mgPlayerJSTest_user-tip-guide-container"),
+				highlightedArea: self.highlightedArea[0]
+			}).start();
+		}
+
+		attachDOMEvents();
+	};
+
+	pub.close = function() {
+		mg$('.mgPlayerJSTest_overlay-container').hide().empty();
+		mg$('.mgPlayerJSTest_user-guide-container').hide().empty();
+		mg$('.mgPlayerJSTest_user-tip-guide-container').hide().empty();
+		if (self.type === 'hoverTipPlayStepGuide') {
+			GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:stop_dom_highlighter", {});
+		}
+	};
+
+	return pub;
+};
+/**
+	* @file Guideme tour player module
+	* @author Nilesh Pachpande
+	*/
+GmCXt.playedPreviousSteps = [];
+GmCXt.elLookupTime = GmCXt.isWestpac() ? GmCXt.t.elLookupTime10s : GmCXt.t.elLookupTime30s;
+
+GmCXt.tourPlayer = function(data) {
+
+	var pub = {};
+
+	GmCXt.playerI.mode = GmCXt.playerI.mode || 'live';
+	GmCXt.playerI.type = GmCXt.playerI.type || 'live';
+	GmCXt.playerI.currentStepId = GmCXt.playerI.currentStepId || 0;
+	GmCXt.log(33, "Current Step ID Updated(Fn: tourPlayerInit):" + GmCXt.playerI.currentStepId);
+	GmCXt.playerI.totalStepCount = parseInt(GmCXt.playerI.tour.step_count);
+
+	if (!GmCXt.playerI.playNextBranch &&
+		(GmCXt.playerI.currentLoop === undefined || !(GmCXt.playerI.currentLoop && GmCXt.playerI.currentLoop > 0))) {
+		GmCXt.playerI.playStructure = [];
+		if (GmCXt.playerI.tour) {
+			updatePlayStructure(GmCXt.playerI.tour);
+		}
+	}
+
+	var self = {
+		maxWait: 500,
+		ready: true,
+		status: null,
+		DOM_WAITING: 100,
+		DOM_SUCCESS: 200,
+		DOM_FAILURE: 300,
+		ATTR_CLS_FAILURE: 400,
+		isDeskReq: data ? data.isDeskReq : null,
+		windowHostNamePath: GmCXt.getPageHostPathName(),
+		windowHost: GmCXt.getPageDomain()
+	};
+
+	var tourSetting = GmCXt.playerI.tour.tour_settings;
+	var tourStepSetting = tourSetting.step_settings;
+	var delayChecked = false;
+
+	pub.isLastStepVisible = true;
+
+	if (GmCXt.playerI.isAutomation) {
+		GmCXt.playerI.automate = true;
+		GmCXt.playerI.manual = false;
+		GmCXt.playerI.initiator = 'doitforme';
+	} else if (GmCXt.playerI.testAutomation) {
+		GmCXt.playerI.automate = true;
+		GmCXt.playerI.manual = false;
+	} else if (GmCXt.playerI.initiator === 'doitforme') {
+		GmCXt.playerI.manual = false;
+	} else {
+		GmCXt.playerI.manual = true;
+	}
+
+	if (GmCXt.playerI.origin === "keypress")
+		GmCXt.playerI.keyShorts = true;
+	else
+		GmCXt.playerI.keyShorts = false;
+
+	pub.triggerMyGuideClickMouseDown = function(ev) {
+		// prevent blur event that takes focus off of forms etc & collapses/closes the section as a result
+		ev.preventDefault();
+	};
+
+	pub.triggerMyGuideClick = function(idName, ev) {
+		ev.stopPropagation();
+		switch (idName) {
+			case 'mgPlayerJSTest_play_step_pause_classic':
+			case 'mgPlayerJSTest_play_step_pause':
+			case 'mgPlayerJSTest_play-step-pause-svg':
+				stopAutomation();
+				break;
+
+			case 'mgPlayerJSTest_play_step_next':
+			case 'mgPlayerJSTest_play_step_next_classic':
+				playNxtStep(ev);
+				break;
+
+			case 'mgPlayerJSTest_play_step_prev':
+			case 'mgPlayerJSTest_play_step_prev_classic':
+				pub.playPreviousStep(ev);
+				break;
+
+			case 'mgPlayerJSTest_play_step_popup_close':
+			case 'mgPlayerJSTest_play_step_next_done':
+			case 'mgPlayerJSTest_play_step_next_done_classic':
+			case 'mgPlayerJSTest_play-step-popup-close-svg':
+				playStepPopupCloseButtonClickEvent();
+				break;
+
+			case 'mgPlayerJSTest_play_step_popup_edit':
+			case 'mgPlayerJSTest_play-step-popup-edit-icon':
+				editStepFromPopUp();
+				break;
+		}
+	};
+
+	pub.start = function() {
+
+		if (GmCXt.isAutomationRunning()) {
+			GmCXt.auto.showProgress();
+		}
+		GmCXt.log(33, "Guide player started");
+
+		if (GmCXt.playerI && GmCXt.playerI.initiator === "urlTour") {
+			GmCXt.isPageReloaded = true;
+		}
+
+		window.addEventListener("mouseup", GmCXt.registerClickListner, true);
+		window.addEventListener("mousedown", GmCXt.registerClickListner, true);
+		window.addEventListener("keyup",
+			function(e) {
+				if (e.keyCode === 13) {
+					GmCXt.registerClickListner(e);
+				}
+			}, true);
+		window.addEventListener("keydown", function(e) {
+			if (e.keyCode === 13) {
+				GmCXt.registerClickListner(e);
+			}
+		}, true);
+
+		GmCXt.storage().set({
+			'loopingCompleted': false
+		});
+
+		if (GmCXt.playerI.isAutolaunch) {
+			GmCXt.setAutoTour(GmCXt.playerI.tour.tour_id);
+		} else {
+			GmCXt.setAutoTour(0);
+		}
+
+		if (GmCXt.playerI.currentLoop === undefined || !(GmCXt.playerI.currentLoop && GmCXt.playerI.currentLoop > 0)) {
+			updatePlayStructure(GmCXt.playerI.tour);
+		}
+
+		GmCXt.log(33, "Guide play structure", GmCXt.playerI.playStructure);
+
+		if (!GmCXt.playerI.currentStepId) {
+
+			var firstStepId = GmCXt.getFirstStepId();
+			if (firstStepId) {
+				GmCXt.playerI.currentStepId = firstStepId;
+				GmCXt.log(33, "Current Step ID Updated(Fn: pub.start):" + GmCXt.playerI.currentStepId);
+
+				if (!GmCXt.playerI.startStepId) {
+					GmCXt.playerI.startStepId = GmCXt.playerI.currentStepId;
+				}
+
+			} else if (!GmCXt.isDesktop()) {
+				GmCXt.cleanPlayer();
+				return true;
+			}
+
+		}
+
+		checkPreviousStepIsHoverStep();
+
+		function hideBeaconsAndTips() {
+			GmCXt.hideBeacons();
+			GmCXt.hideSmartTipsIfOptionON();
+			mg$(document).off('keydown').on('keydown', keydownEventListener);
+		}
+
+		if (GmCXt.playerI.guideState === 'pause') {
+			GmCXt.pauseGuide();
+			hideBeaconsAndTips();
+		} else {
+
+			var appDomainMatch = getMatchDomain();
+
+			if (!GmCXt.playerI) return;
+
+			var tourSetting = GmCXt.playerI.tour.tour_settings;
+
+			if (!appDomainMatch && GmCXt.isFQDN()) {
+				GmCXt.log(33, "Domain mismatch. Stop guide play.");
+				hideBeaconsAndTips();
+				return;
+			} else if (GmCXt.playerI) {
+				// PlayerI might not be available due to user interruption while automation. 
+				playStep(GmCXt.playerI.currentStepId);
+			}
+		}
+	};
+
+	function getMatchDomain() {
+		GmCXt.log(33, "Matching domain:");
+		var match = false;
+
+		if (!GmCXt.playerI) {
+			return;
+		}
+		var tour = GmCXt.playerI.tour;
+
+		if (tour.allDomains && tour.allDomains.length > 0) {
+
+			if (GmCXt.isElectron()) {
+				var d = GmCXt.getCurrentMyGuideApp(tour.allDomains);
+			} else {
+				var d = GmCXt.findDomainMatch(tour.allDomains, GmCXt.urlParts.fullUrl);
+			}
+			if (!GmCXt.isEmpty(d)) {
+				match = true;
+			}
+
+		} else {
+			match = true;
+		}
+		GmCXt.log(33, "Match Result: " + match);
+		return match;
+	}
+
+	pub.stop = function(forceClose, keepUserGuide) {
+
+		var pi = GmCXt.playerI;
+
+		if (GmCXt.playerI) {
+			step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+			if (GmCXt.FT.isPlayer && !GmCXt.taskListOpen) {
+				GmCXt.updatePlayedSteps(step);
+			}
+
+			if (step && (step.step_type === "video" || step.step_type === "image")) {
+				GmCXt.sendMessageToApp("mgPlayerJSTest_action:remove_video_player");
+			}
+		}
+
+		if (GmCXt.isAutomationRunning()) {
+			if (GmCXt.playerI.isPageReloadByLastStep) {
+				return;
+			} else if (GmCXt.playerI.currentBranchIndex !== undefined && !forceClose) {
+				var node = getNode(GmCXt.playerI.currentBranchStep.step_id);
+				var tail_ = node.branch[GmCXt.playerI.currentBranchIndex].tail;
+
+				var s = findFirstNonAutoStepInBranch(tail_);
+				GmCXt.auto.branchPlaySuccess(s.step_id, function() {
+					GmCXt.playerI.currentBranchIndex++;
+					GmCXt.playerI.playNextBranch = true;
+
+					GmCXt.storage().set({
+						'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+						'guide_play_event': GmCXt.guidePlayTracker
+					});
+
+					var tour = GmCXt.playerI.tour;
+					window.location = GmCXt.getRedirectUrlForAuto(GmCXt.playerI.currentBranchStep.step_url, tour);
+				});
+				return;
+			}
+		}
+		var initiator = pi.initiator;
+		var jobId = pi.currentStepId;
+
+		var isTourCompleted = pi.completeEventTracked;
+
+		if (initiator) isTourCompleted = false;
+
+		clearTimeouts();
+
+		hideWaitMsg();
+
+		GmCXt.restartInParent(true);
+
+		GmCXt.hideResumePopup();
+		GmCXt.storage().get(['botTourPlayList']).then(function(tList) {
+			if (tList && tList.botTourPlayList && tList.botTourPlayList.length && pi && pi.tour) {
+				for (var i = 0; i < tList.botTourPlayList.length; i++) {
+
+					if (tList.botTourPlayList[i].tour_id === pi.tour.tour_id) {
+						nextTourPlayed = tList.botTourPlayList[i + 1];
+						if (nextTourPlayed) {
+							var completeURL = '';
+							if (!nextTourPlayed.tour_url.startsWith('http')) {
+								completeURL = location.protocol + '//' + nextTourPlayed.tour_url;
+							} else {
+								completeURL = nextTourPlayed.tour_url;
+							}
+							GmCXt.log(33, "REDIRECTING TO URL - ", {
+								URL: completeURL
+							});
+							GmCXt.redirect(completeURL);
+
+							var msg = {
+								tour: nextTourPlayed,
+								source: 'bot',
+								automate: true,
+								initiator: 'doitforme',
+								type: 'doitforme'
+							};
+
+							GmCXt.showToastMsg(GmCXt.label.playNextBotTour);
+							GmCXt.timeout(GmCXt.requestHandler.playGuide(msg), 5000);
+
+						}
+						break;
+					}
+				}
+			}
+		});
+
+		if (GmCXt.isDesktop()) {
+			GmCXt.log(74, 'Close guide play');
+			GmCXt.sendMessageToDesktop({
+				requestId: 10000,
+				requestType: 'closeGuidePlay',
+				errCode: 1000
+			});
+		}
+
+		GmCXt.cleanPlayer();
+
+		pub.closeStep(jobId, keepUserGuide);
+
+		onCloseTour(initiator, forceClose);
+
+		if (GmCXt.isPlayer()) {
+			if (((GmCXt.isEmpty(GmCXt.onScreenTooltipGuideIds) || !GmCXt.onScreenTooltipGuideIds.length) &&
+					(GmCXt.isEmpty(GmCXt.beaconsOnScreen) || !GmCXt.beaconsOnScreen.length)) || GmCXt.notificationGuides) {
+				GmCXt.getContextGuides("Guide play complete");
+			}
+
+			GmCXt.showSmartTips();
+			GmCXt.showBeacons();
+		}
+
+	};
+
+	function updatePlayedTours(tour_id) {
+		var PI = GmCXt.playerI;
+
+		if (GmCXt.playedTour.indexOf(tour_id) === -1 &&
+			(PI.totalStepCount === 1 || PI.startStepId !== PI.currentStepId)) {
+
+			GmCXt.playedTour.push(tour_id);
+			GmCXt.storage().set({
+				'playedTour': GmCXt.playedTour
+			});
+		}
+		GmCXt.sendMessageToApp("mgPlayerJSTest_action:update_played_tour", {
+			playedTour: GmCXt.playedTour
+		});
+	}
+
+	pub.closeGuide = function(forceClose, fromShowme) {
+
+		GmCXt.failedStepId = 0;
+
+		var pi = GmCXt.playerI;
+		var step = GmCXt.getCurrentStep(pi.currentStepId);
+		var tour = pi.tour;
+		var ti = GmCXt.tourPlayerI;
+
+		if (self.completionTimeout) {
+			clearTimeout(self.completionTimeout);
+		}
+
+		if (GmCXt.isLastStep(pi.currentStepId, pi.playStructure)) {
+			updatePlayedTours(tour.tour_id);
+			GmCXt.markAutoLaunchTourDoNotShow(tour);
+		} else if (GmCXt.FT.isPlayer) {
+
+			GmCXt.tourActivity['t:' + pi.tour.tour_id] = pi.lastPlayedStepId;
+
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:update_tour_activity", {
+				tourActivity: GmCXt.tourActivity
+			});
+		}
+
+		if (GmCXt.autoTrigger) {
+			clearTimeout(GmCXt.autoTrigger);
+		}
+
+		if (step) {
+			var completeEventTracked = (pi.completeEventTracked) ? true : false;
+
+			if (!completeEventTracked) {
+				var o = {
+					tour: pi.tour,
+					stepId: pi.currentStepId,
+				};
+
+				if (step.step_type == GmCXt.STEP_TYPE_INLINE && !GmCXt.isTrue(step.step_settings.inlineBranch)) {
+					o.type = "Inline Step";
+				} else if (step.step_type == GmCXt.STEP_TYPE_IMAGE) {
+					o.type = "Image Step";
+				}
+			}
+
+			if (GmCXt.getTail(pi.currentStepId, pi.playStructure) === null) {
+				toggle();
+			}
+		}
+		GmCXt.stopAudioTrack();
+
+		if (!fromShowme) {
+			GmCXt.getSurveyScreen(GmCXt.createDeepCopy(pi));
+		}
+
+		if (pi.taskObj && pi.completeEventTracked && !pi.taskObj.isComplete) {
+			//Guide Played from Task List
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:mark_task_guide_complete", {
+				taskListId: pi.taskObj.taskId,
+				tourId: pi.tour.tour_id,
+				complete_count: pi.taskObj.complete_count,
+				total_count: pi.taskObj.total_count
+			});
+		} else if (GmCXt.isPlayer() && pi.completeEventTracked && GmCXt.taskListCount > 0) {
+			// Guide played outside task list, but it should be marked complete in task list
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:mark_task_guide_complete_played_outside", {
+				tourId: tour.tour_id
+			});
+		}
+
+		ti.stop(forceClose);
+
+		mg$('.mgPlayerJSTest_image-step-prev').remove();
+		mg$('.mgPlayerJSTest_image-step-next').remove();
+		mg$('.mgPlayerJSTest_image-step-done').remove();
+
+		if (step.step_type === "video" || step.step_type === "image") {
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:remove_video_player");
+		}
+		if (!GmCXt.isAutomationRunning()) {
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:close_media_player", {
+				terminate: true
+			});
+		}
+	};
+
+	function redirectTour(tourSetting) {
+
+		GmCXt.storage().set({
+			'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+			'guide_play_event': GmCXt.guidePlayTracker
+		}).then(function() {
+			if (GmCXt.playerI.testAutomation) {
+				if (!showStepRedirect(tourSetting)) {
+					var msg = 'Guide Rules Not Matched.';
+					if (GmCXt.playerI.stepRuleMatch === false) {
+						msg = 'Step Rules Not Matched.';
+					}
+					var s = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+					GmCXt.auto.fail(s, {
+						errorMessage: msg
+					});
+				} else {
+					GmCXt.changeUrl(getStepUrl(), GmCXt.playerI.tour);
+				}
+			} else if (GmCXt.playerI.loops) {
+				//For CSV file reading
+				GmCXt.changeUrl(getStepUrl(), GmCXt.playerI.tour);
+			} else {
+				if (!showStepRedirect(tourSetting)) {
+					GmCXt.cleanPlayer();
+				}
+			}
+		});
+
+	}
+
+	function updatePlayStructure(tour) {
+
+		var playStructure = GmCXt.getGuidePlayStructure(tour);
+
+		if (GmCXt.isDesktop()) {
+			playStructure = tour.steps[0].playStructure;
+		}
+
+		GmCXt.playerI.playStructure = playStructure;
+
+	}
+
+	function checkPreviousStepIsHoverStep() {
+		if (GmCXt.playerI.currentStepId &&
+			(GmCXt.playerI.lastPlayedStepId || GmCXt.playerI.lastPlayedStepId === undefined) &&
+			(GmCXt.playerI.currentStepId !== GmCXt.playerI.lastPlayedStepId) &&
+			(GmCXt.checkPreviousHoverStep === true)) {
+
+			GmCXt.checkPreviousHoverStep = false;
+
+			var previousStepId = GmCXt.playerI.lastPlayedStepId;
+			if (!previousStepId) {
+				previousStepId = GmCXt.getPreviousStepId(GmCXt.playerI.currentStepId);
+			}
+
+			var previousStep = GmCXt.createDeepCopy(GmCXt.getStepFromPlayerI(previousStepId));
+
+			if (previousStep && !GmCXt.isEmpty(previousStep)) {
+
+				if (previousStep.step_settings.hoverNext) {
+					var windowHost = GmCXt.getPageDomain();
+					var previousStepUrlHost = GmCXt.getDomain(previousStep.step_url);
+
+					if (previousStepUrlHost == windowHost) {
+						GmCXt.playerI.currentStepId = previousStepId;
+						GmCXt.log(33, "Current Step ID Updated(Fn: checkPreviousStepIsHoverStep):" + GmCXt.playerI.currentStepId);
+						GmCXt.showTooltipOnPreviousHoverStep = true;
+					}
+				}
+			}
+
+		}
+	}
+
+	function onCloseTour(initiator, forceClose) {
+
+		if (initiator === 'automation') {
+			if (forceClose) {
+				GmCXt.auto.stop(true);
+			} else {
+				GmCXt.auto.onCloseTour();
+			}
+		}
+
+		mg$('.mgPlayerJSTest_highlighter-span').remove();
+		mg$('.mgPlayerJSTest_image-step-screen').remove();
+	}
+
+	pub.playNextStep = function(isAutomationSuccess) {
+		if (isAutomationSuccess) {
+			self.ready = true;
+		}
+		pub.closeStep();
+		playNxtStep();
+	};
+
+	pub.closeStep = function(jobId, keepUserGuide) {
+
+		if (GmCXt.playerI) jobId = GmCXt.playerI.currentStepId;
+		var step = {};
+
+		if (GmCXt.playerI) {
+			step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		}
+
+		GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:stop_dom_highlighter", {
+			jobId: jobId
+		});
+		GmCXt.stopAudioTrack();
+
+		if (GmCXt.userGuideInstance && !keepUserGuide) {
+			GmCXt.userGuideInstance.close();
+		}
+
+		if (GmCXt.previewStepPopupInstance) {
+			GmCXt.previewStepPopupInstance.close();
+
+		}
+
+		if (!GmCXt.isEmpty(GmCXt.highlight_elements)) {
+			delete GmCXt.highlight_elements;
+		}
+
+		GmCXt.removeScreenOverlay();
+		mg$('.mgPlayerJSTest_step-tooltips').remove();
+		mg$('.mgPlayerJSTest_highlighter-span').remove();
+		var currStepData = false;
+
+		if (self.prevEvent) {
+			currStepData = GmCXt.getPreviousStep();
+		} else {
+			currStepData = GmCXt.getNextStep();
+		}
+
+		if (currStepData && currStepData.step_type !== 'image') {
+			mg$('.mgPlayerJSTest_image-step-screen').remove();
+		}
+		mg$('#mgPlayerJSTest_image_popup').hide();
+		mg$('.mgPlayerJSTest_image-step-prev').remove();
+		mg$('.mgPlayerJSTest_image-step-next').remove();
+		mg$('.mgPlayerJSTest_image-step-done').remove();
+
+		if (step && (step.step_type === "video" || step.step_type === "image")) {
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:remove_video_player");
+		}
+		if (!GmCXt.isAutomationRunning) {
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:close_media_player", {
+				terminate: GmCXt.playerI ? false : true
+			});
+		}
+
+		GmCXt.unlockScroll();
+
+	};
+
+	pub.setStepCompletionTimeout = function(step) {
+
+		if (step && !step.step_settings)
+			return true;
+
+		// Close current step after 4 sec
+		if (step.step_settings.closeAfterDelay) {
+			var closeTimeout = GmCXt.t.stepComplition;
+
+			if (step.step_settings.completionTime) {
+				closeTimeout = parseInt(step.step_settings.completionTime) * 1000;
+				closeTimeout = (closeTimeout) ? closeTimeout : GmCXt.t.stepComplition;
+			}
+
+			if (closeTimeout) {
+				self.completionTimeout = GmCXt.timeout(function() {
+					if (mg$('.mgPlayerJSTest_popup').length === 0 &&
+						mg$('.mgPlayerJSTest_survey-popup-container').length === 0) {
+						playNxtStep();
+					} else {
+						pub.setStepCompletionTimeout(step);
+					}
+				}, closeTimeout);
+			}
+		}
+	};
+
+	function keydownEventListener(e) {
+		if (!GmCXt.playerI)
+			return true;
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var elem = {};
+
+		if (step) {
+			elem = step.step_settings.element;
+			if (elem && elem.selector && elem.selector.js) {
+				elem.tagName = GmCXt.getTagName(elem.selector.js[0]);
+			}
+		}
+
+		function cb() {
+			GmCXt.stopAudioTrack();
+			pub.stop();
+		}
+
+		if (e.which === 27) {
+			// escape key pressed
+			if (isNotLastStep() && GmCXt.isExitSurvey() && GmCXt.isPlayer()) {
+				GmCXt.showExitSurvey();
+			}
+			cb();
+		}
+	}
+
+	var isNotLastStep = function() {
+		if (GmCXt.getTail(GmCXt.playerI.currentStepId, GmCXt.playerI.playStructure) !== null)
+			return true;
+		else
+			return false;
+	};
+
+	function playNextStepWrapper(stepId) {
+		if (GmCXt.playerI && GmCXt.playerI.currentStepId === stepId)
+			playNxtStep();
+	}
+
+	function playNxtStep(e) {
+
+		if (GmCXt.isDesktop()) {
+			var reqType = 'playNextStep';
+			GmCXt.log(74, reqType);
+			desktopPlaySteps(reqType);
+		}
+
+		if (mg$('.mgPlayerJSTest_popup-info') && mg$('.mgPlayerJSTest_popup-info').length) return true;
+		self.prevEvent = false;
+
+		var pi = GmCXt.playerI;
+
+		if (!pi) return true;
+
+		GmCXt.markAutoLaunchTourDoNotShow(pi.tour);
+
+		if (self.completionTimeout)
+			clearTimeout(self.completionTimeout);
+
+		if (self.ready === true) {
+			GmCXt.log(33, "playNextStep event, lastStepId: " + pi.currentStepId);
+
+			var nextStepId = GmCXt.getTail(pi.currentStepId, pi.playStructure, e);
+			var nextStep = getStepFromTour(nextStepId, pi.tour);
+
+			if (GmCXt.isAutomationRunning()) {
+
+				if (!GmCXt.isAutomationStep(nextStep) && GmCXt.playerI.runningBranchDecisionAutoSteps === true) {
+					GmCXt.playerI.runningBranchDecisionAutoSteps = false;
+					playStep(pi.currentBranchStep.step_id);
+					return;
+				}
+
+				if (GmCXt.checkForBranchVariationSteps(nextStep)) {
+					GmCXt.playerI.runningBranchDecisionAutoSteps = true;
+				}
+			}
+
+			GmCXt.log(33, "playNextStep event, nextStepId: " + nextStepId);
+
+			if (nextStepId) {
+				self.ready = false;
+
+				pub.closeStep();
+
+				GmCXt.timeout(function() {
+					playStep(nextStepId);
+				}, self.maxWait);
+
+			} else if (GmCXt.isLastStep(pi.currentStepId, pi.playStructure)) {
+
+				if (pi.loops) {
+					GmCXt.log(33, 'Tour Loop: ' + (pi.currentLoop + 1) + ' completed.');
+					GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:tour_loop_completed');
+
+				} else {
+					GmCXt.tourPlayerI.closeGuide();
+				}
+			}
+		}
+
+		mg$('.mgPlayerJSTest_image-step-prev').remove();
+		mg$('.mgPlayerJSTest_image-step-next').remove();
+		mg$('.mgPlayerJSTest_image-step-done').remove();
+	}
+
+	pub.playPreviousStep = function(e) {
+		if (GmCXt.isDesktop()) {
+			var reqType = 'playPreviousStep';
+			GmCXt.log(74, reqType);
+			desktopPlaySteps(reqType);
+		}
+
+		self.prevEvent = true;
+
+		if (GmCXt.getTail(GmCXt.playerI.currentStepId, GmCXt.playerI.playStructure) === null) {
+			toggle();
+		}
+
+		if (!GmCXt.playerI) return true;
+
+		if (self.ready === true) {
+
+			var previousStepId = GmCXt.getPreviousStepId(GmCXt.playerI.currentStepId);
+
+			GmCXt.log(33, "playPreviousStep event, previousStepId: " + previousStepId);
+
+			if (previousStepId) {
+				self.ready = false;
+				pub.closeStep();
+
+				GmCXt.timeout(function() {
+					playStep(previousStepId);
+				}, self.maxWait);
+			}
+
+			mg$('.mgPlayerJSTest_image-step-prev').remove();
+			mg$('.mgPlayerJSTest_image-step-next').remove();
+			mg$('.mgPlayerJSTest_image-step-done').remove();
+		}
+	};
+
+	function stopAutomation() {
+		if (GmCXt.playerI) {
+			GmCXt.playerI.automate = false;
+			GmCXt.playerI.pauseAutomate = true;
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:update_player_instance_app');
+		}
+		hideAutoIndicator();
+		hideStopButton();
+
+		if (GmCXt.autoTrigger) {
+			clearTimeout(GmCXt.autoTrigger);
+		}
+
+		showNagivation();
+
+		//show next button
+		if (hasNextStep()) {
+			showNextButton();
+			hideDoneButton();
+		}
+
+		var currStep = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var ss = currStep.step_settings;
+		showPrevBtnToggle(ss);
+	}
+
+	function branchDecicisionPopUp(opt) {
+		var ob = {};
+
+		function selectBranchType() {
+			var html = '';
+
+			mg$.each(opt.branch, function(index, branch) {
+				html +=
+					'<div branchIndex="' + index + '" class="mgPlayerJSTest_branching-decision-step">' +
+					'<div branchIndex="' + index + '"  class="mgPlayerJSTest_tour-details-small-thumbnails-wrapper mgPlayerJSTest_inline-block-vm" ' +
+					'class="mgPlayerJSTest_branching-decision-step-value">' +
+					'<div branchIndex="' + index + '"  class="mgPlayerJSTest_tour-title-small-thumbnails mgPlayerJSTest_font-size-16">' + GmCXt.escapeHtml(branch.branchName) + '</div>' +
+					'</div>';
+
+				if (branch.branchDesc) {
+					html += '<div class="mgPlayerJSTest_position-relative mgPlayerJSTest_show-text-tooltip">' + '<div branchIndex="' + index + '"  class="mgPlayerJSTest_branching-decision-branch-desc mgPlayerJSTest_font-size-12">' + GmCXt.escapeHtml(branch.branchDesc) + '</div>' +
+						'<div class="mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-left">' +
+						'<div class="mgPlayerJSTest_tooltip-title">' + branch.branchDesc + '</div>' +
+						'</div>' + '</div>';
+				}
+				html += '</div>' +
+					'</div>';
+			});
+			return html;
+		}
+
+		ob.show = function() {
+			title = GmCXt.label.branchStepMessagePopup;
+			var isOpacity = true;
+			if (opt && opt.step && opt.step.step_title) {
+				title = opt.step.step_title;
+				isOpacity = GmCXt.isDefined(opt.step.step_settings.branchOpacity) ? opt.step.step_settings.branchOpacity : true;
+			}
+
+			var html =
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup-outer'></wmgPlayerJSTest_>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup mgPlayerJSTest_branching-decision-popup'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup-title '>" +
+				"<span class='mgPlayerJSTest_branching-decision-title'>" + title + "<span>" +
+				"<span id='mgPlayerJSTest_play-step-popup-drag-icon' class='mgPlayerJSTest_branching-drag'></span>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_branching-decision-close mgPlayerJSTest_inline-block-vm'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_inline-block-vm'>" +
+				"<span id='mgPlayerJSTest_branching-decision-close-svg'></span>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-bottom-left'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-title'>" + GmCXt.label.close + "</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup-content mgPlayerJSTest_branching-decision-content mgPlayerJSTest_no-padding'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_branching-decision-content-wrapper'>" +
+				selectBranchType() +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>";
+
+			mg$("body").append(html);
+			if (opt.branch.length > 5) {
+				mg$('.mgPlayerJSTest_branching-decision-content-wrapper').css({
+					'overflow-y': 'auto'
+				});
+			}
+
+			mg$(".mgPlayerJSTest_panel-popup-outer").css('height', mg$(document).height());
+			if (!isOpacity) {
+				mg$(".mgPlayerJSTest_panel-popup-outer").css('display', 'none');
+			}
+
+			mg$("#mgPlayerJSTest_branching-decision-close-svg").html(GmCXt.svgs.popup_close);
+			mg$("#mgPlayerJSTest_play-step-popup-drag-icon").html(GmCXt.svgs.popup_drag);
+
+			mg$(".mgPlayerJSTest_branching-decision-step").on("click", function(e) {
+				if (mg$.isFunction(opt.callback))
+					opt.callback(e);
+			});
+
+			mg$(".mgPlayerJSTest_branching-decision-close").on("click", function() {
+				ob.close();
+				if (GmCXt.firstStepAutoLaunch()) {
+					GmCXt.showAutoLaunchCloseOptions(GmCXt.playerI.tour);
+				}
+				pub.stop();
+			});
+
+			var elmnt = document.getElementsByClassName('mgPlayerJSTest_branching-decision-popup')[0];
+			var dragEl = document.getElementById('mgPlayerJSTest_play-step-popup-drag-icon');
+
+			GmCXt.attachDragEvents(elmnt, dragEl);
+		};
+
+		ob.close = function() {
+			mg$(".mgPlayerJSTest_panel-popup").remove();
+			mg$(".mgPlayerJSTest_panel-popup-outer").remove();
+		};
+
+		return ob;
+	}
+
+	function transportDecicisionPopUp(opt) {
+		var ob = {};
+
+		ob.show = function() {
+			title = "";
+			var isOpacity = true;
+			if (opt && opt.step && opt.step.step_title) {
+				title = opt.step.step_title;
+				isOpacity = true;
+			}
+
+			var html =
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup-outer'></wmgPlayerJSTest_>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup mgPlayerJSTest_branching-decision-popup'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup-title '>" +
+				"<span class='mgPlayerJSTest_branching-decision-title'>" + title + "<span>" +
+				"<span id='mgPlayerJSTest_play-step-popup-drag-icon' class='mgPlayerJSTest_branching-drag'></span>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_branching-decision-close mgPlayerJSTest_inline-block-vm'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_inline-block-vm'>" +
+				"<span id='mgPlayerJSTest_branching-decision-close-svg'></span>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-bottom-left'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-title'>" + GmCXt.label.close + "</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-popup-content mgPlayerJSTest_branching-decision-content mgPlayerJSTest_no-padding'>" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_branching-decision-content-wrapper'>" +
+				"<div id='mgPlayerJSTest_trans-redirection' class='mgPlayerJSTest_branching-decision-step'>" +
+				"<div class= 'mgPlayerJSTest_tour-details-small-thumbnails-wrapper mgPlayerJSTest_inline-block-vm mgPlayerJSTest_branching-decision-step-value'> " +
+				"<div class='mgPlayerJSTest_tour-title-small-thumbnails mgPlayerJSTest_font-size-16'>" +
+				GmCXt.label.tranportURlRedirectionConfirm +
+				"</div>" +
+				"</div>" +
+				"<div class='mgPlayerJSTest_ext-link-icon'>" +
+				GmCXt.svgs.iconExternalLink +
+				"</div>" +
+				"</div>" +
+				"<div id='mgPlayerJSTest_guide-continue' class='mgPlayerJSTest_branching-decision-step'>" +
+				"<div class= 'mgPlayerJSTest_tour-details-small-thumbnails-wrapper mgPlayerJSTest_inline-block-vm mgPlayerJSTest_branching-decision-step-value'> " +
+				"<div class='mgPlayerJSTest_tour-title-small-thumbnails mgPlayerJSTest_font-size-16'>" +
+				GmCXt.label.guideContinueConfirm +
+				"</div>" +
+				"</div>" +
+				"</div>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>";
+
+			mg$("body").append(html);
+
+
+			mg$(".mgPlayerJSTest_panel-popup-outer").css('height', mg$(document).height());
+			if (!isOpacity) {
+				mg$(".mgPlayerJSTest_panel-popup-outer").css('display', 'none');
+			}
+
+			mg$("#mgPlayerJSTest_branching-decision-close-svg").html(GmCXt.svgs.popup_close);
+			mg$("#mgPlayerJSTest_play-step-popup-drag-icon").html(GmCXt.svgs.popup_drag);
+
+			mg$("#mgPlayerJSTest_trans-redirection").on("click", function(e) {
+				GmCXt.playerI.lastPlayedStepId = GmCXt.playerI.currentStepId;
+				GmCXt.recordGuideEvents();
+				GmCXt.storage().set({
+					'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+					'guide_play_event': GmCXt.guidePlayTracker
+				}).then(function() {
+					window.open(opt.step.step_settings.transport_url, "_self").focus();
+					ob.close();
+				});
+			});
+
+			mg$("#mgPlayerJSTest_guide-continue").on("click", function(e) {
+				transportCB();
+				ob.close();
+			});
+
+			mg$(".mgPlayerJSTest_branching-decision-close").on("click", function() {
+				transportCB();
+				ob.close();
+			});
+
+			var elmnt = document.getElementsByClassName('mgPlayerJSTest_branching-decision-popup')[0];
+			var dragEl = document.getElementById('mgPlayerJSTest_play-step-popup-drag-icon');
+
+			GmCXt.attachDragEvents(elmnt, dragEl);
+		};
+
+		ob.close = function() {
+			mg$(".mgPlayerJSTest_panel-popup").remove();
+			mg$(".mgPlayerJSTest_panel-popup-outer").remove();
+		};
+
+		return ob;
+	}
+
+	function findFirstNonAutoStepInBranch(id) {
+		if (!id) {
+			return;
+		}
+		var s = GmCXt.getStepFromPlayerI(id);
+		if (!GmCXt.isAutomationStep(s)) {
+			return s;
+		}
+		var playStructure = GmCXt.playerI.playStructure;
+
+		for (var i = 0; i < playStructure.length; i++) {
+			if (parseInt(playStructure[i].id) === parseInt(id)) {
+				var node = playStructure[i];
+				s = GmCXt.getStepFromPlayerI(node.tail);
+				if (GmCXt.isAutomationStep(s)) {
+					return findFirstNonAutoStepInBranch(s.step_id);
+				} else {
+					return s;
+				}
+			}
+		}
+	}
+
+	function isVariableExistInBranchs(branch) {
+		for (var i = 0, j = branch.length; i < j; i++) {
+			for (var k = 0, l = branch[i].rulesEngine.length; k < l; k++) {
+				if (branch[i].rulesEngine[k].type === 'Variables') {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	function playBranchStep(step) {
+
+		if (GmCXt.isStepInlineBranch(step)) {
+			playInlineStep();
+			return;
+		}
+
+		GmCXt.log(33, 'Play Branching Step');
+
+		var branch = step.step_settings.branch;
+		var counter = 0;
+		var isVariableExistInBranch = isVariableExistInBranchs(branch);
+
+		function validate() {
+			if (isVariableExistInBranch) {
+				GmCXt.timeout(function() {
+					validateRule();
+				}, GmCXt.t.checkVariable);
+			} else {
+				validateRule();
+			}
+		}
+
+		var onValidation = function(r) {
+			GmCXt.log(33, "Rule validation response received for branch " + r.branchIndex + " " + r.valid);
+
+			if (r.valid) {
+				branch[r.branchIndex].valid = true;
+			}
+		};
+
+		function clear() {
+			clearInterval(ruleInterval);
+		}
+
+		function updatePlayStructureIfErrHandler(step_id) {
+			var PS = GmCXt.playerI.playStructure;
+			for (var ind in PS) {
+				if (PS[ind].id === step_id) {
+					PS[ind].tail = step.step_id;
+					break;
+				}
+			}
+		}
+
+		var goToBranch = function(index) {
+			clear();
+			if (!GmCXt.playerI) {
+				return;
+			}
+
+			var node = getNode(GmCXt.playerI.currentStepId);
+			var tail_ = node.branch[index].tail;
+			var testingBranchIndex = GmCXt.playerI.currentBranchIndex;
+
+			var s = findFirstNonAutoStepInBranch(tail_);
+			if (index !== testingBranchIndex && GmCXt.isAutomationRunning()) {
+				tail_ = node.branch[testingBranchIndex].tail;
+				s = findFirstNonAutoStepInBranch(tail_);
+				GmCXt.auto.branchPlayFailed(s);
+				return;
+			}
+
+			if (s) {
+				if (index === 1 && step.step_type === GmCXt.STEP_TYPE_ERROR_HANDLER) {
+					updatePlayStructureIfErrHandler(s.step_id);
+				}
+
+				playStep(s.step_id);
+				//} else if (tail_) {
+				//	playStep(tail_);
+			} else {
+				GmCXt.cleanPlayer();
+			}
+		};
+
+		var goToBotBranchStep = function() {
+			if (step.step_settings.automation.enableBot && step.step_settings.automation.defaultData) {
+				var bdata = step.step_settings.automation.defaultData;
+				var index = 0;
+				for (var i = 0; i < branch.length; i++) {
+					if (branch[i].branchName === bdata.branchName) {
+						index = i;
+						break;
+					}
+				}
+				GmCXt.playerI.currentBranchIndex = index;
+				GmCXt.playerI.currentBranchStep = step;
+				goToBranch(GmCXt.playerI.currentBranchIndex);
+			}
+		};
+
+		var domRuleExists = function() {
+
+			for (var i = 0, j = branch.length; i < j; i++) {
+				if (branch[i].isDefault !== true) {
+					if (GmCXt.numberOfDomRules(branch[i].rulesEngine) > 0)
+						return true;
+				}
+			}
+
+			return false;
+		};
+
+		var validateRule = function() {
+			if (!GmCXt.playerI) {
+				return;
+			}
+
+			counter++;
+
+			GmCXt.log(33, "Validating all branches cycle " + counter);
+
+			for (var i = 0, j = branch.length; i < j; i++) {
+
+				if (branch[i].isDefault !== true) {
+
+					var obj = {
+						branchIndex: i,
+						rules: branch[i].rulesEngine,
+						tour: GmCXt.playerI.tour,
+						timeoutVal: GmCXt.t.ruleTimeOut15ms,
+						timeout: GmCXt.t.ruleTimeOut15ms,
+						cb: onValidation,
+						isTour: false,
+						initiator: 'tourPlay'
+					};
+					GmCXt.ruleEngine.queue(obj);
+				}
+			}
+		};
+
+		var playSelectedBranch = function(ev) {
+			if (ev) {
+				var branchIndex = ev.target.getAttribute("branchIndex");
+				if (branchIndex) {
+					goToBranch(branchIndex);
+					branchDecicisionPopUp().close();
+				}
+			}
+		};
+
+		var takeDecision = function() {
+
+			for (var i = 0, j = branch.length; i < j; i++) {
+
+				if (branch[i].valid === true) {
+					branch[i].valid = false;
+					GmCXt.log(33, "Validation true. Going inside branch: " + i);
+					goToBranch(i);
+					return;
+				}
+			}
+
+			if (Date.now() < intervalEndTime) {
+				validate();
+
+			} else if (Date.now() >= intervalEndTime && branch[0].isDefault === true) {
+				GmCXt.log(33, "Going into default branch.");
+				goToBranch(0);
+			} else {
+				var option = {
+					branch: branch,
+					callback: playSelectedBranch
+				};
+				branchDecicisionPopUp(option).show();
+				clear();
+			}
+		};
+
+		GmCXt.playerI.currentStepId = step.step_id;
+		GmCXt.log(33, "Current Step ID Updated(Fn: playBranchStep):" + GmCXt.playerI.currentStepId);
+		if (step.step_settings.branch_type === "User Selection") {
+			if (GmCXt.isAutomationRunning()) {
+				goToBranch(GmCXt.playerI.currentBranchIndex);
+			} else if (GmCXt.playerI.source === "bot") {
+				goToBotBranchStep();
+			} else {
+				var option = {
+					branch: branch,
+					callback: playSelectedBranch,
+					step: step
+				};
+				branchDecicisionPopUp(option).show();
+				clear();
+			}
+
+		} else {
+			var currentTime = Date.now();
+			var intervalEndTime = currentTime + GmCXt.t.branchDecision;
+			var intervalTimer = GmCXt.t.branchDecisionInterval;
+
+			if (domRuleExists()) {
+				intervalTimer = GmCXt.t.branchDecisionInterval_domRule;
+				if (step.step_settings.branch_type === 'Quick Branch') {
+					intervalEndTime = currentTime + GmCXt.t.branchDecision_domRule_quickBranch;
+				} else if (step.step_settings.branch_type === 'errorHandler') {
+					intervalEndTime = currentTime + GmCXt.t.branchDecision_errorHandler;
+				} else {
+					intervalEndTime = currentTime + GmCXt.t.branchDecision_domRule;
+				}
+
+			}
+
+			if (isVariableExistInBranch) {
+				intervalTimer = intervalTimer + GmCXt.t.checkVariable;
+			}
+
+			GmCXt.log(33, "Decision Interval set for every " + intervalTimer + "ms for " + (intervalEndTime - currentTime) + "ms.");
+
+			var ruleInterval = setInterval(function() {
+				takeDecision();
+			}, intervalTimer);
+
+			GmCXt.log(33, "Playing branch step: " + step.step_id);
+
+			if (GmCXt.playerI.runningBranchDecisionAutoSteps === true) {
+				goToBranch(index);
+			} else {
+				if (branch[0].isDefault === true && branch.length > 1) {
+					validate();
+
+				} else if (branch[0].isDefault === true && branch.length === 1) {
+
+					GmCXt.log(33, "Going into default branch directly.");
+					goToBranch(0);
+
+				} else {
+					validate();
+				}
+				recordEvent(step);
+			}
+		}
+	}
+
+	function playLinkedGuide(step) {
+
+		GmCXt.trackStepEvent(step);
+
+		var ts = [];
+
+		function updatePiStepsCb() {
+			playStep(GmCXt.playerI.linkGuideFS);
+		}
+
+		function updatePiPsCb(ps) {
+			ts = ts.length > 0 ? ts : GmCXt.globalMsgData['mgPlayerJSTest_action:update_PI_PS_done'].ts;
+			if (!ts.length) return;
+
+			GmCXt.globalMsgData['mgPlayerJSTest_action:update_PI_steps_done'] = {};
+			GmCXt.globalMsgData['mgPlayerJSTest_action:update_PI_steps_done'].cb = updatePiStepsCb;
+
+			GmCXt.concatLinkGuideSteps(ts);
+
+			if (ps) GmCXt.playerI.playStructure = ps;
+
+			GmCXt.playerI.tour.tour_settings.play_structure = GmCXt.playerI.playStructure;
+		}
+
+		function skipLinkGuide() {
+			GmCXt.log(33, "SKIPING LINKED GUIDE STEPS, segment not valid");
+			self.ready = true;
+			playNxtStep();
+		}
+
+		GmCXt.failedStepId = step.step_id;
+
+		var d = {
+			tour_id: step.step_settings.tour_id
+		};
+
+		if (step.step_settings.linkGuidePlayMode) {
+			GmCXt.playerI.linkGuidePlayMode = step.step_settings.linkGuidePlayMode;
+		}
+
+		if (GmCXt.apiPlayer) {
+			d.forceJSONApi = true;
+		}
+
+		if (GmCXt.playerI && !GmCXt.isEmpty(GmCXt.mgActiveLang) && !GmCXt.playerI.isDefaultLang) {
+			d.language = GmCXt.mgActiveLang;
+		}
+
+		GmCXt.getSteps(d).then(function(tour) {
+			var lnkGuides = [];
+
+			if (!tour) {
+				skipLinkGuide();
+				return;
+			}
+			//check guide segmentation 
+			GmCXt.checkGuidesBasedOnSegment([tour], function(_tour) {
+
+				if (GmCXt.isEmpty(_tour)) {
+					skipLinkGuide();
+					return;
+				}
+
+				if (GmCXt.isEmpty(GmCXt.playerI.linkedGuides)) {
+					GmCXt.playerI.linkedGuides = [];
+				}
+
+				GmCXt.playerI.linkedGuides.push(tour.tour_id);
+
+				if (GmCXt.playerI.mode === 'live' &&
+					GmCXt.playerI.linkGuidePlayMode &&
+					GmCXt.playerI.linkGuidePlayMode === "PDF" &&
+					!(GmCXt.playerI.initiator && GmCXt.playerI.initiator === "doitforme")) {
+
+					if (!GmCXt.isEmpty(tour.media_files) && tour.media_files[0].pdf) {
+
+						GmCXt.playerI.linkGuidePdfUrl = tour.media_files[0].pdf;
+
+						var msg = 'mgPlayerJSTest_action:update_player_instance_app';
+						GmCXt.sendMessageToApp(msg, d);
+
+						GmCXt.sendMessageToApp("mgPlayerJSTest_action:open_pdf_link_step", {
+							data: GmCXt.playerI.linkGuidePdfUrl
+						});
+						return;
+					}
+				}
+
+				GmCXt.globalMsgData['mgPlayerJSTest_action:update_PI_PS_done'] = {};
+				GmCXt.globalMsgData['mgPlayerJSTest_action:update_PI_PS_done'].ts = tour.steps;
+				GmCXt.globalMsgData['mgPlayerJSTest_action:update_PI_PS_done'].cb = updatePiPsCb;
+
+				GmCXt.updatePlayStructureLinkGuide(tour);
+				ts = tour.steps;
+			});
+		});
+	}
+
+	function triggerClickForWD() {
+		// [MG-26104] For editable forms on WD, 'Next' click from step popup is considered as background click
+		// Hence, form goes out of editable state, trigger click to bring to editable state again
+		var index = self.workdayEdit.index;
+		GmCXt.workdayAutoClick(index);
+	}
+
+	function transportCB() {
+		self.ready = true;
+		GmCXt.tourPlayerI.playNextStep();
+	}
+
+	function playStep(stepId) {
+
+		if (self.workdayEdit && self.workdayEdit.isTrue) {
+			triggerClickForWD();
+		}
+
+		if (GmCXt.playerI === null || !GmCXt.playerI.tour) {
+			return;
+		}
+
+		GmCXt.playerI.currentStepId = stepId;
+		GmCXt.log(33, "Current Step ID Updated(Fn: PlayStep):" + GmCXt.playerI.currentStepId);
+
+		GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:set_iframe_id:do', {
+			currentIframeId: null
+		});
+
+		if ((GmCXt.isDefined(GmCXt.playerI.automate) && !GmCXt.playerI.automate) ||
+			!GmCXt.playerI.testAutomation) {
+			GmCXt.playerI.playAudio = true;
+		}
+
+		self.id = null;
+
+		var step = GmCXt.getCurrentStep(stepId);
+
+		if (!step) return;
+
+		clearTimeouts(step.step_type);
+
+		var log = "Playing step...\nID: " + stepId + "\nTitle: " + GmCXt.getText(step.step_title) + "\t";
+		GmCXt.log(33, log, 1);
+
+		var ts = GmCXt.playerI.tour.tour_settings;
+		if (GmCXt.decodeVersion(ts.version) < 2020063000) {
+
+			if (GmCXt.checkForBranchVariationSteps(step)) {
+				if (GmCXt.isAutomationRunning() &&
+					(GmCXt.playerI.runningBranchDecisionAutoSteps === true || GmCXt.playerI.runningBranchDecisionAutoSteps === undefined)) {
+					GmCXt.playerI.currentBranchIndex = 0;
+					GmCXt.playerI.currentBranchStep = step;
+					pub.playBranchStepInAutomation(step);
+				} else {
+					playBranchStep(step);
+				}
+			} else if (step.step_type === GmCXt.STEP_TYPE_GUIDE) {
+				playLinkedGuide(step);
+			} else if (step.step_type === GmCXt.STEP_TYPE_TRANSPORT) {
+				var op = {
+					step: step
+				};
+				transportDecicisionPopUp(op).show();
+			} else playGuideRulesCheck(step);
+
+		} else {
+			playGuideRulesCheck(step);
+		}
+	}
+
+	pub.playBranchStepInAutomation = function(step) {
+
+		GmCXt.auto.showProgress();
+
+		GmCXt.log(36, "Automation - Start testing all branches ");
+
+		var branch = step.step_settings.branch;
+		var branchStepId = step.step_id;
+		var index = GmCXt.playerI.currentBranchIndex;
+
+		if (index !== undefined) {
+			var currentStep = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+			if (index >= branch.length) { // Boundary Reached
+				GmCXt.log(36, 'Branch end reached for branch - ' + branch.branchName);
+				var previousBranch = GmCXt.auto.getPreviousBranch();
+				if (previousBranch.step && previousBranch.index != null && previousBranch.index != undefined) {
+					GmCXt.playerI.currentBranchStep = previousBranch.step;
+					GmCXt.playerI.currentBranchIndex = previousBranch.index;
+				} else {
+					GmCXt.playerI.currentBranchIndex = undefined;
+				}
+				pub.stop();
+				return;
+			}
+			var currentBranch = branch[index];
+			var branchName = currentBranch.branchName;
+
+			var node = getNode(step.step_id);
+			var tail_ = node.branch[index].tail;
+
+			var s = findFirstNonAutoStepInBranch(tail_);
+			if (currentBranch) {
+				GmCXt.auto.setCurrentBranchDetail(s.step_id, index, branchName, branchStepId, function() {
+					GmCXt.log(36, "Testing branch with index - " + index);
+					var autoStep = getNextAutomationStepForBranch(index, step, GmCXt.playerI.tour);
+					if (autoStep) {
+						GmCXt.playerI.runningBranchDecisionAutoSteps = true;
+						playStep(autoStep.step_id);
+					} else {
+						GmCXt.playerI.runningBranchDecisionAutoSteps = false;
+						playStep(step.step_id);
+					}
+				});
+			} else {
+				GmCXt.playerI.currentBranchIndex = undefined;
+				pub.stop();
+			}
+		}
+	};
+
+	function getStepFromTour(step_id, tour) {
+		if (step_id) {
+			for (var i = 0; i < tour.steps.length; i++) {
+				if (parseInt(tour.steps[i].step_id) === parseInt(step_id)) {
+					return tour.steps[i];
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function getNextAutomationStepForBranch(index, step, tour) {
+		var cN = getNode(step.step_id); //Current Node
+		if (cN && cN.branch && cN.branch[index]) {
+			var currentBranchNode = cN.branch[index];
+			var nB = getNode(currentBranchNode.tail); //Node Below
+			if (nB) {
+				step = getStepFromTour(nB.id, tour);
+				if (GmCXt.isAutomationStep(step)) {
+					return step;
+				}
+			}
+		}
+	}
+
+	function checkSetupStep(step) {
+
+		var pathname = GmCXt._location().pathname;
+		var steps = GmCXt.playerI.tour.steps;
+		var ctr = 0;
+
+		steps.forEach(function(item, index) {
+			if (item.step_id === step.step_id) {
+				ctr = index + 1;
+			}
+		});
+
+		if (step.step_type === GmCXt.STEP_TYPE_INLINE && !step.step_url.includes(pathname)) {
+			var text = step.step_settings.element.meta.textPropertyValue;
+			var new_step;
+			while (ctr < steps.length && text === "Setup") {
+				new_step = steps[ctr];
+				if (new_step.step_url.includes(pathname)) {
+					step = new_step;
+					GmCXt.playerI.currentStepId = step.step_id;
+					GmCXt.log(33, "Current Step ID Updated(Fn: checkSetupStep):" + GmCXt.playerI.currentStepId);
+					break;
+				}
+				ctr++;
+			}
+		}
+		return step;
+	}
+
+	function editStepFromPopUp() {
+
+		var tour = GmCXt.playerI.tour;
+		var language = GmCXt.playerI.language;
+		var isDefaultLang = GmCXt.playerI.isDefaultLang;
+		var step_id = GmCXt.playerI.currentStepId;
+
+		for (var i = 0; i < tour.steps.length; i++) {
+			if (tour.steps[i].step_id === step_id) {
+				var step = tour.steps[i];
+			}
+		}
+
+		pub.stop();
+		GmCXt.log(33, "EDIT step event received");
+
+		GmCXt.editStepWrapper(tour, step, null, language, isDefaultLang);
+	}
+
+	function getNodeFromTail(id) {
+
+		//This will return the node which has the id passed in its tail
+		var stepToReturn;
+		var PS = GmCXt.playerI.playStructure;
+
+		for (var i = 0; i < PS.length; i++) {
+			if (PS[i].tail === id) {
+				stepToReturn = PS[i];
+				break;
+			} else if (PS[i].branch) {
+				for (var j = 0; j < PS[i].branch.length; j++) {
+					if (PS[i].branch[j].tail === id) {
+						stepToReturn = PS[i];
+						break;
+					}
+				}
+			}
+		}
+
+		return stepToReturn;
+	}
+
+	function getNode(id) {
+
+		var playStructure = GmCXt.playerI.playStructure;
+		var node = null;
+
+		for (var i = 0; i < playStructure.length; i++) {
+			if (parseInt(playStructure[i].id) === parseInt(id)) {
+				node = playStructure[i];
+			}
+		}
+		return node;
+	}
+
+	function playGuideRulesCheck(step) {
+
+		GmCXt.stepAudioPlayed = false;
+		GmCXt.playerI.currentStepId = step.step_id;
+		GmCXt.log(33, "Current Step ID Updated(Fn: playGuideRulesCheck):" + GmCXt.playerI.currentStepId);
+
+		GmCXt.playerI.forceGuideMe = tourStepSetting.forceGuideMe;
+
+		if (GmCXt.playerI.mode === 'live' && GmCXt.playerI.linkedGuides && GmCXt.playerI.linkedGuides.includes(step.tour_id)) {
+			if (GmCXt.playerI.linkGuidePlayMode &&
+				GmCXt.playerI.linkGuidePlayMode === "Show Me" &&
+				!(GmCXt.playerI.initiator && GmCXt.playerI.initiator === "doitforme")) {
+
+				GmCXt.log(33, "Playing slideshow");
+				GmCXt.playerI.originalMode = "live";
+				playSlideshowStep();
+				return true;
+			}
+		}
+
+		if (step.step_type === "image") {
+			playImageStep();
+			return;
+		} else if (step.step_type === "video") {
+			GmCXt.log(33, "Playing video");
+			GmCXt.playerI.originalMode = "live";
+			playVideoStep();
+			return;
+		}
+
+		if (GmCXt.checkSalesForceSite()) {
+			step = checkSetupStep(step);
+		}
+
+		var stepSetting = step.step_settings;
+		var stepRulesExist = (stepSetting.rules && stepSetting.rules.length);
+		var delay = getDelayedPlayTime(step, tourSetting);
+
+		if (stepRulesExist && delay) {
+			delayChecked = true;
+			GmCXt.timeout(cb, delay);
+		} else {
+			delayChecked = false;
+			cb();
+		}
+
+
+		function cb() {
+			GmCXt.checkProceedToPlay(step, GmCXt.playerI.tour).then(function(y) {
+
+				if (!GmCXt.playerI) return;
+
+				if (y) {
+					if (GmCXt.checkForBranchVariationSteps(step)) {
+						var playBranchSteps = function() {
+							if (GmCXt.isAutomationRunning() &&
+								(GmCXt.playerI.runningBranchDecisionAutoSteps === true || GmCXt.playerI.runningBranchDecisionAutoSteps === undefined)) {
+								GmCXt.playerI.currentBranchIndex = 0;
+								GmCXt.playerI.currentBranchStep = step;
+								pub.playBranchStepInAutomation(step, 0);
+							} else {
+								playBranchStep(step);
+							}
+						};
+						var delay = getDelayedPlayTime(step, tourSetting);
+						if (delay && !delayChecked) {
+							GmCXt.log(33, "Branch Step Delayed for : ", delay);
+							GmCXt.timeout(playBranchSteps, delay);
+						} else {
+							playBranchSteps();
+						}
+					} else if (step.step_type === GmCXt.STEP_TYPE_GUIDE) {
+						playLinkedGuide(step);
+					} else if (step.step_type === GmCXt.STEP_TYPE_TRANSPORT) {
+						var op = {
+							step: step
+						};
+						transportDecicisionPopUp(op).show();
+					} else playStepOK(step);
+
+
+				} else if (!self.failedStep) {
+					self.failedStep = step;
+
+					if (GmCXt.client.isUrlTour) {
+						GmCXt.log(33, 'RULES FAILED: Unable to proceed URL embed tour', self.failedStep);
+					} else {
+						GmCXt.log(33, 'Redirect to step URL', self.failedStep);
+
+						if (!GmCXt.playerI.guideRuleMatch && GmCXt.isFirstNonAutomationStep()) {
+							redirectTour(tourSetting);
+						} else if (!GmCXt.playerI.stepRuleMatch) {
+							redirectTour(tourSetting);
+						}
+					}
+				}
+			});
+		}
+	}
+
+	function playStepOK(step) {
+
+		if (!GmCXt.isWestpac()) {
+			closeTour();
+		}
+
+		GmCXt.closeNotificationPopup();
+
+		if (GmCXt.isAutomationRunning()) {
+			GmCXt.auto.setEndTime();
+		}
+
+		function cb() {
+
+			if (GmCXt.isEmpty(GmCXt.playerI)) return;
+
+			if ((step.step_type === GmCXt.STEP_TYPE_INLINE || step.step_type === GmCXt.STEP_TYPE_WEB_INLINE ||
+					step.step_type === GmCXt.STEP_TYPE_EXTERNAL_AUTOMATION)) {
+				playInlineStep();
+			} else if (step.step_type === GmCXt.STEP_TYPE_MESSAGE) {
+				playMessageStep();
+			} else if (GmCXt.isAutomationStep(step)) {
+				decideActionForAutomationStep(step);
+			}
+		}
+
+		switch (step.step_type) {
+
+			case GmCXt.STEP_TYPE_INLINE:
+			case GmCXt.STEP_TYPE_WEB_INLINE:
+			case GmCXt.STEP_TYPE_MESSAGE:
+			case GmCXt.STEP_TYPE_AUTOMATION:
+			case GmCXt.STEP_TYPE_EXTERNAL_AUTOMATION: {
+				var delay = getDelayedPlayTime(step, tourSetting);
+
+				if (delay && !delayChecked) {
+					GmCXt.timeout(cb, delay);
+				} else {
+					cb();
+				}
+				break;
+			}
+
+			case GmCXt.STEP_TYPE_IMAGE: {
+				playImageStep();
+				break;
+			}
+
+			case GmCXt.STEP_TYPE_VIDEO:
+				playSlideshowStep();
+				break;
+
+			case GmCXt.STEP_TYPE_SURVEY:
+				playSurveyStep();
+				break;
+		}
+	}
+
+	// Skip Automation step for any mode other than doItForMe
+	function decideActionForAutomationStep(step) {
+		if (!GmCXt.playerI.testAutomation &&
+			GmCXt.playerI.initiator !== "doitforme") {
+			GmCXt.log(33, "SKIP THE AUTOMATION STEP");
+			self.ready = true;
+			pub.playNextStep(step);
+		} else if (step.step_type === GmCXt.STEP_TYPE_IMAGE) {
+			playImageStep();
+		} else {
+			playInlineStep();
+		}
+	}
+
+	function getDelayedPlayTime(step, tourSetting) {
+
+		var delay = 0;
+		var tourDelay = parseInt(tourSetting.stepDelayTime);
+		var stepDelay = parseInt(step.step_settings.stepDelayTime);
+
+		if (!isNaN(tourDelay) && !!tourDelay && GmCXt.playerI.currentStepId !== GmCXt.playerI.startStepId) { // When directly playing a step, omit the tour delay
+			delay = tourDelay;
+		}
+
+		if (!isNaN(stepDelay) && !!stepDelay) {
+			delay = stepDelay;
+		}
+
+		return delay ? delay * 1000 : 0;
+	}
+
+	function getStepUrl() {
+		var url = '';
+		var step;
+		if (self.failedStep) {
+			step = self.failedStep;
+		} else {
+			step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		}
+
+		url = step.step_url;
+		return url;
+	}
+
+	function playSlideshowStep() {
+
+		if (autoModePlay('Slideshow')) return;
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		window.onvisibilitychange = null;
+		GmCXt.playerI.type = GmCXt.TOUR_PLAYER_SLIDESHOW;
+
+		GmCXt.playedPreviousSteps.push(GmCXt.playerI.currentStepId);
+
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:play_slideshow');
+
+		GmCXt.nextStepPlayEventReceived = false;
+
+		GmCXt.timeout(function() {
+			self.ready = true;
+			recordEvent(step);
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:update_player_instance_app');
+		}, 100);
+	}
+
+	function showHoverGuide(highlightedArea) {
+		var options = {
+			type: 'hoverTipPlayStepGuide',
+			highlightedArea: highlightedArea
+		};
+
+		if (GmCXt.userGuideInstance) {
+			GmCXt.userGuideInstance.close();
+		}
+
+		GmCXt.userGuideInstance = GmCXt.userGuide(options);
+		GmCXt.userGuideInstance.open();
+
+		self.ready = true;
+		GmCXt.showTooltipOnPreviousHoverStep = false;
+	}
+
+	pub.onFailureTooltipElementNotFound = function(tooltipId) {
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		if (self.status === self.DOM_WAITING && step.step_settings && step.step_settings.domElems &&
+			tooltipId === step.step_settings.domElems[0].id && step.step_settings.optional) {
+
+			self.ready = true;
+			self.maxWait = 0;
+
+			GmCXt.log(33, "Playing optional step.");
+
+			if (self.prevEvent) {
+				self.prevEvent = false;
+				pub.playPreviousStep();
+			} else {
+				GmCXt.recordGuideEvents();
+				playNxtStep();
+			}
+			self.maxWait = 500;
+		}
+	};
+
+	pub.onFailureElementNotFound = function(isAttrClassCheck, rca) {
+
+		GmCXt.log(37, "ELEMENT NOT FOUND", 1);
+
+		if (GmCXt.isDesktop()) {
+			GmCXt.sendMessageToDesktop({
+				stepId: GmCXt.playerI.tour.steps[0].step_id,
+				status: "stepFailed"
+			});
+		}
+
+		if (self.status === self.DOM_WAITING || isAttrClassCheck) {
+			self.status = isAttrClassCheck ? self.ATTR_CLS_FAILURE : self.DOM_FAILURE;
+
+			if (!GmCXt.playerI.currentStepId) {
+				var firstStepId = GmCXt.playerI.tour.steps[0].step_id;
+
+				if (GmCXt.playerI.playStructure) {
+					firstStepId = GmCXt.playerI.playStructure[0].id;
+				}
+
+				if (firstStepId) {
+					GmCXt.playerI.currentStepId = firstStepId;
+					GmCXt.log(33, "Current Step ID Updated(Fn: onFailureElementNotFound):" + GmCXt.playerI.currentStepId);
+				}
+			}
+
+			var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+			GmCXt.markAutoLaunchTourDoNotShow(GmCXt.playerI.tour); // do not show autoLuanch guide if elem not found
+
+			if (GmCXt.deskReq) {
+				GmCXt.sendMessageToDesktopApp('step_failed', step);
+			}
+
+			if (isAttrClassCheck) {
+				GmCXt.recordGuideEvents();
+				GmCXt.trackStepEvent(step, "Step element did not match attribute/class");
+
+				pub.stop(null, true);
+
+			} else if (step.step_settings.optional) {
+
+				self.ready = true;
+				self.maxWait = 0;
+
+				GmCXt.log(33, "Playing optional step.");
+
+				if (self.prevEvent) {
+					self.prevEvent = false;
+					pub.playPreviousStep();
+				} else {
+					GmCXt.recordGuideEvents();
+					playNxtStep();
+				}
+				self.maxWait = 500;
+			} else {
+
+				if (!GmCXt.failedStepId) GmCXt.failedStepId = step.step_id;
+
+				if (GmCXt.playerI.testAutomation) {
+					GmCXt.auto.fail(step, {
+						errorMessage: 'Step Element Not Found'
+					});
+				} else {
+					if (step.step_type !== GmCXt.STEP_TYPE_BRANCH || GmCXt.isTrue(step.step_settings.inlineBranch)) {
+						GmCXt.recordGuideEvents();
+						GmCXt.trackStepEvent(step, "step element not found");
+					}
+
+					if (GmCXt.playerI.automate) {
+						GmCXt.playerI.automate = false;
+					}
+
+					var options = {
+						type: "step_not_found"
+					};
+
+					GmCXt.userGuideInstance = GmCXt.userGuide(options);
+					var img = !step.screen_url || step.screen_url.startsWith('undefined') ? step.step_screen_temp : step.screen_url;
+					GmCXt.userGuideInstance.open(step.step_title, img, step.is_thumbnail_processed, step.step_order, step.step_id, rca, step.step_settings.element.meta.elAttributes);
+
+					pub.stop(null, true);
+				}
+			}
+		}
+	};
+
+	pub.onImageCompareFailure = function(step) {
+		if (!GmCXt.failedStepId) GmCXt.failedStepId = step.step_id;
+
+		GmCXt.recordGuideEvents();
+		GmCXt.trackStepEvent(step, 'Image Comparison Task Failed');
+		GmCXt.tourPlayerI.stop(null, true);
+	};
+
+	pub.onSuccessElementFound = function(elPos, workdayEdit, id) {
+		hideWaitMsg();
+
+		if (!self.id) {
+			self.id = id;
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:set_iframe_id:do', {
+				currentIframeId: self.id
+			});
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:clear_outline;action:do', {
+				scriptId: self.id
+			});
+		} else if (self.id !== id) {
+			return;
+		}
+
+		if (GmCXt.tourPlayerI.guideState === 'pause') return;
+
+		GmCXt.tourPlayerI.elementFound = true;
+
+		GmCXt.failedStepId = false;
+
+		self.status = self.DOM_SUCCESS;
+		self.prevEvent = false;
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		step.highlightedArea = [elPos];
+
+		GmCXt.nextStepPlayEventReceived = false;
+
+		if (GmCXt.showTooltipOnPreviousHoverStep === true) {
+			showHoverGuide(step.highlightedArea);
+			return;
+		}
+
+		var ss = step.step_settings;
+		if (ss.headerNext && GmCXt.decodeVersion(ss.element.version) < 2020063001) { // for old steps on header humanInteration only reflects on UI
+			ss.automation.hasHumanInteraction = true;
+		}
+
+		self.ready = true;
+		self.workdayEdit = workdayEdit;
+
+		playInlineStepPreview(step);
+
+		recordEvent(step);
+
+		if (step.step_type === GmCXt.STEP_TYPE_EXTERNAL_AUTOMATION || step.step_settings.autoPlayStep) {
+			GmCXt.sendMessageToDesktopApp('trigger_event', step);
+		}
+	};
+
+	function automationTriggerEvent(step) {
+		var nextStep = GmCXt.getNextStep();
+		if (GmCXt.playerI.automate && (!step.step_settings.automation.hasHumanInteraction || GmCXt.isAutomationStep(nextStep))) {
+			return true;
+		}
+		return false;
+	}
+
+	function checkRestartInParent(step) {
+		var stepId = step.step_id;
+		var steps = GmCXt.getStepSortedByPS(GmCXt.playerI.playStructure, stepId);
+		for (var i = 0; i < steps.length; i++) {
+			if (parseInt(stepId) !== parseInt(steps[i].step_id)) {
+				if (steps[i].step_settings.pageReloadOption === "restart_parent") {
+					GmCXt.log(33, "START WATCHING for step " + GmCXt.getText(steps[i].step_title) + "to restart guide in parent window.");
+					return true;
+				} else if (steps[i].step_settings.pageReloadOption === "new_tab") {
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	function hideWaitMsg() {
+		clearTimeout(self.waitTimeout);
+		GmCXt.hideToastMsg();
+	}
+
+	function showFindingToastMsg(message) {
+
+		return {
+			show: function() {
+				var htmlstr = "<div class='mgPlayerJSTest_toast-msg-wrapper'><div id='mgPlayerJSTest_toast-msg-close' >x</div>";
+				htmlstr += "<div id='mgPlayerJSTest_toast-msg-text' >" + message + "</div></div>";
+
+				mg$("#mgPlayerJSTest_toast-msg").html(htmlstr);
+				mg$("#mgPlayerJSTest_toast-msg").fadeIn();
+
+				mg$("#mgPlayerJSTest_toast-msg-close").click(function(e) {
+					showFindingToastMsg().hide(e);
+				});
+			},
+			hide: function(e) {
+				mg$('#mgPlayerJSTest_toast-msg').fadeOut(500);
+				if (GmCXt.playerI && e && e.currentTarget.id === 'mgPlayerJSTest_toast-msg-close') {
+					pub.stop();
+				}
+			}
+		};
+	}
+
+	function getCountSpan(t) {
+		return "<span class='mgPlayerJSTest_toast-timer'>" + t + "</span>";
+	}
+
+	function showPleaseWaitMessage(timeout) {
+
+		if (self.status === self.DOM_WAITING && GmCXt.playerI) {
+
+			var now = Date.now();
+			var remainingTime = parseInt((timeout - now) / 1000);
+
+			if (remainingTime) {
+				var msg = GmCXt.label.findingElementMessage + " (" + getCountSpan(remainingTime) + ")";
+				showFindingToastMsg(msg).show();
+
+				clearTimeout(self.waitTimeout);
+				self.waitTimeout = setTimeout(function() {
+					showPleaseWaitMessage(timeout);
+				}, GmCXt.t.plsWaitMsg);
+			} else {
+				showFindingToastMsg().hide();
+			}
+		}
+	}
+
+	function playInlineStep() {
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		if (GmCXt.playerI.initiator === 'doitforme' || step.step_settings.autoPlayStep) {
+			var autoSettings = step.step_settings.automation;
+			if (autoSettings.muteNarration && GmCXt.isFalse(autoSettings.hasHumanInteraction)) {
+				GmCXt.playerI.playAudio = false;
+			}
+		}
+
+		// For automation of the creator app.
+		// If there is a hover step, it should be skipped as such kind cannot be automated.
+		if (step.step_settings.completionEvent === "hoverNext" && GmCXt.playerI.testAutomation) {
+			if (step.step_settings.optional) {
+				self.ready = true;
+				GmCXt.log(37, "SKIP THE HOVER STEP", 1);
+				GmCXt.auto.updateAutomationMessage("Hover step was not tested as it is not supported", function() {
+					playNxtStep();
+				});
+			} else {
+				markStatusFailed(step);
+				GmCXt.auto.fail(step, {
+					errorMessage: "On Hover step is not supported by automation"
+				});
+			}
+
+			return;
+		}
+		var nextStep = GmCXt.getNextStep();
+		var waitFor = getWaitTime(step);
+
+		markStatusFailed(step);
+
+		self.status = self.DOM_WAITING;
+
+		var isLastStep = GmCXt.isLastStep(step.step_id, GmCXt.playerI.playStructure);
+
+		var data = {
+			requestId: step.step_id,
+			settings: step.step_settings,
+			nextStep: nextStep,
+			windowHost: GmCXt.getPageDomain(),
+			task: 'playTour',
+			timeout: Date.now() + parseInt(waitFor),
+			autoRun: GmCXt.playerI.automate,
+			log_stepInfo: GmCXt.getStepInfoLog(step),
+			isLastStep: isLastStep,
+			testAutomation: GmCXt.playerI.testAutomation,
+			iframeAttrs: step.step_settings.element.iframeAttrs,
+			isDeskReq: self.isDeskReq,
+			showLogs: false
+		};
+
+		if (GmCXt.deskReq) {
+			if (data.settings.automation && data.settings.automation.getfromBot) {
+				data.botUsers = GmCXt.deskReq.botUsers;
+			}
+		}
+
+		if (GmCXt.playerI.csvData) {
+			data.csvData = GmCXt.playerI.csvData;
+			data.currentLoop = GmCXt.playerI.currentLoop;
+		}
+
+		if (GmCXt.playerI.manual && !step.step_settings.autoPlayStep) {
+			if (data.settings && data.settings.automation) {
+				data.settings.automation.enableDefaultData = false;
+			}
+		} else if (GmCXt.playerI.automate)
+			data.triggerEvent = automationTriggerEvent(step);
+
+		if (step.step_settings.autoPlayStep) {
+			data.triggerEvent = true;
+		}
+
+		GmCXt.tourPlayerI.elementFound = false;
+		GmCXt.tourPlayerI.currentStepReq = mg$.extend(true, {}, data);
+
+		if (data.settings.pageReloadOption === "new_tab" && checkRestartInParent(step)) {
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:keep_watching_step:inform');
+		}
+
+		GmCXt.log(33, 'Find element: ' + GmCXt.stepLog(step.step_id, GmCXt.playerI.tour.tour_id));
+
+		if (data.settings.element.meta.inTopWindow) {
+			GmCXt.log(33, "FINDING STEP ELEMENT only in TOP window");
+			GmCXt.requestHandler.selectExistingDomElement(data);
+		} else {
+			// Element in iframe
+			if (data.settings.element.criteria.precision_level === "High" && !GmCXt.isEmpty(data.settings.element.iframeAttrs)) {
+
+				var findInIframe = 2500;
+				data.timeout = Date.now() + findInIframe;
+
+				GmCXt.log(33, "FINDING STEP ELEMENT only in TARGET frame");
+				GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_existing_dom_element:target_frame_only', data);
+
+				GmCXt.findStepTimeout = GmCXt.timeout(function() {
+					if (!GmCXt.currentIframeId) {
+						GmCXt.log(33, "TIMED OUT in Target Frame..\nFINDING STEP ELEMENT in all frames");
+						data.timeout = Date.now() + parseInt(waitFor) - findInIframe;
+						data.checkIframe = true;
+						GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_existing_dom_element', data);
+					}
+				}, findInIframe + 250);
+			} else {
+				var tm = 0;
+				GmCXt.timeout(function() {
+					GmCXt.log(33, "FINDING STEP ELEMENT in all frames");
+					GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_existing_dom_element', data);
+				}, tm);
+			}
+		}
+
+		GmCXt.timeout(function() {
+			if (GmCXt.isPlayer() && GmCXt.tourPlayerI && !GmCXt.tourPlayerI.elementFound) {
+				if (!GmCXt.pageTours) {
+					GmCXt.getContextGuides();
+				}
+				GmCXt.showSmartTips(true);
+				GmCXt.showBeacons(true);
+			}
+			GmCXt.displayWidget(true);
+		}, 20000);
+
+		if (GmCXt.isWestpac()) {
+			var timeout = Date.now() + parseInt(GmCXt.elLookupTime);
+
+			self.waitTimeout = setTimeout(function() {
+				showPleaseWaitMessage(timeout);
+			}, 3500);
+		}
+	}
+
+	pub.onSuccessTooltipElementFound = function(elementPos, tooltipId) {
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var tooltip = getTooltipFromId(step, tooltipId);
+
+		self.prevEvent = false;
+		GmCXt.nextStepPlayEventReceived = false;
+
+		var s = step.step_settings;
+
+		if (s.overlayOpacity || (!s.doNotForceGuide && GmCXt.playerI && GmCXt.playerI.forceGuideMe)) {
+			GmCXt.highlight_elements[tooltipId] = [elementPos];
+			GmCXt.applyOverlayMessageStep(GmCXt.highlight_elements);
+		}
+
+		if (self.status === self.DOM_WAITING &&
+			tooltipId === step.step_settings.domElems[0].id &&
+			step.step_settings.optional) {
+			self.status = self.DOM_SUCCESS;
+			playInlineStepPreview(step);
+		}
+
+		if (tooltip.title) {
+
+			var options = {
+				description: tooltip.title,
+				highlightedArea: [elementPos],
+				width: GmCXt.stepPopupWidth,
+				tooltipId: tooltipId,
+				tour: GmCXt.playerI.tour,
+				alignment: tooltip.alignment,
+				stepType: step.step_type
+			};
+
+			GmCXt.showTooltip(options);
+		}
+	};
+
+	function getTooltipFromId(step, id) {
+		var stepData = step.step_settings;
+		var domElems = stepData.domElems;
+
+		for (var i = 0, j = domElems.length; i < j; i++) {
+			if (domElems[i].id === id) {
+				return domElems[i];
+			}
+		}
+
+		return null;
+	}
+
+	function msgToDesktop(step) {
+		GmCXt.sendMessageToDesktop({
+			isHybrid: GmCXt.playerI.isHybrid,
+			isFirstStep: GmCXt.playerI.isFirstStep,
+			isLastStep: GmCXt.playerI.isLastStep,
+			stepDetails: step,
+			ack: GmCXt.playerI.lastStepStatus
+		});
+	}
+
+	function markStatusFailed(step) {
+		if (!step.step_settings.optional && !GmCXt.isEmpty(GmCXt.playerI)) {
+			GmCXt.playerI.lastStepStatus = 'failed';
+		}
+	}
+
+	function checkFailedMessage(step) {
+		if (!GmCXt.isEmpty(step.step_description) && step.step_description.toLowerCase().indexOf("fail") !== -1) {
+
+			var prevStepId = GmCXt.playedPreviousSteps[GmCXt.playedPreviousSteps.length - 1];
+			var prevStep = prevStepId ? GmCXt.createDeepCopy(GmCXt.getStepFromPlayerI(prevStepId)) : null;
+
+			if (prevStep && prevStep.step_type === 'branch') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function recordFailedTestCase(step) {
+		GmCXt.log(33, 'Message Step: "Fail" text found in description marking testcase failed');
+		GmCXt.recordGuideEvents();
+		var title = mg$('<span />').html(step.step_title).text().trim();
+		GmCXt.trackStepEvent(step, title);
+
+	}
+
+	function playMessageStep() {
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var nextStep = GmCXt.getNextStep();
+		var stepSettings = GmCXt.createDeepCopy(step.step_settings);
+		var tooltipExists = false;
+		var scrollTopBefore = mg$(window).scrollTop();
+
+		GmCXt.nextStepPlayEventReceived = false;
+
+		markStatusFailed(step);
+
+		var waitFor = GmCXt.t.stepMTimeout;
+
+		if (!stepSettings.optional) {
+			playInlineStepPreview(step);
+		} else {
+			self.status = self.DOM_WAITING;
+			waitFor = 3000;
+		}
+
+		recordEvent(step);
+
+		if (stepSettings) {
+			var auto = stepSettings.automation;
+
+			if (stepSettings.completionEvent === "onClickAnywhere" &&
+				GmCXt.playerI.testAutomation) {
+				if (!auto.hasHumanInteraction) {
+					automatePlayStep();
+				} else {
+					GmCXt.log(33, 'Message Step - Wait for human interaction');
+					if (GmCXt.isAutomationStep(nextStep)) {
+						automatePlayStep();
+					}
+				}
+			} else if (stepSettings.keepNext === true && GmCXt.playerI.testAutomation) {
+				automatePlayStep();
+			} else if (GmCXt.playerI.automate && !auto.hasHumanInteraction) {
+
+				GmCXt.rotateGear();
+				automatePlayStep();
+			}
+
+			var domElems = stepSettings.domElems;
+
+			if (domElems && domElems.length) {
+				GmCXt.highlight_elements = {};
+				tooltipExists = true;
+
+				var data = {
+					requestId: step.step_id,
+					settings: stepSettings,
+					nextStep: nextStep,
+					windowHost: GmCXt.getPageDomain(),
+					task: 'playTour',
+					timeout: Date.now() + parseInt(waitFor),
+					stepType: GmCXt.STEP_TYPE_MESSAGE,
+					isOptional: stepSettings.optional
+				};
+
+				if (GmCXt.playerI.automate)
+					data.triggerEvent = automationTriggerEvent(step);
+
+				var action = 'mgPlayerJSTest_action:started;task:select_dom_element_tooltips';
+				GmCXt.sendMessageToAllWindows(action, data);
+			}
+		}
+
+		if (tooltipExists === true) {
+			GmCXt.timeout(function() {
+				var scrollTopAfter = mg$(window).scrollTop();
+				if (scrollTopAfter !== scrollTopBefore) {
+
+					var $popup = mg$(".mgPlayerJSTest_step-popup");
+					GmCXt.alignMessagePreview($popup,
+						mg$(window),
+						stepSettings.alignment,
+						stepSettings);
+				}
+			}, GmCXt.t_.sec1);
+		}
+	}
+
+	function getWaitTime(step) {
+
+		var wait = GmCXt.elLookupTime;
+		var el = step.step_settings.element;
+
+		if (step.step_settings.optional) {
+			wait = 100;
+			// If current and previous step is optional 
+			var prevStep = GmCXt.getPreviousStep();
+			if (prevStep) {
+				if (prevStep.step_settings.optional) wait = 50;
+			}
+			if (el && !el.meta.inTopWindow) {
+				wait = wait * 30;
+			}
+		}
+		var PI = GmCXt.playerI;
+		if (!GmCXt.isWestpac() && PI && PI.currentStepId === PI.startStepId) {
+			wait = 6000;
+		}
+
+		if (PI && PI.loops) {
+			wait = 3000;
+		}
+
+		if (GmCXt.playerI.testAutomation && !step.step_settings.optional) {
+			wait = GmCXt.t.autoWaitTime;
+		}
+
+		return wait;
+	}
+
+	function playInlineStepPreview(step) {
+
+		GmCXt.log(33, "PLAY INLINE STEP PREVIEW");
+
+		if ((GmCXt.playerI.testAutomation || GmCXt.playerI.initiator === 'doitforme') && GmCXt.isAutomationStep(step)) {
+			return;
+		}
+		if (GmCXt.playerI.keyShorts && GmCXt.playerI.initiator === 'doitforme') {
+			return;
+		}
+
+		var options = {
+			step: step,
+			totalStepCount: GmCXt.playerI.totalStepCount,
+			tour: GmCXt.playerI.tour,
+			playingTour: true
+		};
+
+		if (GmCXt.previewStepPopupInstance) {
+			GmCXt.previewStepPopupInstance.close();
+		}
+
+		GmCXt.previewStepPopupInstance = GmCXt.previewStepPopup(options);
+		GmCXt.previewStepPopupInstance.load();
+
+		addEventsOnPreviewPopup(step);
+
+		GmCXt.timeout(function() {
+			setUpStepAudio(step);
+		}, 500);
+
+		setStepComTimeout(step);
+
+		self.ready = true;
+	}
+
+	function recordEvent(step) {
+		GmCXt.recordGuideEvents();
+		GmCXt.trackStepEvent(step);
+
+		var PI = GmCXt.playerI;
+
+		GmCXt.playedPreviousSteps.push(PI.currentStepId);
+
+		PI.lastPlayedStepId = PI.currentStepId;
+		PI.lastStepStatus = 'success';
+		if (GmCXt.isDesktop()) {
+			msgToDesktop(step);
+		}
+
+		GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:update_player_instance");
+
+		GmCXt.storage().remove(['linkClickOnStep']);
+		GmCXt.storage().set({
+			'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': PI,
+			'guide_play_event': GmCXt.guidePlayTracker
+		});
+	}
+
+	function saveImage(imageStr) {
+		return new Promise(function(resolve, reject) {
+			var formData = new FormData();
+			formData.append('image_data', imageStr.replace('data:image/jpeg;base64,', ''));
+
+			var options = {
+				args: formData
+			};
+			GmCXt.api.uploadFileBase64(options).then(function(result) {
+				resolve(result.data.image_id);
+			}).catch(function(result) {
+				reject(result.message);
+			});
+		});
+	}
+
+	function clearTimeouts(stepType) {
+		if (GmCXt.closeTourTimeout) {
+			clearTimeout(GmCXt.closeTourTimeout);
+		}
+
+		if (GmCXt.findStepTimeout) {
+			clearTimeout(GmCXt.findStepTimeout);
+		}
+
+		hideWaitMsg();
+
+	}
+
+	function closeTour() {
+
+		var wait = GmCXt.t_.min5;
+		GmCXt.log(33, "CLOSE TOUR TIMEOUT initiated for " + wait);
+		if (GmCXt.playerI && GmCXt.playerI.testAutomation) {
+			wait = GmCXt.t.autoWaitTime + 5000;
+		}
+
+		clearTimeouts();
+
+		GmCXt.closeTourTimeout = GmCXt.timeout(function() {
+			if (GmCXt.playerI) {
+				var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+				if (GmCXt.isAutomationRunning()) {
+					GmCXt.auto.fail(step, {
+						errorMessage: "Stop automation for current guide due to timeout"
+					});
+					return;
+				}
+				GmCXt.log(33, "KILLED guide after " + wait);
+				if (!mg$(".mgPlayerJSTest_slideshow-panel").visible()) {
+					GmCXt.recordGuideEvents();
+					GmCXt.trackStepEvent(step, "Stop current guide due to timeout");
+					pub.stop();
+				}
+			}
+		}, wait);
+	}
+
+	function playImageStep() {
+
+		if (autoModePlay('Image')) return;
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		markStatusFailed(step);
+
+		if (!step.step_settings.displayPreview) {
+
+			window.onvisibilitychange = null;
+			GmCXt.playerI.type = "image";
+
+			GmCXt.playedPreviousSteps.push(GmCXt.playerI.currentStepId);
+
+			addEventsOnPreviewPopup(step);
+
+			var data = {
+				prev_btn: self.prev_button,
+				next_btn: self.next_button
+			};
+
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:play_image_step', data);
+
+			GmCXt.nextStepPlayEventReceived = false;
+
+			self.ready = true;
+			recordEvent(step);
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:update_player_instance_app');
+		} else {
+			GmCXt.lockScroll();
+
+			if (mg$("body").find('.mgPlayerJSTest_image-step-screen').length === 0) {
+				mg$("<wmgPlayerJSTest_ class='mgPlayerJSTest_image-step-screen'><img id='mgPlayerJSTest_img-step-div' class='mgPlayerJSTest_custom-image' src='' ></wmgPlayerJSTest_>").appendTo('body');
+			}
+
+			var container = mg$('#mgPlayerJSTest_img-step-div');
+
+			container.attr('src', (step.image_url)).one('load', function(e) {
+
+				mg$('.mgPlayerJSTest_image-step-screen').show();
+				mg$('.mgPlayerJSTest_highlighter-span').remove();
+				var windowWidth = mg$(window).width();
+				var windowHeight = mg$(window).height();
+				var containerWidth = container.width();
+				var containerHeight = container.height();
+
+				container.css('margin-left', (windowWidth - containerWidth) / 2);
+				container.css('margin-top', (windowHeight - containerHeight) / 2);
+
+				/**
+					* preview popup requires highlightedArea to be set on step object
+					* But in database highlightedArea is in step_settings property of step object
+					*/
+				step.highlightedArea = scaleHighlightedArea(step);
+
+				/**
+					* Select highlighted areas on image canvas
+					*/
+				step.highlightedArea.forEach(function(val, ind) {
+					var offset = mg$("#mgPlayerJSTest_img-step-div").offset();
+					var bordWidth = "1";
+					var borderColor = "red";
+					if (step.step_settings.highlightedArea) {
+
+						if (step.step_settings.highlightedArea[ind].borderColor) {
+							borderColor = step.step_settings.highlightedArea[ind].borderColor;
+						} else {
+							borderColor = "red";
+						}
+
+						if (step.step_settings.highlightedArea[ind].borderWidth) {
+							bordWidth = step.step_settings.highlightedArea[ind].borderWidth;
+						} else {
+							bordWidth = 1;
+						}
+					}
+					var highlighterHtml = '<wmgPlayerJSTest_ class="mgPlayerJSTest_highlighter-span highliter_' + ind + '" style="' +
+						'    width:' + val.width + 'px; ' +
+						'    height:' + val.height + 'px;' +
+						'    top:' + (val.top + offset.top) + 'px;' +
+						'    left:' + (val.left + offset.left) + 'px;' +
+						'    border: ' + bordWidth + 'px solid ' + borderColor + '!important; position: absolute;box-sizing: border-box">' +
+						'</wmgPlayerJSTest_>';
+					mg$('.mgPlayerJSTest_image-step-screen').append(highlighterHtml);
+				});
+
+				window.scrollTo(0, 0);
+
+				var options = {
+					step: step,
+					totalStepCount: GmCXt.playerI.totalStepCount,
+					containerOffest: container.offset(),
+					container: container,
+					tour: GmCXt.playerI.tour,
+					playingTour: true
+				};
+				if (GmCXt.isEmpty(step.step_title.trim()) && GmCXt.isEmpty(step.step_description.trim())) {
+					createBlackoutViewPortInstance(options);
+				} else {
+					GmCXt.previewStepPopupInstance = GmCXt.previewStepPopup(options);
+					GmCXt.previewStepPopupInstance.load();
+					addEventsOnPreviewPopup(step);
+				}
+
+				GmCXt.nextStepPlayEventReceived = false;
+
+				recordEvent(step);
+				setUpStepAudio(step);
+				setStepComTimeout(step);
+
+				if (step.step_settings.version) {
+
+					var highlightedAreaScaled = scaleHighlightedArea(step);
+
+					for (var i = 0; i < step.step_settings.highlightedArea.length; i++) {
+
+						var highLightArr = [];
+						var offset = mg$("#mgPlayerJSTest_img-step-div").offset();
+
+						highlightedAreaScaled[i].left = highlightedAreaScaled[i].left + offset.left;
+						highlightedAreaScaled[i].top = highlightedAreaScaled[i].top + offset.top;
+
+						highLightArr.push(highlightedAreaScaled[i]);
+
+						var options = {
+							description: step.step_settings.highlightedArea[i].title.trim(),
+							highlightedArea: highLightArr,
+							width: 250,
+							tooltipId: i,
+							tour: GmCXt.playerI.tour,
+							alignment: step.step_settings.highlightedArea[i].alignment,
+							stepType: step.step_type
+						};
+						if (options.description) GmCXt.showTooltip(options);
+					}
+				}
+
+				mg$("<div class='mgPlayerJSTest_image-step-done' ><wmgPlayerJSTest_ class='mgPlayerJSTest_icon-image-close mgPlayerJSTest_inline-block-vm'></wmgPlayerJSTest_></div>").appendTo('html');
+				mg$(".mgPlayerJSTest_image-step-done").html(GmCXt.svgs.close_slideshow);
+				mg$(".mgPlayerJSTest_image-step-done").off("click").on("click", playStepPopupCloseButtonClickEvent);
+
+				if (GmCXt.getTail(GmCXt.playerI.currentStepId, GmCXt.playerI.playStructure)) {
+					mg$("<div class='mgPlayerJSTest_image-step-nav-button mgPlayerJSTest_image-step-next'><wmgPlayerJSTest_ class='mgPlayerJSTest_img-step-next-icon mgPlayerJSTest_inline-block-vm'></wmgPlayerJSTest_></div>").appendTo('html');
+					mg$(".mgPlayerJSTest_img-step-next-icon").html(GmCXt.svgs.slideshow_next_button);
+					mg$(".mgPlayerJSTest_image-step-next").off("click").on("click", playNxtStep);
+				}
+
+				var prevStep = GmCXt.getPreviousStep();
+
+				if (prevStep !== null && showPrevBtnCond(prevStep) && !tourStepSetting.hidePrevBtn) {
+
+					mg$("<div class='mgPlayerJSTest_image-step-nav-button mgPlayerJSTest_image-step-prev'><wmgPlayerJSTest_ class='mgPlayerJSTest_img-step-prev-icon mgPlayerJSTest_inline-block-vm'></wmgPlayerJSTest_></div>").appendTo('html');
+					mg$(".mgPlayerJSTest_img-step-prev-icon").html(GmCXt.svgs.slideshow_prev_button);
+					mg$(".mgPlayerJSTest_image-step-prev").off("click").on("click", pub.playPreviousStep);
+				}
+				self.ready = true;
+			});
+		}
+	}
+
+	function playVideoStep() {
+
+		if (autoModePlay('Video')) return;
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		window.onvisibilitychange = null;
+		GmCXt.playerI.type = "video";
+
+		GmCXt.playedPreviousSteps.push(GmCXt.playerI.currentStepId);
+
+		addEventsOnPreviewPopup(step);
+
+		var data = {
+			prev_btn: self.prev_button,
+			next_btn: self.next_button
+		};
+
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:play_video_step', data);
+
+		GmCXt.nextStepPlayEventReceived = false;
+
+		GmCXt.timeout(function() {
+			self.ready = true;
+			recordEvent(step);
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:update_player_instance_app');
+		}, 100);
+
+	}
+
+	function scaleHighlightedArea(step) {
+
+		var containerWidth = mg$('#mgPlayerJSTest_img-step-div').width();
+		var containerHeight = mg$('#mgPlayerJSTest_img-step-div').height();
+
+		var imageRatio = step.step_settings.imageDimension.width / step.step_settings.imageDimension.height;
+		var containerRatio = containerWidth / containerHeight;
+
+		var ratio = 1;
+		if (imageRatio <= containerRatio) {
+			ratio = (containerHeight * 100) / step.step_settings.imageDimension.height;
+		} else {
+			ratio = (containerWidth * 100) / step.step_settings.imageDimension.width;
+		}
+
+		var arr = [];
+
+		if (step.step_settings.highlightedArea === undefined || step.step_settings.highlightedArea === null) {
+			step.step_settings.highlightedArea = [];
+		}
+
+		var highlightedArea = step.step_settings.highlightedArea;
+		highlightedArea.forEach(function(val, ind) {	
+			var a = {
+				'left': (((highlightedArea[ind].left || highlightedArea[ind].position.left)  * ratio) / 100),
+				'top': ((highlightedArea[ind].top || highlightedArea[ind].position.top) * ratio) / 100,
+				'height': ((highlightedArea[ind].height || highlightedArea[ind].position.height) * ratio) / 100,
+				'width': ((highlightedArea[ind].width || highlightedArea[ind].position.width) * ratio) / 100
+			};
+			arr.push(a);
+		});
+
+		return arr;
+	}
+
+	function setUpStepAudio(step) {
+
+		if (!GmCXt.FT.audio) return;
+		if (GmCXt.isPageReloaded) {
+			GmCXt.setOffAudioMode();
+			GmCXt.isPageReloaded = false;
+			showAudioIcon();
+			return;
+		}
+
+		mg$('.mgPlayerJSTest_play-step-audio-loader').show();
+		mg$(".mgPlayerJSTest_play-step-audio").css("opacity", ".5");
+
+		GmCXt.storage().get(['stepAudioRunningStatus']).then(function(items) {
+
+			if (items === undefined) items = {};
+
+			if (!GmCXt.isAutomationRunning() && GmCXt.getAudioPreference(items.stepAudioRunningStatus)) {
+
+				if (step.step_audio) {
+					var message = {
+						audioTrack: step.step_audio,
+						step: step
+					};
+
+					if (GmCXt.playerI && GmCXt.playerI.playAudio) {
+
+						if (!GmCXt.stepAudioPlayed) {
+							GmCXt.stepAudioPlayed = true;
+							GmCXt.playAudioTrack(message);
+						}
+
+					} else {
+						GmCXt.setOffAudioMode();
+					}
+
+					showAudioIcon();
+
+				} else {
+					showAudioIcon();
+				}
+
+			} else {
+				GmCXt.stopAudioTrack();
+				GmCXt.setOffAudioMode();
+
+				showAudioIcon();
+			}
+		});
+
+		function showAudioIcon() {
+			mg$('.mgPlayerJSTest_play-step-audio-loader').hide();
+			mg$(".mgPlayerJSTest_play-step-audio").css("opacity", "1");
+		}
+	}
+
+	function setStepComTimeout(step) {
+		if (GmCXt.tourPlayerI) {
+			GmCXt.tourPlayerI.setStepCompletionTimeout(step);
+		}
+	}
+
+	function playStepPopupCloseButtonClickEvent() {
+		GmCXt.log(33, "STOP guide event received");
+		var forceClose = !GmCXt.playerI.testAutomation;
+		GmCXt.confirmTourClose(forceClose);
+	}
+
+	function isClassicSetting() {
+		return mg$('.mgPlayerJSTest_preview-step-popup-container').hasClass('preview-step-popup-classic-design');
+	}
+
+	function showPrevButton() {
+		if (isClassicSetting()) {
+			mg$(".popup-classic-design-navigation-prev").show();
+		} else {
+			mg$(".mgPlayerJSTest_play-step-prev").show();
+		}
+		self.prev_button = true;
+		mg$(".mgPlayerJSTest_play-step-prev").css({
+			"opacity": "1",
+			"pointer-events": "initial"
+		});
+	}
+
+	function showNextButton() {
+		var currStep = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		if (onChangeNextStep()) {
+			if (isClassicSetting()) {
+				mg$("#mgPlayerJSTest_play_step_next_classic").find('span.mgPlayerJSTest_text-span').text(GmCXt.label.btnSkip);
+			} else {
+				mg$(".mgPlayerJSTest_play-step-next").find('span').text(GmCXt.label.btnSkip);
+			}
+		}
+
+		if (!onChangeNextStep() || !currStep.step_settings.hideSkip) {
+			if (isClassicSetting()) {
+				mg$(".mgPlayerJSTest_popup-classic-navigation-next").show();
+			} else {
+				mg$(".mgPlayerJSTest_play-step-next").show();
+			}
+		}
+
+		self.next_button = true;
+	}
+
+	function hidePrevButton() {
+		if (isClassicSetting()) {
+			mg$(".popup-classic-design-navigation-prev").hide();
+		} else {
+			mg$(".mgPlayerJSTest_play-step-prev").hide();
+		}
+
+		mg$(".mgPlayerJSTest_image-step-prev").hide();
+	}
+
+	function hideNextButton() {
+		if (isClassicSetting())
+			mg$(".mgPlayerJSTest_popup-classic-navigation-next").hide();
+		else
+			mg$(".mgPlayerJSTest_play-step-next").hide();
+
+		mg$(".mgPlayerJSTest_image-step-next").remove();
+	}
+
+	function showDoneButton() {
+		var currStep = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var ss = currStep.step_settings;
+
+		mg$(".mgPlayerJSTest_play-step").css({
+			"display": "inline-block"
+		});
+
+		if (ss.automation && ss.automation.hasHumanInteraction) {
+			mg$(".mgPlayerJSTest_play-step").removeClass("mgPlayerJSTest_hide");
+		}
+		if (isClassicSetting()) {
+			document.getElementsByClassName("mgPlayerJSTest_play-step-classic-done")[0].style.display = "block";
+			mg$(".mgPlayerJSTest_play-step").css({
+				"width": "28% !important"
+			});
+		} else {
+			mg$(".mgPlayerJSTest_play-step").html(GmCXt.label.close);
+			mg$(".mgPlayerJSTest_play-step").css({
+				"min-width": "50px"
+			});
+		}
+	}
+
+	function hideDoneButton() {
+		mg$(".mgPlayerJSTest_play-step").hide();
+		mg$(".mgPlayerJSTest_image-step-done").hide();
+	}
+
+	function showAutoIndicator() {
+		mg$('#mgPlayerJSTest_play-step-automation-indicator-wrapper').show();
+	}
+
+	function hideAutoIndicator() {
+		mg$('#mgPlayerJSTest_play-step-automation-indicator-wrapper').hide();
+	}
+
+	function showStopButton() {
+		if (isClassicSetting()) {
+			mg$(".mgPlayerJSTest_play-step-pause-classic").show();
+		} else {
+			mg$(".mgPlayerJSTest_play-step-pause").show();
+		}
+	}
+
+	function hideStopButton() {
+		if (isClassicSetting())
+			mg$(".mgPlayerJSTest_play-step-pause-classic").hide();
+		else
+			mg$(".mgPlayerJSTest_play-step-pause").hide();
+	}
+
+	function resetNavigationButton() {
+		hidePrevButton();
+		hideNextButton();
+		hideDoneButton();
+		hideStopButton();
+	}
+
+	function showNagivation() {
+		var pi = GmCXt.playerI;
+		mg$(".mgPlayerJSTest_hide").removeClass("mgPlayerJSTest_hide");
+		mg$(".preview-step-popup-navigation-wrapper").css("width", "calc(100% - 35px)");
+
+		if (GmCXt.isLastStep(pi.currentStepId, pi.playStructure)) {
+			mg$(".preview-step-popup-navigation-wrapper").css("width", "100%");
+		}
+	}
+
+	function hideButton(selector) {
+		mg$(selector).addClass("mgPlayerJSTest_hide");
+	}
+
+	function hideNavigation() {
+		hideButton(".mgPlayerJSTest_play-step-prev");
+		hideButton(".popup-classic-design-navigation-prev");
+		hideButton(".mgPlayerJSTest_image-step-prev");
+		hideButton(".mgPlayerJSTest_image-step-next");
+		hideButton(".mgPlayerJSTest_play-step");
+		hideButton(".mgPlayerJSTest_image-step-done");
+		mg$(".preview-step-popup-navigation-wrapper").css("width", "100%");
+	}
+
+	function addEventsOnPreviewPopup(step) {
+
+		resetNavigationButton();
+		self.prev_button = false;
+		self.next_button = false;
+		//show next button
+		if (hasNextStep()) {
+			showNextButton();
+			hideDoneButton();
+		}
+
+		// show previous button
+		var currStep = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var ss = currStep.step_settings;
+		var automate = GmCXt.playerI.automate;
+
+		showPrevBtnToggle(ss);
+
+		if (automate) {
+			showAutoIndicator();
+			hideNavigation(); // Except 'Next' button
+
+			if (ss.automation && !ss.automation.hasHumanInteraction) {
+				hideNextButton();
+				showStopButton();
+			}
+		} else {
+			hideAutoIndicator();
+		}
+
+		// show done button
+		if (GmCXt.isLastStep(GmCXt.playerI.currentStepId, GmCXt.playerI.playStructure) || (GmCXt.isDesktop() && GmCXt.playerI.isLastStep)) {
+			hideNextButton();
+			showDoneButton();
+		}
+		if ((GmCXt.isDesktop() && !GmCXt.playerI.isLastStep && !automate)) {
+			showNextButton();
+			hideDoneButton();
+		}
+
+		//hide previous button if totalStepCount is one
+		if (parseInt(GmCXt.playerI.totalStepCount) == 1) {
+			hidePrevButton();
+		}
+
+		mg$(".g" + "ss-play-linked-guide")
+			.off("mousedown")
+			.on("mousedown", playGuideOnLinkClick);
+	}
+
+	function showPrevBtn(ss) {
+
+		if (tourStepSetting.hidePrevBtn) {
+			if (ss.showPreviousStep)
+				return true;
+		} else if (!ss.hidePreviousStep) {
+			return true;
+		}
+		return false;
+	}
+
+	function showPrevBtnToggle(ss) {
+		var prevStep = GmCXt.getPreviousStep();
+		if (showPrevBtn(ss)) {
+			if (GmCXt.isDesktop() && !GmCXt.playerI.isFirstStep) {
+				showPrevButton();
+				return;
+			}
+
+			if (!GmCXt.isEmpty(prevStep) && showPrevBtnCond(prevStep)) {
+				if ((mg$.inArray(prevStep.step_id, GmCXt.playedPreviousSteps) !== -1 || prevStep.step_settings.optional) &&
+					pub.isLastStepVisible) {
+					showPrevButton();
+				} else
+					pub.isLastStepVisible = true;
+			}
+		}
+	}
+
+	function showPrevBtnCond(step) {
+		if (step.step_settings.keepNext === true ||
+			step.step_settings.completionEvent === 'closeAfterDelay' ||
+			step.step_type === GmCXt.STEP_TYPE_VIDEO) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function playGuideOnLinkClick(e) {
+		e.stopPropagation();
+		var tourId = mg$(e.currentTarget).attr('href').split('tourId=')[1];
+		if (tourId) {
+			pub.closeStep();
+			GmCXt.requestHandler.playLinkedGuide({
+				tourId: tourId
+			});
+		}
+	}
+
+	var hasNextStep = function() {
+		var pi = GmCXt.playerI;
+		var currStep = GmCXt.getCurrentStep(pi.currentStepId);
+		var ss = currStep.step_settings;
+		var flag = false;
+
+		if (ss.keepNext || ss.onChangeNext || ss.onKeyupNext || self.showNextButtonCV) {
+			if (GmCXt.getTail(pi.currentStepId, pi.playStructure) !== null) {
+				flag = true;
+			}
+		}
+
+		return flag;
+	};
+
+	var onChangeNextStep = function() {
+		var pi = GmCXt.playerI;
+		var currStep = GmCXt.getCurrentStep(pi.currentStepId);
+		var ss = currStep.step_settings;
+		if (!GmCXt.isStepInlineBranch(currStep)) {
+			if (ss.onChangeNext || ss.onKeyupNext) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	var hasClickNext = function() {
+		var pi = GmCXt.playerI;
+		var currStep = GmCXt.getCurrentStep(pi.currentStepId);
+		var flag = false;
+
+		if (currStep.step_settings.clickNext === true) {
+			if (GmCXt.getTail(pi.currentStepId, pi.playStructure) !== null) {
+				flag = true;
+			}
+		}
+
+		return flag;
+	};
+
+	function toggle() {
+		if (isClassicSetting()) {
+			var next = mg$(".mgPlayerJSTest_popup-classic-navigation-next");
+			mg$(".mgPlayerJSTest_popup-classic-navigation-next").hide();
+			if (next.length > 1) {
+				next[1].style.display = "block";
+			} else {
+				mg$(".mgPlayerJSTest_popup-classic-navigation-next:first").show();
+			}
+		} else {
+			var next = mg$(".mgPlayerJSTest_play-step-next-done:visible").hide().next();
+			if (next.length > 1)
+				next[1].style.display = "block";
+			else
+				mg$(".mgPlayerJSTest_play-step-next-done:first").show();
+		}
+	}
+
+	function doneButtonConfiguration() {
+		if (isClassicSetting()) {
+			mg$(".mgPlayerJSTest_play-step").html(GmCXt.label.close);
+			mg$(".mgPlayerJSTest_play-step").css({
+				"width": "50px"
+			});
+		} else {
+			mg$(".mgPlayerJSTest_play-step").css({
+				"width": "49%"
+			});
+		}
+		mg$(".mgPlayerJSTest_play-step").off("click").on("click", playStepPopupCloseButtonClickEvent);
+	}
+
+	window.onresize = function() {
+		if (GmCXt.playerI && GmCXt.playerI.type === 'live') {
+			var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+			if (step.step_type == "image" && !step.step_settings.isCvStep) {
+				if (!GmCXt.isMediaPlayerOn) {
+					pub.closeStep();
+				}
+				playImageStep();
+			}
+		}
+	};
+
+	function createBlackoutViewPortInstance(options) {
+		/**
+			* Blackout area surrounding step DOM element for inline step 
+			* and surrounding highlighted areas for image steps.
+			*/
+		var ob = {
+			id: options.step.step_id,
+			type: options.step.step_type,
+			title: options.step.step_title,
+			description: options.step.step_description,
+			audioTrack: options.step.step_audio,
+			highlightedArea: options.step.highlightedArea,
+			settings: options.step.step_settings,
+			serialNumber: options.step.order || 0,
+			container: options.container,
+			containerOffest: options.containerOffest || {
+				left: 0,
+				top: 0
+			},
+			totalStepCount: options.totalStepCount,
+			playingTour: options.playingTour || false
+		};
+
+		if (ob.playingTour && options.tour) {
+			ob.tour = options.tour;
+		} else {
+			ob.tour = false;
+		}
+
+		if (ob.settings.screenBlackout === true) {
+
+			if (!ob.highlightedArea) {
+				ob.highlightedArea = [{
+					left: 0,
+					top: 0,
+					height: 0,
+					width: 0
+				}];
+			} else {
+
+				var options = {
+					data: ob.highlightedArea,
+					containerOffset: GmCXt.getContainerOffSet(mg$('#mgPlayerJSTest_image-canvas')),
+					stepType: GmCXt.STEP_TYPE_IMAGE,
+					overlay: true,
+					tour: ob.tour,
+					stepIndex: ob.serialNumber
+				};
+
+				if (ob.container) {
+					options.containerOffset = GmCXt.getContainerOffSet(ob.container);
+				}
+			}
+
+			options.overlay = false;
+
+			GmCXt.removeScreenOverlay();
+
+			if (GmCXt.browserApp !== 'ie') {
+
+				if (GmCXt.playerI && GmCXt.playerI.tour) {
+
+					var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+					var overlayOpacity = GmCXt.getOpacity(step);
+
+					if (overlayOpacity) {
+						GmCXt.screenOverlayI = GmCXt.screenOverlay(options);
+						GmCXt.screenOverlayI.start();
+					}
+				}
+			}
+		}
+	}
+
+	function triggerAutoClick() {
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		var data = {
+			requestId: step.step_id
+		};
+
+		GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:command; task:trigger_step_click', data);
+	}
+
+	function autoModePlay(stepType) {
+		var ret = false;
+		if (GmCXt.playerI && GmCXt.playerI.automate) {
+			self.ready = true;
+			ret = true;
+			if (GmCXt.isAutomationRunning()) {
+				GmCXt.auto.updateAutomationMessage(stepType + " step was not tested as it is not supported", function() {
+					playNxtStep();
+				});
+			} else {
+				playNxtStep();
+			}
+		}
+
+		return ret;
+	}
+
+	function automatePlayStep() {
+
+		if (GmCXt.autoTrigger) {
+			clearTimeout(GmCXt.autoTrigger);
+		}
+
+		GmCXt.autoTrigger = GmCXt.timeout(function() {
+			if (GmCXt.playerI && !GmCXt.playerI.pauseAutomate) {
+				playNxtStep();
+			}
+		}, 3000);
+	}
+
+	var alertRedirect = function() {
+		var url = getAlertRedirectUrl(GmCXt.playerI.tour.tour_settings);
+		window.open(url, '_blank');
+	};
+
+	function getAlertURLByStepDomain(url) {
+		var stepDomain = GmCXt.getHostnameFromUrl(url);
+
+		if (GmCXt.isFQDN()) {
+			var fullUrl = GmCXt.urlParts.href.split('/');
+
+			if (fullUrl[0]) {
+				url = url.replace(stepDomain, fullUrl[0]);
+			}
+		}
+
+		url = GmCXt.urlParts.scheme + "://" + url;
+		return url;
+	}
+
+	function getAlertRedirectUrl(tourSetting) {
+		var url = getStepUrl();
+
+		var envurls = tourSetting.redirectRules;
+		if (!GmCXt.isEmpty(envurls) && GmCXt.isFQDN()) {
+			var activeEnv = GmCXt.getAppEnvByDomain();
+			envurls = envurls.filter(function(envData) {
+				return envData.env === activeEnv;
+			});
+		}
+
+		if (tourSetting.enableRuleRedirect) {
+			url = getRedirectURLFromTourSetting(tourSetting);
+		} else {
+			url = getAlertURLByStepDomain(url);
+		}
+
+
+		return url;
+	}
+
+	function getRedirectURLFromTourSetting(tourSetting) {
+		var envurls = tourSetting.redirectRules;
+		if (!GmCXt.isEmpty(envurls) && GmCXt.isFQDN()) {
+			var activeEnv = GmCXt.getAppEnvByDomain();
+			envurls = envurls.filter(function(envData) {
+				return envData.env === activeEnv;
+			});
+		}
+
+		var url = getStepUrl();
+
+		if (GmCXt.isEmpty(envurls)) {
+			url = getAlertURLByStepDomain(url);
+		} else {
+			var path = envurls[0].path;
+
+			if (path.includes('https://') || path.includes('http://')) {
+				url = path;
+			} else {
+				url = GmCXt.urlParts.scheme + "://" + GmCXt.urlParts.host + "/" + path;
+			}
+		}
+		return url;
+	}
+
+	function showStepRedirect(tourSetting) {
+		var redirectUrl = getAlertRedirectUrl(tourSetting);
+		var redirectUrl_ = GmCXt.filterUrlScheme(redirectUrl);
+		var currUrl = GmCXt.filterUrlScheme(GmCXt.urlParts.fullUrl);
+
+		if ((redirectUrl_ !== currUrl) && !GmCXt.isElectron()) {
+
+			if (tourSetting.disableRedirect) {
+				GmCXt.log(33, "NO REDIRECT PROMPT since disabled from Guide advanced settings");
+				alertRedirect(tourSetting);
+			} else {
+				GmCXt.log(33, " REDIRECT PROMPT from Guide advanced settings");
+				var option = {
+					description: GmCXt.label.stepNotFoundRedirect,
+					button1Callback: alertRedirect,
+					button1: GmCXt.label.btnYes,
+					button2: GmCXt.label.btnNo,
+					closeTour: true
+				};
+				GmCXt.alertV2(option).show();
+			}
+		} else {
+			GmCXt.log(33, "NO REDIRECT since step URL matches current URL");
+			if (GmCXt.playerI.stepRuleMatch === false) {
+				var msg = GmCXt.label.stepRuleMatchErr;
+				GmCXt.toastMsg(msg).show();
+				GmCXt.log(33, "STEP RULE not matched");
+				return false;
+			} else if (GmCXt.playerI.guideRuleMatch === false) {
+				var msg = GmCXt.label.guideRuleMatchErr;
+				GmCXt.toastMsg(msg).show();
+				GmCXt.log(33, "GUIDE RULE not matched");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function playSurveyStep() {
+		self.ready = true;
+		if (GmCXt.playerI.initiator === 'doitforme' || GmCXt.isAutomationRunning()) {
+			GmCXt.log(33, "Skip Survey Step since doItForMe.");
+			if (GmCXt.isAutomationRunning()) {
+				GmCXt.auto.updateAutomationMessage("Survey step was not tested as it is not supported", function() {
+					playNxtStep();
+				});
+			} else {
+				GmCXt.tourPlayerI.playNextStep();
+			}
+		} else {
+			var pi = GmCXt.playerI;
+			var step = GmCXt.getCurrentStep(pi.currentStepId);
+			recordEvent(step);
+			GmCXt.getSurveyScreen(GmCXt.createDeepCopy(pi), true);
+		}
+	}
+
+	function desktopPlaySteps(ackMsg) {
+		GmCXt.sendMessageToDesktop({
+			stepId: GmCXt.playerI.currentStepId,
+			requestId: GmCXt.playerI.requestId,
+			ack: ackMsg
+		});
+
+		self.ready = false;
+		pub.closeStep();
+
+		return;
+	}
+
+	return pub;
+};
+/**
+ * @file Guideme preview step popup
+ * @author Nilesh Pachpande
+ */
+
+GmCXt.showTooltip = function(options) {
+	options = options || {};
+
+	var self = {
+		description: GmCXt.replaceVariableWithValue(options.description),
+		highlightedArea: options.highlightedArea,
+		alignment: options.alignment,
+		width: options.width,
+		tour: options.tour,
+		containerOffest: {
+			left: 0,
+			top: 0
+		},
+		tipClass: "gm-tip-" + options.tooltipId,
+		tipId: options.tooltipId
+	};
+
+	self.description = GmCXt.updateOrgAndAddSignature(self.description);
+	self.description = GmCXt.restoreAssetSrc(self.description);
+
+	var brandLogo = GmCXt.brandLogo();
+
+	function add() {
+		var position = false;
+		if (GmCXt.tourPlayerI) {
+			position = GmCXt.tourPlayerI.cssPosition;
+		}
+		var html =
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_preview-step-popup-container mgPlayerJSTest_step-tooltips " +
+			self.tipClass + " " + GmCXt.getPosition(position) + "' style='zIndex:'2147483647'>" +
+			"	<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup'>" +
+			"  		<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-tooltip-ctrls-wrapper'>";
+
+		if (options.stepType === GmCXt.STEP_TYPE_MESSAGE) {
+			html +=
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-close mgPlayerJSTest_tooltip-popup-close' id='" + self.tipId + "'>" +
+				"	<span class='mgPlayerJSTest_tooltip-popup-close-svg'></span>" +
+				"</wmgPlayerJSTest_>";
+		}
+
+		html += "</wmgPlayerJSTest_>" +
+			"		<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-header'>" +
+			"			<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-wrapper'>";
+
+		html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_msg-tooltip-description mgPlayerJSTest_play-step-popup-s-title'>" +
+			self.description +
+			"</wmgPlayerJSTest_></wmgPlayerJSTest_></wmgPlayerJSTest_>" +
+
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-footer'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_brand-logo mgPlayerJSTest_play-step-popup-logo mgPlayerJSTest_inline-block-vm'>" +
+			"<img src='" + brandLogo + "' class='mgPlayerJSTest_custom-image' />" +
+			"</wmgPlayerJSTest_></wmgPlayerJSTest_></wmgPlayerJSTest_></wmgPlayerJSTest_>";
+
+		mg$("html").append(html);
+
+		mg$(".mgPlayerJSTest_tooltip-popup-close-svg").html(GmCXt.svgs.close_popup);
+
+		GmCXt.zoomImage(self.description, ".mgPlayerJSTest_msg-tooltip-description");
+		GmCXt.setLinkClickhandler(self.description, ".mgPlayerJSTest_msg-tooltip-description");
+		if (self.description.indexOf('target = "gssPlayGuide"' !== -1)) {
+			GmCXt.setLinkGuidePlay(self.description, ".mgPlayerJSTest_msg-tooltip-description");
+		}
+
+		GmCXt.onPopupRerender();
+	}
+
+	function align() {
+		var $popup = mg$("." + self.tipClass);
+
+		var a = GmCXt.alignPopup({
+			popup: $popup,
+			highlightedArea: self.highlightedArea[0],
+			containerOffest: self.containerOffest,
+			alignment: self.alignment
+		});
+
+		a.clear();
+
+		var alignment = a.start();
+
+		if (alignment) {
+			$popup.addClass(alignment);
+		}
+	}
+
+	function setDesign() {
+		var popupDesign = GmCXt.getStepSettings().popupDesign;
+
+		mg$('.mgPlayerJSTest_tooltip-wrapper').css('max-height', '400px');
+
+		if (popupDesign.type === 'classic') {
+			mg$('.mgPlayerJSTest_preview-step-popup-container').addClass('preview-step-popup-classic-design');
+			mg$('.mgPlayerJSTest_brand-logo').css({
+				'display': 'none'
+			});
+		}
+
+		// For backward compatibility
+		if (popupDesign.popupActiveSettings) {
+			popupDesign.current = popupDesign.popupActiveSettings;
+		}
+
+		mg$('.' + self.tipClass).css({
+			"background-color": popupDesign.current.bgColor,
+			"border-color": popupDesign.current.borderColor,
+			"border-width": popupDesign.current.borderWidth,
+			"border-radius": popupDesign.current.borderRadius,
+			"border-style": "solid",
+			"zIndex": '2147483647',
+			"padding-top": popupDesign.current.padding.top,
+			"padding-bottom": popupDesign.current.padding.bottom,
+			"padding-left": popupDesign.current.padding.left,
+			"padding-right": popupDesign.current.padding.right
+		});
+
+		mg$('.' + self.tipClass + ' .mgPlayerJSTest_msg-tooltip-description').css({
+			"color": popupDesign.current.stepTitleColor
+		});
+		var len = mg$('.' + self.tipClass + ' .mgPlayerJSTest_msg-tooltip-description img').length;
+		if (len) {
+			for (var i = 0; i < len; i++) {
+				var imgW = mg$('.' + self.tipClass + ' .mgPlayerJSTest_msg-tooltip-description img')[i].getAttribute('width');
+				var imgH = mg$('.' + self.tipClass + ' .mgPlayerJSTest_msg-tooltip-description img')[i].getAttribute('height');
+
+				mg$('.' + self.tipClass + ' .mgPlayerJSTest_msg-tooltip-description img')[i].style.setProperty('width', imgW + 'px', 'important');
+				mg$('.' + self.tipClass + ' .mgPlayerJSTest_msg-tooltip-description img')[i].style.setProperty('height', imgH + 'px', 'important');
+			}
+		}
+
+		if (GmCXt.getOrgLevelBrandLogoSetting()) {
+			mg$("." + self.tipClass + " .mgPlayerJSTest_brand-logo img").hide();
+		} else {
+			mg$("." + self.tipClass + " .mgPlayerJSTest_brand-logo img").show();
+		}
+
+		mg$("." + self.tipClass).css({
+			"width": self.width
+		});
+	}
+
+	function onClose(e) {
+		var currentTip = e.currentTarget.id;
+
+		mg$(".gm-tip-" + currentTip).remove();
+		GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:clear_dom_outline", {
+			id: currentTip
+		});
+		GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:clear_message_tooltip", {
+			id: GmCXt.playerI.currentStepId + '_' + currentTip
+		});
+		changeOpacity(currentTip);
+	}
+
+	function changeOpacity(currentTip) {
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var s = step.step_settings;
+		if (!s.overlayOpacity) return;
+		if (s.highlightedArea && GmCXt.highlight_elements) {
+
+			delete GmCXt.highlight_elements[currentTip];
+			GmCXt.applyOverlayMessageStep(GmCXt.highlight_elements);
+		}
+	}
+
+	mg$("." + self.tipClass).remove();
+	add();
+	mg$("." + self.tipClass).show();
+	mg$('.mgPlayerJSTest_tooltip-popup-close').off('click').on('click', onClose);
+
+	setDesign();
+	align();
+};
+/**
+	* @author Nilesh Pachpande
+	*/
+
+GmCXt.listenerBackgroud = function(request, sender, sendResponse) {
+
+	request = GmCXt.parseJSON(request);
+	request = GmCXt.convertMgdata(request);
+
+	let appDomainExist = true;
+	if(GmCXt.isPlayer() && !GmCXt.isEmpty(GmCXt.urlParts) && !GmCXt.isEmpty(GmCXt.appList)){
+		let domainApp = GmCXt.checkDomainInApps(GmCXt.urlParts.fullUrl);
+		if(domainApp && !domainApp.appName){
+			appDomainExist = false;
+		}
+	}
+
+	if (request.action === 'mgPlayerJSTest_action:open_panel_after_capture') {
+		GmCXt.clearStepReq();
+		GmCXt.openAppPanel();
+	}
+
+	if (request.action === 'mgPlayerJSTest_action:browser_action_icon_click' && GmCXt.initialization && GmCXt.initialization.sidePanel &&
+		appDomainExist) {
+		if (GmCXt.isInspectToolON()) {
+			GmCXt.sendMessageToParentWindow('mgPlayerJSTest_action:stop_inline_step_selection_mode');
+		}
+
+		GmCXt.openAppPanel(null, 'extension');
+	} else if (request.action === 'mgPlayerJSTest_action:browser_action_icon_click' &&
+		(GmCXt.isExcludeDomain() || !appDomainExist)) {
+		GmCXt.showPanelDisabledPopup();
+		return true;
+	}
+
+	if (request.action === 'mgPlayerJSTest_action:user_logged_out') {
+		GmCXt.sendMessageToApp("mgPlayerJSTest_action:user_logged_out");
+	}
+
+	return true;
+};
+
+GmCXt.listenTopWinPlayer = function(event) {
+	event = mg$.extend({}, event);
+	if (GmCXt.verifyMsg(event)) {
+		GmCXt.processTopWinPlayer(event);
+		GmCXt.processIframePlayer(event);
+	}
+};
+
+GmCXt.processTopWinPlayer = function(event) {
+
+	var message = event.data;
+
+	switch (message.action) {
+
+		case 'mgPlayerJSTest_action:get_local_storage_response':
+		case 'mgPlayerJSTest_action:call_api_response':
+			if (GmCXt.globalMsgData[message.data.msgId]) {
+				GmCXt.globalMsgData[message.data.msgId].cb(message.data.items);
+				delete GmCXt.globalMsgData[message.data.msgId];
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:got_survey_detail':
+			if (GmCXt.globalMsgData[message.data.msgId]) {
+				GmCXt.globalMsgData[message.data.msgId].cb(message.data);
+				delete GmCXt.globalMsgData[message.data.msgId];
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:set_local_storage_response':
+		case 'mgPlayerJSTest_action:remove_local_storage_response':
+			if (GmCXt.globalMsgData[message.data.msgId]) {
+				GmCXt.globalMsgData[message.data.msgId].cb();
+				delete GmCXt.globalMsgData[message.data.msgId];
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:update_PI_steps_done':
+		case 'mgPlayerJSTest_action:update_PI_PS_done':
+			if (GmCXt.globalMsgData[message.action]) {
+				GmCXt.globalMsgData[message.action].cb();
+				delete GmCXt.globalMsgData[message.action];
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:payload_event_call':
+			GmCXt.eventApiCall(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:automation_check_reload':
+			if (!GmCXt.playerI) {
+				GmCXt.playerI = message.data.playerInstance;
+			}
+			GmCXt.auto.newTabStepFound(message.data.pageReloadOption, message.data.isNextStep);
+			break;
+
+		case 'mgPlayerJSTest_action:set_iframe_id':
+			GmCXt.currentIframeId = message.data.currentIframeId;
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:set_iframe_id:do', message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:set_iframe_id:beacon':
+			GmCXt.beaconIframe[message.data.tour_id].frameId = message.data.frameId;
+			break;
+
+		case 'mgPlayerJSTest_action:set_iframe_id:tooltip':
+			GmCXt.smartTipIframe[message.data.step_id].frameId = message.data.frameId;
+			break;
+
+		case 'mgPlayerJSTest_action:set_iframe_id:tag':
+			GmCXt.tagIframe[message.data.step_id].frameId = message.data.frameId;
+			break;
+
+		case 'mgPlayerJSTest_action:initialization:side_panel_loaded':
+			GmCXt.handleAppInit(event);
+			break;
+
+		case 'mgPlayerJSTest_action:position_play_pause_toolbar':
+			GmCXt.handlePositionToolbar(event);
+			break;
+
+		case 'mgPlayerJSTest_action:update_widget_icon':
+			GmCXt.showWidget();
+			break;
+
+		case 'mgPlayerJSTest_action:update_chat_icon':
+			GmCXt.showChatIcon();
+			break;
+
+		case 'mgPlayerJSTest_action:update_cdn_signature':
+			GmCXt.handleUpdateCdnSign(event);
+			break;
+
+		case 'mgPlayerJSTest_action:get_cdn_signature':
+			GmCXt.getCdnSignature(true);
+			break;
+
+		case 'mgPlayerJSTest_action:clear_outline;action:inform':
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:clear_outline;action:do', message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:enable_next_button':
+			GmCXt.requestHandler.enableNextButton();
+			break;
+
+		case 'mgPlayerJSTest_action:close_app_panel':
+			GmCXt.closeAppPanel();
+			mg$('.mgPlayerJSTest_panel').css({
+				'width': '500px'
+			});
+
+			if (window.matchMedia("(max-width: 480px)").matches && !GmCXt.isMiniPlayer) {
+				mg$('.mgPlayerJSTest_panel').css({
+					'width': '85%'
+				});
+			}
+
+			if (message.data && message.data.resetPanel) {
+				GmCXt.sendMessageToApp("mgPlayerJSTest_action:reset_panel_right");
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:show_beacon_smarttip':
+			GmCXt.showBeacons();
+			GmCXt.showSmartTips();
+			break;
+
+		case 'mgPlayerJSTest_action:open_app_panel':
+			GmCXt.handleOpenApp(event);
+			break;
+
+		case 'mgPlayerJSTest_action:set_beacon_position':
+			GmCXt.handleBeaconPosition(event);
+			break;
+
+		case 'mgPlayerJSTest_action:play_linked_tour':
+			GmCXt.requestHandler.playLinkedGuide(message.data);
+			break;
+
+		case "mgPlayerJSTest_action:play_tour":
+			GmCXt.requestHandler.playGuide(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:play_tour;event:beacon_click':
+			GmCXt.handleEventBeaconClick(event);
+			break;
+
+		case 'mgPlayerJSTest_action:play_video_lms':
+			GmCXt.requestHandler.playVideo(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:lms_video_assignment_played':
+			GmCXt.requestHandler.videoAssignmentPlayed();
+			break;
+
+		case 'mgPlayerJSTest_action:close_step':
+			GmCXt.requestHandler.closeStep();
+			break;
+
+		case 'mgPlayerJSTest_action:click; on:mgPlayerJSTest_slideshow-close':
+			mg$('.mgPlayerJSTest_panel').removeAttr('style');
+			GmCXt.closeAppPanel();
+			GmCXt.requestHandler.closeSlideshow();
+			break;
+
+		case 'mgPlayerJSTest_action:completed;task:select_dom_element_tooltips':
+			GmCXt.timeout(function() {
+				GmCXt.requestHandler.handleEventSelectDOMElTooltip(event, message.data);
+			}, 500);
+			break;
+
+		case 'mgPlayerJSTest_action:find_other_msg_step_tooltips':
+			GmCXt.requestHandler.findOtherTooltips(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:completed;task:select_existing_dom_element':
+
+			GmCXt.timeout(function() {
+				GmCXt.requestHandler.handleEventSelectDOMElement(event, message.data);
+			}, 500);
+			break;
+
+		case 'mgPlayerJSTest_action:hide_widget':
+			GmCXt.hideWidgetIcon();
+			break;
+
+		case 'mgPlayerJSTest_action:hide-panel-close-btn':
+			GmCXt.hidePanelCloseBtn();
+			break;
+
+		case 'mgPlayerJSTest_action:show_current_page_guide_indicator':
+
+			GmCXt.ifGuidesOnCurrentPage = true;
+
+			if (message.data.clearRulesJobs) {
+				GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:clear_rule_jobs', {
+					initiator: 'currentPageIndicator',
+					trigger: 'guide_indicator'
+				});
+			}
+
+			GmCXt.showWidget();
+			break;
+
+		case 'mgPlayerJSTest_action:hide_current_page_guide_indicator':
+			GmCXt.ifGuidesOnCurrentPage = false;
+			GmCXt.hideCurrentPageGuidesIndicator();
+			break;
+
+		case 'mgPlayerJSTest_action:inform_task_list_guide_count':
+			GmCXt.taskListCount = message.data;
+			break;
+
+		case 'mgPlayerJSTest_action:show_widget':
+			GmCXt.showWidget();
+			break;
+
+		case 'mgPlayerJSTest_action:show_chat_icon':
+			GmCXt.showChatIcon();
+			break;
+
+		case 'mgPlayerJSTest_action:remove_chat_icon':
+			GmCXt.removeChatIcon();
+			break;
+
+		case 'mgPlayerJSTest_action:show-panel-close-btn':
+			GmCXt.showPanelCloseBtn();
+			break;
+
+		case 'mgPlayerJSTest_action:get_page_url':
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:get_page_url_response', GmCXt.getCurrentURL());
+			break;
+
+		case 'mgPlayerJSTest_action:go_to_web_tour':
+			var webUrl = (message.data && message.data.webUrl) ? message.data && message.data.webUrl : false;
+			if (webUrl) {
+				window.open(webUrl, "_blank");
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:save_user_info':
+			GmCXt.updateGlobalUser(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:save_org':
+			GmCXt.updateGlobalOrg(message.data);
+			GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:save_org_in_iframes", {
+				org: message.data
+			});
+			GmCXt.updateGmConfig();
+
+			break;
+
+		case 'mgPlayerJSTest_action:on_side_panel_init':
+			GmCXt.onSidePanelInit(message);
+			break;
+
+		case 'mgPlayerJSTest_action:update_access_token':
+			GmCXt.updateGlobalUser(message.data.user);
+			GmCXt.updateGmConfig();
+			break;
+
+		case 'mgPlayerJSTest_action:start_step_completion_timeout':
+			if (GmCXt.tourPlayerI && message.data && message.data.step) {
+				GmCXt.tourPlayerI.setStepCompletionTimeout(message.data.step);
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:set_audio_storage':
+			if (message.data && GmCXt.playerI.playAudio) {
+				GmCXt.stepAudioRunningStatus = message.data.stepAudioRunningStatus;
+				GmCXt.storage().set(message.data);
+			}
+
+			GmCXt.updateAudioStatusForTracking();
+
+			break;
+
+		case 'mgPlayerJSTest_action:set_style_audio_icon':
+			var os = GmCXt.getStepSettings();
+			if (os) {
+				var popupDesign = os.popupDesign;
+
+				if (popupDesign) {
+
+					var popUpCSS = "<style id='mgPlayerJSTest_popup-arrow' type='text/css'>" +
+						".mgPlayerJSTest_play-step-audio-on svg path {" +
+						"fill:" + popupDesign.current.closeIconColor + "!important;" +
+						"}" +
+						".mgPlayerJSTest_play-step-audio-off svg path {" +
+						"fill:" + popupDesign.current.closeIconColor + "!important;" +
+						"}" +
+						"html, body {" +
+						"background:" + popupDesign.current.bgColor + " !important;" +
+						"}" +
+						"</style>";
+
+					GmCXt.sendMsgToAudioFrame('mgPlayerJSTest_action:set_style_audio_icon_response', {
+						data: popUpCSS,
+						user: GmCXt.user
+					});
+				}
+			}
+			break;
+		case 'mgPlayerJSTest_action:hide_pop_audio_ctrl':
+			mg$('.mgPlayerJSTest_audio-pop-icons').hide();
+			break;
+
+		case 'mgPlayerJSTest_action:expand_sidepanel':
+			mg$('.mgPlayerJSTest_panel').removeAttr('style');
+			mg$('.mgPlayerJSTest_panel').css({
+				'width': '100%',
+				'left': 'initial',
+				'right': '0px',
+				'top': '0px',
+				'transition': 'none'
+			});
+			break;
+
+		case 'mgPlayerJSTest_action:reduce_sidepanel':
+			mg$('.mgPlayerJSTest_panel').removeAttr('style');
+			mg$('.mgPlayerJSTest_panel').css({
+				'width': '500px',
+				'left': 'initial',
+				'right': '0px',
+				'top': '0px',
+				'transition': 'none'
+			});
+			break;
+
+		case 'mgPlayerJSTest_action:increase_side_panel_width':
+			GmCXt.toggleSidePanel(true);
+			mg$('.mgPlayerJSTest_panel').css({
+				'width': '100%',
+				'left': '0px',
+				'right': 'initial'
+			});
+
+			if (!GmCXt.isMicroPlayer()) GmCXt.hidePanelCloseBtn();
+			break;
+
+		case 'mgPlayerJSTest_action:close_notification_popup':
+			GmCXt.closeNotificationPopup();
+			break;
+
+		case 'mgPlayerJSTest_action:update_custom_labels':
+			GmCXt.updateCustomLabels(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:reduce_side_panel_width':
+			GmCXt.toggleSidePanel(false);
+			if (!GmCXt.isMicroPlayer()) GmCXt.showPanelCloseBtn();
+			break;
+
+		case 'mgPlayerJSTest_action:toggle_sidepanel_fullscreen':
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:toggle_sidepanel", message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:survey_start;task:show_survey':
+			mg$(window).focus();
+			GmCXt.isSurveyVisible = true;
+			GmCXt.surveyStart(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:exit_survey_start;task:show_survey':
+			mg$(window).focus();
+			GmCXt.isSurveyVisible = true;
+			GmCXt.surveyStart(message.data, true);
+			break;
+
+		case "mgPlayerJSTest_action:start_tool;testMe":
+			GmCXt.handleStartTest(event);
+			break;
+
+		case "mgPlayerJSTest_action:record_event;testMe":
+			GmCXt.requestHandler.recordEventTestMe(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:redirectTestMe':
+			GmCXt.storage().set({
+				'testMe': message.data.data
+			}).then(function() {
+				window.open(message.data.currStepUrl, '_blank');
+			});
+			break;
+
+		case 'mgPlayerJSTest_action:show_toast_message':
+			GmCXt.toastMsg(message.data).show();
+			break;
+
+		case 'mgPlayerJSTest_action:completed;task:select_dom_element_for_rules':
+			GmCXt.requestHandler.onElementFoundForDomSelectRule(message);
+			break;
+
+		case 'mgPlayerJSTest_action:play_next_step':
+			GmCXt.requestHandler.playTourNextStep();
+			break;
+
+		case 'mgPlayerJSTest_action:play_prev_step':
+			GmCXt.requestHandler.playTourPrevStep();
+			break;
+
+		case 'mgPlayerJSTest_action:click_event_for_guide':
+			GmCXt.requestHandler.pageClickForGuide(message);
+			break;
+
+		case 'mgPlayerJSTest_action:select_element_for_branching':
+			GmCXt.requestHandler.selectElementForBranching();
+			break;
+
+		case 'mgPlayerJSTest_action:select_new_element_for_dom_rule_from_side_panel':
+			GmCXt.requestHandler.sendRequestForDomSelectRule(message);
+			break;
+
+		case 'mgPlayerJSTest_action:select_new_table_for_dom_rule_from_side_panel':
+			GmCXt.requestHandler.sendRequestForDomSelectTableRule(message);
+			break;
+
+		case 'mgPlayerJSTest_action:user_logout':
+			GmCXt.clearDataOnLogout(message.data);
+			GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:empty_user_on_logout_in_iframes", {});
+			break;
+
+		case 'mgPlayerJSTest_action:set_audio_icon_off':
+			GmCXt.setOffAudioMode();
+			break;
+
+		case 'mgPlayerJSTest_action:set_audio_icon_off_onboar':
+			GmCXt.setOffOnBoarAudioMode();
+			break;
+
+		case 'mgPlayerJSTest_action:set_audio_icon_on_onboar':
+			GmCXt.setOnOnBoarAudioMode();
+			break;
+
+		case 'mgPlayerJSTest_action:page_clicked':
+			GmCXt.triggerChangeListeners('page_click');
+			break;
+
+		case 'mgPlayerJSTest_action:track_feature_click':
+			GmCXt.trackerV1.trackFeatureClick(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:start_point_found':
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:start_point_found_app', message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:next_step_found':
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:next_step_found_app');
+			break;
+
+		case 'mgPlayerJSTest_action:get_survey_data_from_sidepanel':
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:get_survey_detail_tooltip", message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:init;task:select_dom_element_for_rules':
+			GmCXt.sendMessageToAllWindows(
+				'mgPlayerJSTest_action:started;task:select_dom_element_for_rules',
+				message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:preview_smarttip':
+			GmCXt.handlePreviewTooltip(event);
+			break;
+
+		case 'mgPlayerJSTest_action:preview_beacon':
+			GmCXt.handlePreviewBeacon(event);
+			break;
+
+		case 'mgPlayerJSTest_action:set_lang_content_script':
+			GmCXt.setLangPref(message.data.lang);
+			break;
+
+		case 'mgPlayerJSTest_action:init_app_id':
+			GmCXt.activeAppId = message.data.activeAppId;
+			break;
+
+		case 'mgPlayerJSTest_action:tour_loop_completed':
+			GmCXt.requestHandler.playAutoTour();
+			break;
+
+		case 'mgPlayerJSTest_action:close_guide':
+			if (GmCXt.tourPlayerI) {
+				var fromShowme = message.data.fromShowme;
+				GmCXt.tourPlayerI.closeGuide(false, fromShowme);
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:update_tracking_info':
+			GmCXt.trackerUtil.enableTracking = message.data.enableTracking;
+			GmCXt.trackerUtil.trackPI = message.data.trackPI;
+			GmCXt.trackerUtil.featureTracking = message.data.featureTracking;
+			GmCXt.trackerUtil.pageTracking = message.data.pageTracking;
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:update_tracking_info:frames', message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:get_lxp_storage':
+			GmCXt.storage().get(message.data.key).then(function(result) {
+				GmCXt.sendStorageResponseToApp(result, message.data.id);
+			});
+			break;
+		case 'mgPlayerJSTest_action:set_lxp_storage':
+			var d = message.data;
+			var key = d.key;
+			var data = d.data;
+			var obj = {};
+			obj[key] = data;
+			GmCXt.storage().set(obj);
+			break;
+
+		case 'mgPlayerJSTest_action:remove_lxp_storage':
+			GmCXt.storage().remove(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:reset_lxp_storage':
+			GmCXt.removeLxpStorageAll();
+			break;
+
+		case 'gmPlayerXt_action:init_sfdc_env': // for backward compatibility
+		case 'mgPlayerJSTest_action:init_sfdc_env':
+			GmCXt.initSfdc(message.data);
+			break;
+
+		case 'gmPlayerXt_action:sfdc_play_tour': // for backward compatibility
+		case 'mgPlayerJSTest_action:sfdc_play_tour':
+			GmCXt.playSfdcTour(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:process_active_requests':
+			GmCXt.processActiveReq();
+			break;
+
+		case 'gmPlayerXt_action:init_snow': // for backward compatibility
+		case 'mgPlayerJSTest_action:init_snow':
+			GmCXt.initSnow(message.data);
+			break;
+
+		case 'gmPlayerXt_action:snow_panel_open': // for backward compatibility
+		case "mgPlayerJSTest_action:snow_panel_open":
+			if (GmCXt.isPlayer() && GmCXt.serviceNow())
+				GmCXt.openAppPanel();
+			break;
+
+		case 'mgPlayerJSTest_action:start_test_automation':
+			GmCXt.startAuto(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:myBot_report_saved':
+			GmCXt.auto.reportSaved();
+			break;
+
+		case 'mgPlayerJSTest_action:update_noti_watch_later':
+			GmCXt.updateNotiWatchLater(message.data.tour_id);
+			break;
+
+		case 'mgPlayerJSTest_action:update_noti_do_not_show':
+			GmCXt.updateNotiDoNotShow(message.data.tour_id);
+			break;
+
+		case 'mgPlayerJSTest_action:show_ducttape_alert':
+			GmCXt.showDuctTapeAlert(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:show_smarttip':
+			GmCXt.requestHandler.showSmarttip(message.data, event);
+			break;
+
+		case 'mgPlayerJSTest_action:show_beacon':
+			GmCXt.requestHandler.setBeaconPosition(message, event);
+			break;
+
+		case 'mgPlayerJSTest_action:toggle_beacon_visibility':
+			GmCXt.requestHandler.toggleBeacon(message);
+			break;
+
+		case 'mgPlayerJSTest_action:trigger_next_click':
+			if (GmCXt.playerI && GmCXt.playerI.testAutomation) {
+				GmCXt.tourPlayerI.playNextStep();
+				return;
+			}
+			var btn = GmCXt.getNextBtnElem();
+			GmCXt.triggerClick(btn);
+			break;
+
+		case 'mgPlayerJSTest_action:play_next_step_automator':
+			GmCXt.tourPlayerI.playNextStep();
+			break;
+
+		case 'mgPlayerJSTest_action:rotate_gear':
+			GmCXt.rotateGear();
+			break;
+
+		case 'mgPlayerJSTest_action:complete:get_cards':
+			GmCXt.successCallbackCards(message);
+			break;
+
+		case 'mgPlayerJSTest_action:open_power_form':
+			GmCXt.openPowerForm(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:insert_power_html_i':
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:insert_power_html', message.data);
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:close_power_form", {});
+			break;
+
+		case 'mgPlayerJSTest_action:error:get_cards':
+			GmCXt.errorCallbackCards(message);
+			break;
+
+		case 'mgPlayerJSTest_action:hide_smarttip_delay':
+			GmCXt.requestHandler.hideSmarttipDelay(message.data, message.data.options);
+			break;
+
+		case 'mgPlayerJSTest_action:clear_smarttip_delay_timeout':
+			GmCXt.clearTooltipTimeout();
+			break;
+
+		case 'mgPlayerJSTest_action:hide_validation_smarttip':
+			GmCXt.requestHandler.hideValidationSmarttip(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:hide_smarttip':
+			GmCXt.requestHandler.hideSmartTip(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:initialize_image_iframe_popup':
+			GmCXt.setImagePopUp();
+			break;
+
+		case 'mgPlayerJSTest_action:open_image_iframe_popup':
+			GmCXt.openImagePopup(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:play_guide_from_link':
+			GmCXt.getTourAndPlay(message.data.tourId, message.data.initiator);
+			break;
+
+		case 'mgPlayerJSTest_action:play_guide_from_notification':
+			GmCXt.playLiveTour(message.data.tour, 0, 'overlayTourPopup', message.data.isAutolaunchTriggered, 'live');
+			break;
+
+		case 'mgPlayerJSTest_action:mark_auto_tour_donotshow':
+			GmCXt.markAutoLaunchTourDoNotShow(message.data.tour);
+			break;
+
+		case 'mgPlayerJSTest_action:update_beacons_on_screen':
+			GmCXt.updateBeaconsOnScreen(message.data.jobId, message.data.isValid);
+			break;
+
+		case 'mgPlayerJSTest_action:update_smarttip_on_screen':
+			GmCXt.updateOnScreenTooltipGuideInfo(message.data.tour, message.data.tourId, message.data.stepId, message.data.isValid, message.data.smartTip, message.data.url);
+			break;
+
+		case 'mgPlayerJSTest_action:update_tooltip_action_info':
+			var d = message.data;
+			GmCXt.updateTooltipActionInfo(d.tourId, d.stepId, d.smartTip, d.actionName);
+			break;
+
+		case 'mgPlayerJSTest_action:set_auto_tour':
+			GmCXt.setAutoTour(message.data.tourId);
+			break;
+
+		case 'mgPlayerJSTest_action:search_next_step':
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:search_next_step', message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:search_start_point':
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:search_start_point', message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:clear_player_instance':
+			GmCXt.cleanPlayer();
+			break;
+
+		case 'mgPlayerJSTest_action:update:player_mode':
+			GmCXt.handleUpdatePlayerMode(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:sync_app_list':
+			GmCXt.appList = message.data.appList;
+			GmCXt.updateAppListSettingsInAllFrames(message);
+			break;
+
+		case 'mgPlayerJSTest_action:print_debug_log':
+			GmCXt.requestHandler.printDebugLog(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:keep_watching_step:inform':
+			GmCXt.handleRestartInParent();
+			break;
+
+		case 'mgPlayerJSTest_action:update_PI_PS':
+			GmCXt.requestHandler.updatePIPS(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:update_PI_steps':
+			GmCXt.requestHandler.updatePISteps(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:update_tooltip_tracking':
+			GmCXt.tooltipTrackingList = message.data.trackingInfo;
+			break;
+
+		case 'mgPlayerJSTest_action:hide_inline_step_popup':
+			mg$('.mgPlayerJSTest_preview-step-popup-container').css({
+				'display': 'none'
+			});
+			mg$('.mgPlayerJSTest_screen-blackout').hide();
+			GmCXt.stopAudioTrack();
+			var iframe = document.getElementById('mgPlayerJSTest_play-step-audio-iframe');
+			if (iframe && iframe.src) {
+				iframe.src = iframe.src;
+			}
+			GmCXt.stepAudioPlayed = false;
+			GmCXt.displayWidget();
+			break;
+
+		case 'mgPlayerJSTest_action:hide_inline_step_popup_tootip':
+			mg$('.gm-tip-' + message.data.id).css({
+				'display': 'none'
+			});
+			break;
+
+		case 'mgPlayerJSTest_action:step_element_hidden':
+			GmCXt.tourPlayerI.isLastStepVisible = false;
+			GmCXt.stepAudioPlayed = false;
+			GmCXt.stopAudioTrack();
+			break;
+
+		case 'mgPlayerJSTest_action:check_iframe_visible':
+			if (message.data && message.data.selector) {
+				GmCXt.highlighter.bringElementInViewport({}, message.data.selector, true);
+			}
+			break;
+		case 'mgPlayerJSTest_action:update_notification_data_content_script':
+			GmCXt.updNotifDataSidePanel(message.data.toursClosedByUser, message.data.tourIdArray);
+			break;
+
+		case 'mgPlayerJSTest_action:update_notification_data_content_script_snooze_tours':
+			GmCXt.setSnoozedTours(message.data.tour, message.data.msg);
+			break;
+
+		case 'mgPlayerJSTest_action:update_notification_data_content_script_donot_show':
+			GmCXt.updateNotification(message.data.tours);
+			break;
+
+		case 'mgPlayerJSTest_action:update_notification_count_content_script':
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:update_notification_count", {
+				count: message.data.count
+			});
+			break;
+
+		case 'mgPlayerJSTest_action:track_notification_for_automation':
+			GmCXt.auto.trackNotificationForAutomation(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:stop_automation':
+			GmCXt.auto.stop(true);
+			break;
+
+		case 'mgPlayerJSTest_action:close_video_step':
+			GmCXt.confirmTourClose();
+			break;
+
+		case 'mgPlayerJSTest_action:update_click_time':
+			GmCXt.clickTime = message.data.clickTime;
+			break;
+
+		case 'mgPlayerJSTest_action:update_secrets':
+			GmCXt.trackerUtil.secrets = message.data.secrets;
+			GmCXt.storage().set({
+				'tracker_secrets': JSON.stringify(GmCXt.trackerUtil.secrets)
+			});
+			break;
+
+		case 'mgPlayerJSTest_action:update_segment_group_data':
+			GmCXt.allSegments = message.data.allSegments;
+			break;
+
+		case 'mgPlayerJSTest_action:select_element_for_variable':
+			GmCXt.requestHandler.selectElementForVariable();
+			break;
+
+		case 'mgPlayerJSTest_action:update_notification_data_content_script_display_frequency':
+			GmCXt.updateGuideDisplayFrequency(message.data.tours);
+			break;
+
+		case 'mgPlayerJSTest_action:stop_audio':
+			GmCXt.stopAudioTrack();
+			break;
+
+		case 'mgPlayerJSTest_action:hide_step_popup':
+			mg$(".mgPlayerJSTest_preview-step-popup-container").addClass("mgPlayerJSTest_preview-step-popup-container-mp");
+			break;
+
+		case 'mgPlayerJSTest_action:show_step_popup':
+			mg$(".mgPlayerJSTest_preview-step-popup-container").removeClass("mgPlayerJSTest_preview-step-popup-container-mp");
+			break;
+
+		case 'mgPlayerJSTest_action:track_element_not_found':
+			GmCXt.trackElNotFound(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:update_player_sync_time':
+			GmCXt.refreshTime = message.data.refreshTime;
+			GmCXt.lastTimeStampSync = message.data.lastTimeStampSync;
+			break;
+
+		case 'mgPlayerJSTest_action:send_dom_tracker_info':
+			GmCXt.combineDomTrackerData(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:update_accessibility':
+			GmCXt.updateAccessibility(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:media_player_on':
+			GmCXt.isMediaPlayerOn = message.data.mediaPlayerStatus;
+			break;
+
+		case 'mgPlayerJSTest_action:reset_micro_player_position':
+			GmCXt.resetMplayerPos();
+			break;
+
+		case 'mgPlayerJSTest_action:getSurveyScreen':
+			GmCXt.getSurveyScreen(message.data, message.data.guideNotCompleted);
+			break;
+
+		case 'mgPlayerJSTest_action:showSurveyScreen':
+			GmCXt.showSurveyScreen(message.data, message.data.guideNotCompleted);
+			break;
+
+		case 'mgPlayerJSTest_action:empty_media_recorder':
+			mediaRecorder = null;
+			GmCXt.storage().remove(['screen_recorder_close']);
+			break;
+
+		case 'mgPlayerJSTest_action:send_feedback':
+			GmCXt.closeAppPanel();
+			GmCXt.addFeedBackToolbar();
+			GmCXt.timeout(function() {
+				GmCXt.captureScreenForFeedback(message.data.feedback_email);
+			}, 100);
+			break;
+
+		case 'mgPlayerJSTest_action:preview_sound':
+			GmCXt.sendMessageToDesktop(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:update_played_slideshow_step':
+			GmCXt.updatePlayedSteps(message.data.playedStep);
+			break;
+
+		case 'mgPlayerJSTest_action:get_key_input_guides':
+			GmCXt.keyInputGuides = message.data.tours;
+			break;
+
+		case 'mgPlayerJSTest_action:track_beacon_feature':
+			GmCXt.trackerV1.trackBeacons(message.tour, message.eventType);
+			break;
+
+		case 'mgPlayerJSTest_action:get_context_guides':
+			GmCXt.getContextGuides("Process Guides");
+			break;
+
+		case 'mgPlayerJSTest_action:set_audio_mode_on':
+			var d = {
+				user: GmCXt.user
+			};
+
+			GmCXt.sendMsgToAudioFrame('mgPlayerJSTest_action:set_audio_mode_on', d);
+			break;
+
+		case 'mgPlayerJSTest_action:set_audio_mode_off':
+			var d = {
+				user: GmCXt.user
+			};
+			GmCXt.sendMsgToAudioFrame('mgPlayerJSTest_action:set_audio_mode_off', d);
+			break;
+
+		default:
+	}
+};
+
+GmCXt.eventApiCall = function(payload) {
+	var keys = GmCXt.trackerUtil.secrets;
+
+	if (!keys) {
+		GmCXt.storage().get([
+			'tracker_secrets'
+		]).then(function(r) {
+			keys = r.tracker_secrets;
+			if (keys && !keys.registerClientId) {
+				keys = GmCXt.parseJSON(keys);
+			}
+			GmCXt.addPayload(keys, payload);
+		});
+	} else {
+		GmCXt.addPayload(keys, payload);
+	}
+};
+
+GmCXt.addPayload = function(keys, payload) {
+	if (keys && keys.registerClientId) {
+		var jsonData = {
+			"app_client_id": keys.registerClientId,
+			"payload": [],
+			"signature": ''
+		};
+
+		if (payload.event_type === "mi_logout") {
+			GmCXt.isLogoutTrackApi = true;
+		}
+
+		jsonData.event_chain_id = GmCXt.ANALYTICS_EVENT_CHAIN_ID;
+		jsonData.payload = [payload];
+		jsonData.signature = SHA256(SHA256(JSON.stringify(jsonData.payload)) + keys.app_client_secret).toString();
+
+		if (GmCXt.isEventTimeValid(payload.event_time)) {
+			GmCXt.trackerV1.apiV1(jsonData);
+		}
+	}
+};
+
+
+GmCXt.toggleSidePanel = function(fullscreen) {
+
+	if (fullscreen) {
+		if (GmCXt.isMicroPlayer()) {
+			mg$('.mgPlayerJSTest_panel').css({
+				'width': '100%',
+				'left': '0px',
+				'right': '0px',
+				'height': '100vh',
+				'min-width': '100%'
+			});
+		} else {
+				mg$('.mgPlayerJSTest_panel').css({
+					'width': '100%',
+					'left': '0px',
+					'right': 'initial',
+					'top': '0',
+				});
+		}
+	} else {
+
+		if (GmCXt.APP_PANEL_OPEN) {
+			if (GmCXt.isMicroPlayer()) {
+				mg$('.mgPlayerJSTest_panel').removeAttr('style');
+			}
+
+			mg$('.mgPlayerJSTest_panel').css({
+				'width': '500px',
+				'right': '0px'
+			});
+
+			if (window.matchMedia("(max-width: 480px)").matches && !GmCXt.isMiniPlayer) {
+				mg$('.mgPlayerJSTest_panel').css({
+					'width': '85%'
+				});
+			}
+
+			mg$('.mgPlayerJSTest_panel').css({
+				'left': 'initial'
+			});
+
+		} else {
+			mg$('.mgPlayerJSTest_panel').removeAttr('style');
+			GmCXt.closeAppPanel();
+		}
+	}
+};
+
+GmCXt.updateAppListSettingsInAllFrames = function(d) {
+	if (!GmCXt.isEmpty(GmCXt.appList)) {
+
+		var activeApp = GmCXt.appList['app:' + GmCXt.activeAppId];
+		var d = {};
+
+		if (activeApp && activeApp.settings) {
+			d.activeAppSettings = activeApp.settings;
+		}
+		GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:update_app_settings', d);
+	}
+};
+
+GmCXt.requestHandler.printDebugLog = function(d) {
+	GmCXt.log(d.mode, d.str, d.opt);
+};
+
+GmCXt.requestHandler.updatePIPS = function(d) {
+	GmCXt.playerI.playStructure = d;
+	GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:update_PI_PS_done');
+};
+
+GmCXt.requestHandler.updatePISteps = function(d) {
+	GmCXt.playerI.tour.steps = d;
+	GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:update_PI_steps_done');
+};
+
+GmCXt.updateNotiDoNotShow = function(tour_id) {
+	GmCXt.storage().get(['tourIdArray', 'toursClosed']).then(function(st) {
+		var doNotShowTours = GmCXt.parseJSON(st.tourIdArray);
+		if (doNotShowTours[tour_id]) {
+			delete doNotShowTours[tour_id];
+			GmCXt.storage().set({
+				'tourIdArray': doNotShowTours
+			});
+		}
+		var toursClosedByUser = GmCXt.parseJSON(st.toursClosed);
+		GmCXt.updNotifDataSidePanel(toursClosedByUser, doNotShowTours);
+	});
+};
+
+GmCXt.updateNotiWatchLater = function(tour_id) {
+	GmCXt.storage().get(['tourIdArray', 'toursClosed']).then(function(st) {
+		var toursClosedByUser = GmCXt.parseJSON(st.toursClosed);
+		if (toursClosedByUser[tour_id]) {
+			delete toursClosedByUser[tour_id];
+			GmCXt.storage().set({
+				'toursClosed': toursClosedByUser
+			});
+		}
+		var doNotShowTours = GmCXt.parseJSON(st.tourIdArray);
+		GmCXt.updNotifDataSidePanel(toursClosedByUser, doNotShowTours);
+	});
+};
+
+GmCXt.handleRestartInParent = function() {
+	GmCXt.storage().remove(['restartInParent']);
+	var cb = function() {
+		GmCXt.storage().get(['restartInParent']).then(function(st) {
+			if (st.restartInParent) {
+				clearInterval(intervalId);
+				GmCXt.log(33, "STOP WATCHING and restart guide in parent window.");
+				GmCXt.processActiveReq();
+				GmCXt.storage().remove(['restartInParent']);
+				return;
+			}
+		});
+	};
+	var intervalId = null;
+	clearInterval(intervalId);
+	intervalId = setInterval(cb, 1000);
+};
+
+GmCXt.handleUpdatePlayerMode = function(d) {
+	GmCXt.initPlayerModeFeatures(d.showPlayer, d.isMiniPlayer, d.playerMode);
+	GmCXt.setPanelTopLeft();
+
+	if (GmCXt.isWBMicroPlayer() || GmCXt.isMicroPlayer()) {
+		GmCXt.addDragMicroPlayerFunction();
+		mg$(".mgPlayerJSTest_panel").removeClass('mgPlayerJSTest_mobile-view');
+	}
+};
+
+GmCXt.showDuctTapeAlert = function(data) {
+	var options = {
+		title: "",
+		description: GmCXt.updateOrgAndAddSignature(GmCXt.replaceVariableWithValue(data.desc)),
+	};
+
+	GmCXt.alert(options).show();
+	mg$(".mgPlayerJSTest_popup-content-info").css('max-height', "250px");
+	mg$(".mgPlayerJSTest_popup-content-info").css('overflow', "auto");
+	mg$(".mgPlayerJSTest_popup-content-info *").css('width', "auto");
+};
+
+GmCXt.startAuto = function(app) {
+	GmCXt.auto.init(app);
+};
+
+GmCXt.initSfdc = function(m) {
+
+	if (GmCXt.FT.isPlayer) {
+
+		var userData = GmCXt.parseJSON(m);
+		userData.user = GmCXt.validateDataModel(userData.user, GmCXt.model.user);
+
+		GmCXt.isSFDCApp = true;
+
+		var session = false;
+
+		if (!GmCXt.user) {
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:user_signed_in', {
+				data: userData
+			});
+			session = true;
+		} else if (GmCXt.user.user_email === userData.user.user_email) {
+			session = true;
+		}
+
+		var m = {
+			action: "mgPlayerJSTest_action:sfdc_app_acknowledgement",
+			data: {
+				session: session
+			}
+		};
+		GmCXt.msgToThisWin(m);
+
+		m.action = "gmPlayerXt_action:sfdc_app_acknowledgement";
+		GmCXt.msgToThisWin(m);
+	}
+};
+
+GmCXt.playSfdcTour = function(data) {
+	if (GmCXt.FT.isPlayer) {
+		var data = GmCXt.parseJSON(data);
+		data.tour = GmCXt.validateDataModel(data.tour, GmCXt.model.guide);
+		GmCXt.requestHandler.playGuide(data);
+	}
+};
+
+GmCXt.initSnow = function(m) {
+	if (GmCXt.isPlayer() && GmCXt.serviceNow()) {
+		GmCXt.snowApp = true;
+
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:snow_sign_in', m);
+
+		message = {
+			action: 'mgPlayerJSTest_action:snow_app_acknowledgement'
+		};
+		GmCXt.msgToThisWin(message);
+	}
+};
+
+GmCXt.handlePositionToolbar = function(event) {
+	var message = event.data;
+
+	if (message.data.position === 'top') {
+		mg$('.mgPlayerJSTest_play-pause-toolbar').css({
+			top: '5px'
+		});
+	} else if (message.data.position === 'bottom') {
+		var bpos = mg$(window).height() - 141;
+		mg$('.mgPlayerJSTest_play-pause-toolbar').css({
+			top: bpos + 'px'
+		});
+	}
+};
+
+GmCXt.handleUpdateCdnSign = function(event) {
+	var message = event.data;
+
+	GmCXt.updateGlobalUser(message.data.user);
+
+	GmCXt.updateGmConfig();
+	GmCXt.showWidget();
+	GmCXt.showChatIcon();
+
+	GmCXt.reloadFailedImages();
+};
+
+GmCXt.handleEventBeaconClick = function(event) {
+	var message = event.data;
+	if (message.data && message.data.tourId) {
+
+		var d = {
+			tour_id: message.data.tourId
+		};
+
+		GmCXt.callApi(d, "tour")
+			.then(function(tour) {
+				GmCXt.playLiveTour(tour, 0, 'beaconTour', false, 'live');
+			});
+	}
+};
+
+GmCXt.handleStartTest = function(event) {
+	var message = event.data;
+
+	var checkCurrentDomain = GmCXt.requestHandler.checkTestMeDomain(message.data);
+	if (checkCurrentDomain) {
+		GmCXt.log(58, "DOMAIN MATCHED, START MyTest");
+		GmCXt.requestHandler.startToolTestMe(message.data);
+	} else {
+		GmCXt.log(58, "DOMAIN DID NOT MATCH, show REDIRECT message");
+		GmCXt.requestHandler.redirectToUrl(message.data);
+	}
+};
+
+GmCXt.handleOpenApp = function(event) {
+	var message = event.data;
+	var byPassRoute = (message.data && message.data.byPassRoute) ? "byPassRoute" : null;
+	GmCXt.openAppPanel(byPassRoute);
+};
+
+GmCXt.handlePreviewTooltip = function(event) {
+	var message = event.data;
+
+	GmCXt.closeAppPanel();
+	GmCXt.hideTips();
+	GmCXt.smartTipPreviewOn = true;
+
+	GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:smarttip_preview_on');
+
+	GmCXt.timeout(function() {
+		GmCXt.renderSmartTips(message.data, true);
+	}, 0);
+};
+
+GmCXt.handlePreviewBeacon = function(event) {
+	var message = event.data;
+
+	GmCXt.closeAppPanel();
+	GmCXt.hideTips();
+
+	GmCXt.timeout(function() {
+		GmCXt.renderBeacons(message.data, true);
+	}, 0);
+};
+
+GmCXt.handleAppInit = function(event) {
+
+	if (event.data && event.data.organization) {
+		GmCXt.organization = event.data.organization;
+	}
+
+	if (GmCXt.isExcludeDomain()) {
+		return;
+	}
+
+	GmCXt.initialization.sidePanel = true;
+
+	if (!GmCXt.mgActiveLang && GmCXt.organization && !GmCXt.isEmpty(GmCXt.organization) &&
+		GmCXt.organization.admin_settings.language_settings &&
+		GmCXt.organization.admin_settings.language_settings.default) {
+		var l = GmCXt.organization.admin_settings.language_settings.default.language;
+
+		if (GmCXt.browserLang && GmCXt.browserLang !== l &&
+			GmCXt.checkLangExist(GmCXt.organization.admin_settings.language_settings.translations, GmCXt.browserLang)) {
+			l = GmCXt.browserLang;
+		}
+		GmCXt.getAllLabels(l);
+	}
+
+	var d = GmCXt.getCurrentURL();
+	d.pageTitle = GmCXt.pageTitle;
+
+	if (GmCXt.FT.isPlayer) {
+		d.baseUrl = GmCXt.conf.baseUrl;
+		d.orgSecKey = window.guideMe ? window.guideMe.orgkey : "";
+		d.myGuideOrgKey = window.myGuideOrgKey;
+	}
+
+	GmCXt.storage().get(['desktopReq']).then(function(st) {
+		if (st.desktopReq) {
+			d.isDesktopReq = true;
+			GmCXt.deskReq = st.desktopReq;
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:connected_from_app', {
+				data: st.desktopReq
+			});
+		}
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:init_side_panel_app', d);
+	});
+};
+
+GmCXt.handleBeaconPosition = function(event) {
+	var message = event.data;
+
+	GmCXt.closeAppPanel();
+	GmCXt.hideSmartTips();
+	GmCXt.hideBeacons();
+	GmCXt.stepReq = message;
+	GmCXt.storage().set({
+		'beaconReq': message
+	}).then(function() {
+		GmCXt.requestHandler.selectBeaconPosition(message);
+	});
+};
+
+GmCXt.getUserRolesLXP = function(params) {
+	var d = window.__ED__;
+
+	var profileData = {
+		onboardingCompleted: 'no',
+		orgAnnualSubscriptionPaid: 'no',
+		countryCode: ''
+	};
+
+	// Get LXP user profile information
+	if (d && d.profile && Object.keys(d.profile).length) {
+		profileData = Object.assign({}, profileData, d.profile);
+	}
+
+	var rolesObject = {
+		isManager: 'manager',
+		isMkpAdmin: 'mkpAdmin',
+		isOrgAdmin: 'orgAdmin',
+		isSuperAdmin: 'superAdmin',
+		isAdmin: 'admin'
+	};
+
+	function filterRoles(roles) {
+		const filteredRoles = roles.filter(role => {
+			return role !== 'member' && !Object.values(rolesObject).includes(role);
+		});
+		return filteredRoles.join(',');
+	}
+
+	var role = '';
+	for (var l in rolesObject) {
+		if (d[l]) {
+			role = role.length > 0 ? role + ',' + rolesObject[l] : rolesObject[l];
+		}
+	}
+
+	if (d.roles && d.roles.length > 1) {
+		role = filterRoles(d.roles) ? role + ',' + filterRoles(d.roles) : role;
+	}
+	if (role.length === 0) role = 'member';
+
+	profileData.role = role;
+
+	if (d.onboardingCompleted) {
+		profileData.onboardingCompleted = 'yes';
+	}
+
+	if (d.orgAnnualSubscriptionPaid) {
+		profileData.orgAnnualSubscriptionPaid = 'yes';
+	}
+
+	profileData.countryCode = d.countryCode;
+
+	params.profile = JSON.stringify(profileData);
+};
+
+GmCXt.updateUserData = function(params) {
+	var d = null;
+	var subdomain = "";
+
+	if (GmCXt.urlParts.host) {
+		subdomain = GmCXt.urlParts.host.split('.')[0];
+		if (GmCXt.urlParts.pathname.indexOf('admin') !== -1) {
+			subdomain = 'admin' + subdomain;
+		}
+	}
+
+	if (GmCXt.isLXP()) {
+
+		d = window.__ED__;
+		GmCXt.getUserRolesLXP(params);
+
+	} else {
+		d = window.__MG__;
+	}
+
+	if (d && d.email) {
+
+		if (GmCXt.isLXP()) {
+
+			var emailParts = d.email.split('@');
+			params.email_id = emailParts[0] + '+' + subdomain + '@' + emailParts[1];
+
+		} else {
+			params.email_id = d.email;
+		}
+		params.first_name = d.fullName;
+		params.last_name = "";
+
+	} else if (!GmCXt.isWBC()) {
+
+		params.email_id = 'guest-' + subdomain + '@myguide.com';
+		params.first_name = 'guest-' + subdomain;
+	}
+};
+
+GmCXt.loginUsingAuthKey = function() {
+
+	if (GmCXt.loginUsingAuthKeyTime && ((GmCXt.loginUsingAuthKeyTime + 30000) > Date.now())) {
+		return;
+	}
+
+	GmCXt.loginUsingAuthKeyTime = Date.now();
+
+	var l = 0;
+	readMyGuideOrgKey();
+
+	function readMyGuideOrgKey() {
+
+		var myGuideOrgKey = window.myGuideOrgKey;
+
+		if (myGuideOrgKey) {
+			var jwOrgKey = GmCXt.getOrgKeyFromJwToken(myGuideOrgKey);
+			GmCXt.log(21, "GOT myGuideOrgKey" + myGuideOrgKey);
+
+			processLogin(jwOrgKey);
+		} else {
+			GmCXt.timeout(function() {
+				if (!GmCXt.user)
+					readMyGuideOrgKey();
+			}, 1000);
+		}
+	}
+
+	function callSigninApi(jwOrgKey) {
+		var params = {
+			myGuideOrgKey: myGuideOrgKey,
+		};
+
+		GmCXt.updateUserData(params);
+		GmCXt.log(21, "SIGN-IN user info", params);
+
+		//sign in using window.myGuideOrgKey
+		GmCXt.api.userApiKeySignin(params).then(function(response) {
+
+			if (response.error) {
+				GmCXt.sendMessageToApp('mgPlayerJSTest_action:user_signin_org_key_failed', response);
+				GmCXt.log(21, "ERROR: User signin failed", response.message[0]);
+				return;
+			}
+
+			response.forceLogin = true;
+
+			if (GmCXt.reloginInterval) {
+				clearInterval(GmCXt.reloginInterval);
+			}
+
+			var user = response.data.user;
+
+			if (GmCXt.isSumtotal() && user.user_email.indexOf('anonymous-') !== -1) { // TODO: GmCXt.isSumtotal() condition need to update as admin per admin setting - enable_anonymous_user_preference
+				var data = {
+					email_id: params.email_id,
+					organization_id: user.organization_id
+				};
+				GmCXt.api.getAnonymousUserPrefrence(data, user.accesstoken).then(function(prefrence) {
+
+					if (!prefrence.error) {
+						response.data.user.signin_user_email = params.email_id;
+						response.data.user.settings = prefrence.data.settings;
+					}
+					GmCXt.sendMessageToApp('mgPlayerJSTest_action:user_signed_in', response);
+				});
+			} else {
+				GmCXt.sendMessageToApp('mgPlayerJSTest_action:user_signed_in', response);
+			}
+
+			GmCXt.storage().set({
+				myGuideKey: jwOrgKey
+			});
+
+		}).catch(function(e) {
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:user_signin_org_key_failed', e);
+			GmCXt.storage().remove(['myGuideKey']);
+			GmCXt.log(21, "ERROR: exception, user signin failed", e);
+		});
+	}
+
+	function processLogin(jwOrgKey) {
+		GmCXt.storage().get(['myGuideKey', 'user']).then(function(st) {
+
+			if ((GmCXt.isLXP() && st.user && st.user.val) || st.user) {
+
+				var user = st.user;
+
+				if (st.user.val) {
+					user = st.user.val;
+				}
+
+				if (jwOrgKey === st.myGuideKey || user.ssoSignInTrue) {
+
+					GmCXt.log(21, "FOUND USER SESSION for this org key");
+					return;
+				}
+			}
+
+			callSigninApi(jwOrgKey)
+
+		}).catch(function(error) {
+
+			GmCXt.log(21, "ERROR: Failed to retrieve storage data - Retrying Login", error);
+
+			callSigninApi(jwOrgKey);
+
+		});
+	}
+};
+
+GmCXt.pauseGuide = function() {
+
+	if (!GmCXt.playerI) return;
+
+	var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+	if (step && step.step_settings.onPageClickNext === true) {
+
+		GmCXt.playerI.guideState = 'pause';
+		GmCXt.playerI.pausedOn = GmCXt.urlParts.host + GmCXt.urlParts.pathname;
+
+		GmCXt.storage().set({
+			'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+			'guide_play_event': GmCXt.guidePlayTracker
+		});
+
+		if (GmCXt.tourPlayerI) {
+			GmCXt.tourPlayerI.guideState = 'pause';
+			GmCXt.tourPlayerI.closeStep();
+		}
+
+		GmCXt.storage().get(['resumeWinDisplayed']).then(function(st) {
+
+			if (!st.resumeWinDisplayed) {
+				mg$('.mgPlayerJSTest_play-pause-toolbar').show();
+				mg$('#mgPlayerJSTest_play-pause-toolbar-title').html(GmCXt.label.resumeGuide);
+				mg$('#mgPlayerJSTest_play-pause-resume-message').html(GmCXt.label.resume);
+				GmCXt.hideWidgetIcon();
+				GmCXt.setResumeWinDisplayed(true);
+			}
+		});
+	}
+};
+
+GmCXt.startTourFromDesktopApp = function() {
+
+	GmCXt.log(33, 'Tour invoked: ' + GmCXt.deskReq.testCaseId);
+	var d = {
+		tour_id: GmCXt.deskReq.testCaseId,
+		isDeskReq: true
+	};
+
+	GmCXt.getTourDetails(d).then(function(tour) {
+		GmCXt.log(33, "Tour received", tour);
+		GmCXt.playLiveTour(tour, 0, 'doitforme', false, 'live');
+	});
+};
+
+GmCXt.isTestMeOn = function(o) {
+
+	if (o && (o.expectedTime || o.tour))
+		return true;
+	else
+		return false;
+};
+
+GmCXt.onSidePanelInit = function(m) {
+
+	GmCXt.refreshTime = m.data.refreshTime;
+	GmCXt.lastTimeStampSync = m.data.lastTimeStampSync;
+
+	GmCXt.updateGlobalUser(m.data.user);
+
+	GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:save_user_in_iframes", {
+		user: GmCXt.user
+	});
+
+	GmCXt.updateGlobalOrg(m.data.organization);
+
+	GmCXt.activeAppId = m.data.activeAppId;
+	GmCXt.appList = m.data.appList;
+
+	GmCXt.externalAppId = GmCXt.appList['app:' + GmCXt.activeAppId].external_id;
+
+	GmCXt.userPrefLang = m.data.userPrefLang;
+
+	var as = GmCXt.getAppSetting();
+	if (GmCXt.organization && !GmCXt.isEmpty(GmCXt.organization) && as) {
+		GmCXt.orgBucket = GmCXt.organization.bucket;
+		var s = GmCXt.organization.settings;
+		var data = {
+			userLabels: s.userLabels,
+			chatLabels: as.chatLabels
+		};
+
+		if (GmCXt.isDefined(as.playAudio)) {
+			GmCXt.FT.audio = as.playAudio;
+		} else if (GmCXt.isDefined(GmCXt.organization.settings.playAudio)) {
+			GmCXt.FT.audio = GmCXt.organization.settings.playAudio;
+		} else {
+			GmCXt.FT.audio = true;
+		}
+
+		GmCXt.updateCustomLabels(data);
+	}
+
+	if (m.data.reset) {
+		GmCXt.log(21, "Reset Beacon and tooltip data");
+		GmCXt.clearBeaconsAndTooltips();
+		GmCXt.resetBeaconsandTooltips();
+	}
+
+	GmCXt.updateGmConfig();
+	GmCXt.log(21, "Content script initialisation completed", m.data);
+
+	GmCXt.processActiveReq(m);
+};
+
+GmCXt.processActiveReq = function(m) {
+
+	GmCXt.log(33, 'PROCESS ACTIVE REQUEST FROM PREVIOUS PAGE');
+
+	var items = ['mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY', 'SHOW_SURVEY', 'stepReq',
+		'testMe', 'linkClickOnStep', 'guide_play_event',
+		'loopingCompleted', 'tourActivity', 'playedTour', 'trackPageVisit', 'captureStepCounter',
+		'testAuto', 'guide_play_event', 'desktopReq', 'trackingTours', 'isRecording', 'replaceElReq', 'tooltipTrackData'
+	];
+
+	GmCXt.storage().get(items).then(function(st) {
+
+		GmCXt.tooltipTrackData = st.tooltipTrackData ? st.tooltipTrackData : [];
+
+		if (GmCXt.isElectron() && !GmCXt.isEmpty(st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY)) {
+			st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY = null;
+			GmCXt.cleanPlayer();
+		}
+
+		if (st.captureStepCounter) {
+			GmCXt.captureStepCounter = st.captureStepCounter;
+		}
+
+		if (st.desktopReq) {
+			GmCXt.deskReq = st.desktopReq;
+		}
+
+		if (st.trackPageVisit) {
+			GmCXt.trackerV1.sendPayloadEventCall(GmCXt.parseJSON(st.trackPageVisit));
+			GmCXt.storage().remove(['trackPageVisit']);
+		}
+
+		if (st.replaceElReq) {
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:FindReplaceElReq", {
+				step: st.replaceElReq
+			});
+			GmCXt.storage().remove(['replaceElReq']);
+		}
+
+		if (st.testAuto) {
+			GmCXt.auto.resumeState(st.testAuto);
+			GmCXt.auto.startWatcher();
+			if (st.testAuto.playNext) {
+				GmCXt.auto.next();
+				return;
+			} else if (st.testAuto.shouldRedirectToTourPage) {
+				GmCXt.getContextGuides("Test Auto");
+				GmCXt.auto.onRedirectToTourPage();
+			} else if (st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY) {
+				GmCXt.playerI = st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY;
+				if (!GmCXt.tourPlayerI) {
+					GmCXt.tourPlayerI = GmCXt.tourPlayer();
+				}
+				if (st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.isPageReloadByLastStep) {
+					GmCXt.playerI.isPageReloadByLastStep = false;
+					GmCXt.tourPlayerI.stop();
+					return;
+				} else if (st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.playNextBranch) {
+					GmCXt.playerI.playNextBranch = false;
+					GmCXt.tourPlayerI.playBranchStepInAutomation(GmCXt.playerI.currentBranchStep);
+					return;
+				} else if (st.testAuto.automationInProgress && st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.lastPlayedStepId) {
+					var nextStepId = GmCXt.getTail(st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.lastPlayedStepId, st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.playStructure);
+					if (nextStepId) {
+						GmCXt.playLiveTour(st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.tour, nextStepId, 'automation', false, 'live');
+					}
+					return;
+				}
+				return;
+			}
+		}
+
+		if (GmCXt.isPlayer()) {
+			GmCXt.tourActivity = st.tourActivity || {};
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:update_tour_activity", {
+				tourActivity: GmCXt.tourActivity
+			});
+
+			GmCXt.playedTour = st.playedTour || [];
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:update_played_tour", {
+				playedTour: GmCXt.playedTour
+			});
+		}
+
+		if (GmCXt.isLXP()) {
+			GmCXt.setLangFromCS(GmCXt.getLXPLang());
+		} else if (!GmCXt.userPrefLang) {
+			GmCXt.setLangFromCS(GmCXt.browserLang);
+		}
+
+		if (GmCXt.isExtension() && st.stepReq) {
+			GmCXt.handleActiveStepReq(st);
+		} else if (GmCXt.isDomainInActiveApp()) {
+			GmCXt.processGuides(st);
+		}
+
+		if (GmCXt.user) {
+			if (GmCXt.isClientJs()) {
+				GmCXt.processLastActionTime();
+			}
+		}
+
+		// if (GmCXt.user && GmCXt.inPlayer && m && m.data && m.data.triggerSync) {
+		// 	if (GmCXt.isClientJs()) {
+		// 		GmCXt.log(70, "TRIGGER PLAYER UPDATE " + new Date());
+		// 		GmCXt.checkTimeStampUpdate();
+		// 	} else {
+		// 		GmCXt.sendMessageToBackgroundService({
+		// 			action: "mgPlayerJSTest_action:check_time_stamp_update"
+		// 		});
+		// 	}
+		// }
+
+	});
+};
+
+GmCXt.updateCustomLabels = function(data) {
+	var userLabels = data.userLabels;
+	var chatLabels = data.chatLabels;
+	var enLabels = GmCXt.getEngLabels();
+	for (var property in userLabels) {
+		if (GmCXt.label.hasOwnProperty(property) && (userLabels[property] !== enLabels[property])) {
+			GmCXt.label[property] = userLabels[property] || GmCXt.label[property];
+		}
+	}
+
+	for (var property in chatLabels) {
+		if (GmCXt.label.hasOwnProperty(property)) {
+			GmCXt.label[property] = chatLabels[property] || GmCXt.label[property];
+		}
+	}
+};
+
+GmCXt.processGuides = function(d) {
+
+	if (GmCXt.checkPrecedence()) {
+
+		GmCXt.log(21, "Precedence check passed");
+		var tourAppId = d.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY && d.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.tour.application_id || d.testMe && d.testMe.message && d.testMe.message.tour.application_id || d.testMe && d.testMe.tour && d.testMe.tour.application_id;
+		var pubEnv = d.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY && d.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.tour.tour_settings.app_publish_env;
+		if ((tourAppId === GmCXt.activeAppId) ||
+			(GmCXt.isMirrorApp() && GmCXt.getBaseAppId() === GmCXt.activeAppId)) {
+			//ON APP ID MATCH
+			if (GmCXt.isTestMeOn(d.testMe)) {
+				GmCXt.processTestMe(d.testMe);
+			} else if (GmCXt.checkDomainInPublishedEnv(pubEnv) || !GmCXt.isPlayer()) {
+				GmCXt.runPlayer(d);
+			}
+		}
+
+		if (GmCXt.isPlayer() || d.testAuto) {
+
+			if (d.SHOW_SURVEY && d.SHOW_SURVEY.tourId && !d.linkClickOnStep) {
+				GmCXt.showSurveyScreen({
+					tourId: d.SHOW_SURVEY.tourId,
+					version: d.SHOW_SURVEY.version
+				});
+			}
+
+			GmCXt.getContextGuides("Process Guides");
+		}
+
+		if (!GmCXt.tourPlayerI && GmCXt.client.isUrlTour) {
+			GmCXt.executeUrlTour();
+		}
+
+		if (GmCXt.isPlayer() && GmCXt.getAppSetting('keep_player_panel_open') && !GmCXt.playerI) {
+			GmCXt.openAppPanel();
+		}
+	}
+};
+
+GmCXt.executeUrlTour = function() {
+
+	if (GmCXt.client.executed) return;
+
+	GmCXt.client.executed = true;
+	var initiator = 'urlTour';
+	if (GmCXt.client.automation) {
+		initiator = 'doitforme';
+	}
+	GmCXt.getTourAndPlay(GmCXt.client.tourId, initiator, 'urlTour');
+};
+
+GmCXt.processTestMe = function(d) {
+
+	GmCXt.testMe = d;
+
+	if (d.expectedTime)
+		GmCXt.requestHandler.startTestMeWatcher();
+	else if (d.tour)
+		GmCXt.requestHandler.startToolTestMe(d);
+};
+
+GmCXt.isActiveStepReq = function() {
+	var currentTime = (new Date()).getTime();
+	if (GmCXt.stepReq && (currentTime - GmCXt.stepReq.time) < 60000)
+		return true;
+	else
+		return false;
+};
+
+GmCXt.handleActiveStepReq = function(st) {
+
+	function gotTabId(tabId) {
+		if (req.tabId === tabId) {
+			GmCXt.stepReq = req;
+
+			if (inlineReq) {
+				GmCXt.requestHandler.createInlineStep();
+			} else if (tooltipReq) {
+				GmCXt.requestHandler.createSmartTipStep();
+			}
+
+		} else {
+			GmCXt.processGuides(st);
+		}
+	}
+
+	if (GmCXt.isDomainInActiveApp() && st.stepReq.appId === GmCXt.activeAppId) {
+		var req = st.stepReq;
+		var inlineReq = (req.action === 'mgPlayerJSTest_action:create_step,type:inline');
+		var tooltipReq = (req.action === 'mgPlayerJSTest_action:create_step,type:smartTip');
+
+		if (inlineReq || tooltipReq) {
+			var m = {
+				action: 'mgPlayerJSTest_action:get_current_tab_id'
+			};
+			GmCXt.sendMessageToBackgroundService(m, gotTabId);
+		} else {
+			GmCXt.processGuides(st);
+		}
+	} else {
+		GmCXt.storage().remove(['stepReq']);
+	}
+};
+
+GmCXt.runPlayer = function(st) {
+
+	var pi = st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY;
+
+	if (st.loopingCompleted && pi) {
+		pi = null;
+	}
+
+	var next = function() {
+
+		if (!st.linkClickOnStep) {
+			GmCXt.invokeLiveTour();
+		} else {
+			GmCXt.storage().remove(['linkClickOnStep']);
+		}
+	};
+
+	GmCXt.guidePlayTracker = st.guide_play_event || {};
+
+	if (pi) {
+		GmCXt.log(33, 'Page reloaded. Running player.');
+
+		GmCXt.playerI = st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY;
+
+		GmCXt.storage().set({
+			'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+			'guide_play_event': st.guide_play_event
+		});
+
+		GmCXt.isPageReloaded = true;
+
+		var tour = GmCXt.playerI.tour;
+		var ss = tour.tour_settings.segment_groups;
+
+		if (GmCXt.isPlayer() && GmCXt.organization.admin_settings.guide_segmentation && ss.length > 0) {
+			GmCXt.checkGuidesBasedOnSegment([tour], function(t) {
+				if (!GmCXt.isEmpty(t)) {
+					next();
+				}
+			}, "guidePlay");
+		} else {
+			next();
+		}
+
+	} else if (!GmCXt.isEmpty(GmCXt.guidePlayTracker)) {
+		GmCXt.trackGuide();
+	}
+};
+
+GmCXt.getContextGuides = function(eventType) {
+
+	if (!GmCXt.checkPrecedence()) {
+		return;
+	}
+
+	if (GmCXt.isDomainInActiveApp()) {
+
+		if (GmCXt.organization || GmCXt.onPrem()) {
+			var options = {
+				url: GmCXt.getUrl(),
+				organization_id: GmCXt.organization.organization_id,
+				title: GmCXt.pageTitle
+			};
+
+			if (GmCXt.getLXPLang()) {
+				options.language = GmCXt.getLXPLang();
+			}
+
+			GmCXt.callApi(options, "tour/contextual").then(gotCTours);
+		}
+	} else {
+		GmCXt.log(1, "ERROR: Domain not configured in any app");
+	}
+
+	function gotCTours(tours) {
+
+		GmCXt.log(1, "Guides on this domain", tours);
+
+		if (GmCXt.isPlayer() && !GmCXt.isEmpty(tours)) {
+			tours = GmCXt.filterScheduleTours(tours);
+		}
+
+		GmCXt.pageTours = tours;
+
+		if (GmCXt.isAutomationRunning()) {
+			var automatedCurrentTour = GmCXt.getAutomatedCurrentTour();
+			GmCXt.log(37, "Automation running for guide ", automatedCurrentTour);
+			tours = tours.filter((tour) => tour.tour_id === automatedCurrentTour.tour_id);
+			GmCXt.log(37, "After automation filter Context tours left ", tours);
+		}
+
+		GmCXt.renderBeacons(GmCXt.filterBeaconGuides(tours));
+
+		var rulesElementTooltips = GmCXt.tooltipTours.filter(function(tour) {
+			return tour.tour_settings.watchRulesElement === true;
+		});
+
+		var removeInvalidTooltips = rulesElementTooltips.filter(function(tour) {
+			return !tours.includes(tour.tour_id);
+		});
+
+		for (var i = 0; i < removeInvalidTooltips.length; i++) {
+			var invalidTour = removeInvalidTooltips[i];
+			GmCXt.removeTooltips(invalidTour);
+		}
+		GmCXt.renderSmartTips(GmCXt.filterSmartTipGuides(tours));
+
+		GmCXt.notificationGuides = mg$.extend([], GmCXt.filterNotifications(tours));
+
+		if (!GmCXt.stopNotification(false) || GmCXt.isAutomationRunning()) {
+			GmCXt.showNotifications(false);
+		}
+
+		if (GmCXt.trackerUtil.featureTracking) {
+			GmCXt.validateFtGuideRules(GmCXt.filterFtTags(tours));
+		}
+		if (GmCXt.trackerUtil.pageTracking) {
+			GmCXt.startPageTracker();
+		}
+
+		GmCXt.sendMessageToApp("mgPlayerJSTest_action:refresh_current_page", {
+			eventType: eventType
+		});
+	}
+};
+
+GmCXt.filterTrackingGuides = function(tours) {
+	return tours.filter(function(t) {
+		return GmCXt.isFeatureTags(t);
+	});
+};
+
+GmCXt.renderBeacon = function(tour, isPreview) {
+
+	if (!(tour && tour.tour_id)) return;
+
+	var renderB = function(_t) {
+
+		var settings = _t.tour_settings;
+		var beaconSettings = settings.beacon;
+		var data = {
+			stepData: beaconSettings.selectedDOMElement,
+			beaconSettings: beaconSettings,
+			tour: _t,
+			tourId: _t.tour_id,
+			tourTitle: _t.tour_title,
+			isPreview: isPreview,
+			timeout: Date.now() + GmCXt.getOrgStepWaitTime()
+		};
+
+		if (data.stepData && data.stepData.meta.inTopWindow) {
+			GmCXt.log(49, "FINDING BEACON only in TOP window");
+
+			GmCXt.highlighter.queueBeacon({
+				data: data
+			});
+		} else {
+			// Element in iframe
+			if (data.stepData.criteria.precision_level === "High" && data.stepData.iframeAttrs) {
+
+				var findInIframe = 3000;
+				data.timeout = Date.now() + findInIframe;
+
+				GmCXt.log(49, "FINDING BEACON only in TARGET frame");
+				GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:show_beacon_on_dom_element:target_frame_only', data);
+
+				GmCXt.beaconIframe[_t.tour_id].timeout = GmCXt.timeout(function() {
+					if (!GmCXt.beaconIframe[_t.tour_id].frameId) {
+						GmCXt.log(49, "TIMED OUT in Target Frame..\nFINDING BEACON in all frames");
+						data.timeout = Date.now() + GmCXt.getOrgStepWaitTime() - findInIframe;
+						GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:show_beacon_on_dom_element', data);
+					}
+				}, findInIframe + 500);
+			} else {
+				GmCXt.log(49, "FINDING BEACON in all frames");
+				GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:show_beacon_on_dom_element', data);
+			}
+		}
+	};
+
+	if (GmCXt.getObjectSize(tour.tour_settings.beacon)) {
+		renderB(tour);
+	}
+};
+
+GmCXt.validateBeaconGuideRules = function(tours, isPreview, clickEvent) {
+
+	GmCXt.log(1, "Beacon tours", tours);
+
+	function queueRule(data, ruleDelayTime) {
+		GmCXt.timeout(function() {
+			GmCXt.ruleEngine.queue(data);
+		}, ruleDelayTime);
+	}
+
+	for (var i = 0, j = tours.length; i < j; i++) {
+		var tour = tours[i];
+		var tid = parseInt(tour.tour_id);
+
+		GmCXt.log(48, "VALIDATING GUIDE RULES for: ", GmCXt.tourLog(tour));
+
+		if (GmCXt.beaconIframe[tid] && GmCXt.beaconIframe[tid].timeout) {
+			clearTimeout(GmCXt.beaconIframe[tid].timeout);
+		}
+		GmCXt.beaconIframe[tid] = {};
+		var beaconNotOnScreen = ((GmCXt.beaconsOnScreen.indexOf(tid) < 0) || isPreview);
+
+		if (tour.is_published &&
+			(beaconNotOnScreen || tour.tour_settings.removeBeaconRulesInvalid || GmCXt.checkRuleOnPageClick(clickEvent, tour))) {
+
+			var waitTime = tour.tour_settings.ruleDelayTime || 0;
+			var timeout = GmCXt.t.ruleTimeOut25ms;
+			if (GmCXt.checkTourCreatedBefore(tour.tour_settings, 2021013001)) {
+				timeout = GmCXt.t.ruleTimeOut10s;
+			}
+
+			if (tour.ruleValidated && !waitTime) { // useful in json player when the tours are returned after validation
+				onMatch({
+					tour: tour,
+					valid: true
+				});
+			} else {
+				var data = {
+					rules: tour.tour_settings.rules,
+					tour: tour,
+					timeoutVal: timeout,
+					timeout: timeout,
+					cb: onMatch,
+					isTour: true,
+					initiator: 'beacon'
+				};
+
+				queueRule(data, waitTime);
+			}
+		}
+	}
+
+	function onMatch(result) {
+		if (result.valid) {
+
+			delete result.tour.ruleValidated;
+
+			GmCXt.renderBeacon(result.tour, isPreview);
+		} else if (isPreview) {
+			GmCXt.openAppPanel("byPassRoute");
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:beacon_rules_donot_match");
+		} else {
+			GmCXt.removeBeaconElement(result.tour);
+		}
+	}
+};
+
+GmCXt.renderBeacons = function(tours, isPreview, clickEvent) {
+
+	GmCXt.log(48, "Skip already loaded beacons", GmCXt.beaconsOnScreen);
+
+	var segmentCb = function(t) {
+
+		if (!GmCXt.isEmpty(t)) {
+			GmCXt.validateBeaconGuideRules([t], isPreview, clickEvent);
+		}
+	};
+
+	if (GmCXt.organization.admin_settings.guide_segmentation && !isPreview) {
+		GmCXt.checkGuidesBasedOnSegment(tours, segmentCb, "beaconSeg");
+	} else {
+		GmCXt.validateBeaconGuideRules(tours, isPreview, clickEvent);
+	}
+};
+
+GmCXt.removeBeaconElement = function(t) {
+	if (GmCXt.beaconsOnScreen.indexOf(parseInt(t.tour_id)) >= 0) {
+		GmCXt.log(48, "Rules Failed. Removing Beacon for " + t.tour_title, t);
+		GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:remove_beacon_job", {
+			tourId: t.tour_id
+		});
+	}
+};
+
+GmCXt.validateSmartTipGuideRules = function(tours, isPreview, clickEvent) {
+
+	function queueRule(data, ruleDelayTime) {
+		GmCXt.timeout(function() {
+			GmCXt.log(42, "QUEUE TOUR RULE: " + GmCXt.tourLog(tour));
+			GmCXt.ruleEngine.queue(data);
+		}, ruleDelayTime);
+	}
+
+	for (var i = 0, m = tours.length; i < m; i++) {
+		var tour = tours[i];
+
+		GmCXt.log(42, "VALIDATING GUIDE RULES for: ", GmCXt.tourLog(tour));
+
+		var tooltipsLoaded = (GmCXt.onScreenTooltipGuideIds.indexOf(tour.tour_id) !== -1);
+
+		if (tour.is_published &&
+			(!tooltipsLoaded ||
+				tour.tour_settings.watchRulesElement ||
+				GmCXt.checkRuleOnPageClick(clickEvent, tour)
+			)) {
+
+			var waitTime = tour.tour_settings.ruleDelayTime || 0;
+			var timeout = GmCXt.t.ruleTimeOut25ms;
+			if (GmCXt.checkTourCreatedBefore(tour.tour_settings, 2021013001)) {
+				timeout = GmCXt.t.ruleTimeOut10s;
+			}
+
+			if (tour.ruleValidated && !waitTime) { // useful in json player when the tours are returned after validation
+
+				onMatch({
+					tour: tour,
+					valid: true
+				});
+			} else {
+				var data = {
+					rules: tour.tour_settings.rules,
+					tour: tour,
+					cb: onMatch,
+					timeoutVal: timeout,
+					timeout: timeout,
+					isTour: true,
+					initiator: 'smartTip'
+				};
+
+				queueRule(data, waitTime);
+			}
+
+		} else {
+			GmCXt.log(42, "Skip Tooltip: ", GmCXt.tourLog(tour));
+		}
+	}
+
+	function onMatch(result) {
+		GmCXt.onTooltipMatch(result, isPreview);
+	}
+};
+
+GmCXt.checkRuleOnPageClick = function(clickEvent, t) {
+	if (clickEvent && GmCXt.organization.admin_settings.efficient_rule_mode && t.tour_settings.ruleCheckOnClick) {
+		return true;
+	}
+	return false;
+};
+
+GmCXt.validateFtGuideRules = function(tours) {
+
+	for (var i = 0, m = tours.length; i < m; i++) {
+		var tour = tours[i];
+
+		GmCXt.log(16, "VALIDATING GUIDE RULES for: ", GmCXt.tourLog(tour));
+
+		if (tour.is_published) {
+			var waitTime = tour.tour_settings.ruleDelayTime || 0;
+
+			if (tour.ruleValidated && !waitTime) { // useful in json player when the tours are returned after validation
+				GmCXt.onTagsMatch({
+					tour: tour,
+					valid: true
+				});
+			} else {
+				var data = {
+					rules: tour.tour_settings.rules,
+					tour: tour,
+					cb: GmCXt.onTagsMatch,
+					timeoutVal: GmCXt.t.ruleTimeOut25ms,
+					timeout: GmCXt.t.ruleTimeOut25ms,
+					isTour: true,
+					initiator: 'ftags'
+				};
+				queueRule(waitTime, tour, data);
+			}
+
+		} else {
+			GmCXt.log(16, "Skip Tag: ", GmCXt.tourLog(tour));
+		}
+	}
+
+	function queueRule(waitTime, tour, data) {
+		GmCXt.timeout(function() {
+			GmCXt.log(16, "QUEUE TOUR RULE: " + GmCXt.tourLog(tour));
+			GmCXt.ruleEngine.queue(data);
+		}, waitTime);
+	}
+};
+
+GmCXt.onTagsMatch = function(data) {
+
+	var tour = data.tour;
+	GmCXt.log(16, "VALID TOUR RULE, showing: " + GmCXt.tourLog(tour));
+
+	delete tour.ruleValidated;
+
+	if (tour.steps.length) {
+		GmCXt.log(17, "FOUND IN CACHE", tour);
+		GmCXt.startFtTag(tour);
+	} else {
+		GmCXt.log(17, "CALL API to get tour");
+
+		var d = {
+			tour_id: tour.tour_id,
+			category_id: tour.category_id
+		};
+		GmCXt.callApi(d, "tour").then(function(_tour) {
+			GmCXt.pageTours.forEach(function(t) {
+				if (t.tour_id === _tour.tour_id) {
+					t.steps = _tour.steps;
+				}
+			});
+
+			// Remove existing tour
+			GmCXt.fTags.forEach(function(t, key) {
+				if (t.tour_id === _tour.tour_id) {
+					GmCXt.fTags.splice(key, 1);
+				}
+			});
+			// Push new tour
+			GmCXt.fTags.push(_tour);
+			GmCXt.startFtTag(_tour);
+		});
+	}
+};
+
+GmCXt.renderSmartTips = function(tours, isPreview, clickEvent) {
+
+	GmCXt.log(42, "Skip already loaded tooltips: ", GmCXt.onScreenTooltipGuideIds);
+
+	var segmentCb = function(t) {
+		if (!GmCXt.isEmpty(t)) {
+			GmCXt.validateSmartTipGuideRules([t], isPreview, clickEvent);
+		}
+		//remove invallid tours
+	};
+
+	if (GmCXt.organization.admin_settings.guide_segmentation && !isPreview) {
+		GmCXt.checkGuidesBasedOnSegment(tours, segmentCb, "smarttipSeg");
+	} else {
+		GmCXt.validateSmartTipGuideRules(tours, isPreview, clickEvent);
+	}
+};
+
+GmCXt.startFtTag = function(tour) {
+
+	var windowHost = GmCXt.getPageDomain();
+
+	for (var j = 0; j < tour.steps.length; j++) {
+
+		var step = mg$.extend({}, tour.steps[j]);
+		var nodes = mg$('.' + GmCXt.tagClassName(step));
+
+		if (nodes.length) return; //Return since already tagged
+
+		if (step.step_settings && step.step_settings.element) {
+
+			GmCXt.log(17, "LOADING STEP " + GmCXt.stepLog(step.step_id, step.tour_id));
+
+			var data = {
+				settings: step.step_settings,
+				windowHost: windowHost,
+				step: step,
+				tour: tour,
+				task: 'showTag',
+				timeout: Date.now() + GmCXt.getOrgStepWaitTime(),
+				iframeAttrs: step.step_settings.element.iframeAttrs,
+				os: GmCXt.getStepSettings()
+			};
+
+			if (GmCXt.tagIframe[step.step_id] && GmCXt.tagIframe[step.step_id].timeout) {
+				clearTimeout(GmCXt.tagIframe[step.step_id].timeout);
+			}
+			GmCXt.tagIframe[step.step_id] = {};
+			searchTag(data, step);
+		}
+	}
+
+	function searchTag(data, step) {
+
+		if (data.settings.element.meta.inTopWindow) {
+			GmCXt.log(17, "FINDING TAG only in TOP window");
+
+			GmCXt.highlighter.queueTag({
+				data: data
+			});
+		} else {
+
+			var findInIframe = 3000;
+			data.timeout = Date.now() + findInIframe;
+
+			GmCXt.log(17, "FINDING TAG only in TARGET frame");
+			GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:find_tag_elm:target_frame_only', data);
+
+			GmCXt.tagIframe[step.step_id].timeout = GmCXt.timeout(function() {
+				if (!GmCXt.tagIframe[step.step_id].frameId) {
+					GmCXt.log(17, "TIMED OUT in Target Frame..\nFINDING TAG in all frames");
+					data.timeout = Date.now() + GmCXt.getOrgStepWaitTime() - findInIframe;
+					GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:find_tag_elm', data);
+				}
+			}, findInIframe + 500);
+		}
+	}
+};
+
+GmCXt.startTooltip = function(tour, isPreview) {
+
+	GmCXt.setOnScreenTooltipGuideInfo(tour);
+
+	for (var j = 0; j < tour.steps.length; j++) {
+
+		var step = mg$.extend({}, tour.steps[j]);
+		var windowHost = GmCXt.getPageDomain();
+
+		if(GmCXt.mgActiveLang && !GmCXt.isGuideInDefaultLang(tour, GmCXt.mgActiveLang) && step.language_data && step.language_data[GmCXt.mgActiveLang] ) {
+			let langStepSetting = GmCXt.parseJSON(step.language_data[GmCXt.mgActiveLang].step_settings);
+			step.step_settings.smartTip = langStepSetting.smartTip;
+		}
+
+		if (step.step_settings && step.step_settings.element) {
+
+			GmCXt.log(43, "LOADING STEP " + GmCXt.stepLog(step.step_id, step.tour_id));
+
+			var data = {
+				settings: step.step_settings,
+				windowHost: windowHost,
+				step: step,
+				tour: tour,
+				isPreview: isPreview,
+				task: 'showSmarttip',
+				timeout: Date.now() + GmCXt.getOrgStepWaitTime(),
+				iframeAttrs: step.step_settings.element.iframeAttrs,
+				os: GmCXt.getStepSettings()
+			};
+
+			if (GmCXt.smartTipIframe[step.step_id] && GmCXt.smartTipIframe[step.step_id].timeout) {
+				clearTimeout(GmCXt.smartTipIframe[step.step_id].timeout);
+			}
+			GmCXt.smartTipIframe[step.step_id] = {};
+			searchTooltip(data, step);
+		}
+	}
+
+	function searchTooltip(data, step) {
+
+		if (data.settings.element.meta.inTopWindow) {
+			GmCXt.log(43, "FINDING TOOLTIP only in TOP window");
+
+			GmCXt.highlighter.queueSmarttip({
+				data: data
+			});
+		} else {
+			// Element in iframe
+			if (data.settings.element.criteria.precision_level === "High" && data.iframeAttrs) {
+
+				var findInIframe = 3000;
+				data.timeout = Date.now() + findInIframe;
+
+				GmCXt.log(43, "FINDING TOOLTIP only in TARGET frame");
+				GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_dom_element_to_show_tooltip:target_frame_only', data);
+
+				GmCXt.smartTipIframe[step.step_id].timeout = GmCXt.timeout(function() {
+					if (!GmCXt.smartTipIframe[step.step_id].frameId) {
+						GmCXt.log(43, "TIMED OUT in Target Frame..\nFINDING TOOLTIP in all frames");
+						data.timeout = Date.now() + GmCXt.getOrgStepWaitTime() - findInIframe;
+						GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_dom_element_to_show_tooltip', data);
+					}
+				}, findInIframe + 500);
+			} else {
+				GmCXt.log(43, "FINDING TOOLTIP in all frames");
+				GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_dom_element_to_show_tooltip', data);
+			}
+		}
+	}
+};
+
+GmCXt.onTooltipMatch = function(r, isPreview) {
+
+	var tour = r.tour;
+
+	delete tour.ruleValidated;
+
+	var d = {
+		tour_id: tour.tour_id,
+		category_id: tour.category_id
+	};
+
+	function tooltipGetSteps(tour, cb, isPreview, isValid) {
+
+		if (tour.steps.length) {
+			GmCXt.log(43, "FOUND IN CACHE", tour);
+			cb(tour, isPreview);
+
+		} else if (isValid) {
+			GmCXt.log(43, "CALL API to get tour");
+			GmCXt.callApi(d, "tour")
+				.then(function(_tour) {
+
+					if (GmCXt.pageTours) {
+						GmCXt.pageTours.forEach(function(t) {
+							if (t.tour_id === _tour.tour_id) {
+								t.steps = _tour.steps;
+							}
+						});
+					}
+
+					var showTooltip = function(_t) {
+						// Remove existing tour
+						GmCXt.tooltipTours.forEach(function(t, key) {
+							if (t.tour_id === _t.tour_id) {
+								GmCXt.tooltipTours.splice(key, 1);
+							}
+						});
+						// Push new tour
+						GmCXt.tooltipTours.push(_t);
+						cb(_t, isPreview);
+					};
+
+					showTooltip(_tour);
+				});
+		}
+	}
+
+	if (r.valid) {
+
+		GmCXt.log(42, "VALID TOUR RULE, showing: " + GmCXt.tourLog(tour));
+
+		if (isPreview) {
+			GmCXt.startTooltip(tour, isPreview);
+		} else {
+			tooltipGetSteps(tour, GmCXt.startTooltip, isPreview, true);
+		}
+
+	} else if (!r.valid) {
+
+		GmCXt.log(42, "INVALID TOUR RULE: " + GmCXt.tourLog(tour));
+
+		tooltipGetSteps(tour, GmCXt.removeTooltips, isPreview, false);
+
+		if (isPreview) {
+			GmCXt.openAppPanel("byPassRoute");
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:smartTip_rules_donot_match");
+		}
+	}
+};
+
+GmCXt.filterOutSmarttipGuides = function(tours) {
+	var arr = [];
+	tours.filter(function(itm) {
+		if (itm.tour_type.indexOf('smartTip') === -1) {
+			arr.push(itm);
+		}
+	});
+	return arr;
+};
+
+GmCXt.notifyCurrentPageGuideExistence = function() {
+	var m = {
+		action: 'mgPlayerJSTest_action:get_cguide_count',
+		data: GmCXt.ifGuidesOnCurrentPage
+	};
+	GmCXt.msgToThisWin(m);
+};
+
+GmCXt.hideCurrentPageGuidesIndicator = function() {
+	mg$('.mgPlayerJSTest_start-button-cnt').hide();
+	GmCXt.notifyCurrentPageGuideExistence();
+
+	GmCXt.showWidget();
+};
+
+GmCXt.showCurrentPageGuidesIndicator = function() {
+
+	if (GmCXt.FT.isPlayer) {
+		var ws = GmCXt.getWidgetSettings();
+
+		var wCnt = mg$('.mgPlayerJSTest_start-button-cnt');
+		if (GmCXt.ifGuidesOnCurrentPage && ws && ws.guide_count_on_widget) {
+
+			wCnt.css({
+				background: ws.guide_count_widget_color
+			});
+
+			wCnt.show();
+		} else {
+
+			wCnt.hide();
+		}
+	}
+
+	GmCXt.notifyCurrentPageGuideExistence();
+};
+
+GmCXt.showNotifications = function(isPageClicked) {
+
+	var guideMeTourId = GmCXt.getUrlParameter('guideMe-tourId');
+	var delay = GmCXt.getNotificationDelay();
+
+	if (!(GmCXt.isPlayer() || GmCXt.isAutomationRunning())) {
+		return;
+	}
+	if (GmCXt.isSurveyVisible || GmCXt.orgNotificationPopup) {
+		return;
+	}
+
+	if (GmCXt.isAutomationRunning()) {
+		delay = 0; // Render Notification for Automation
+	} else if (GmCXt.tourPlayerI || guideMeTourId) {
+		delay = 5000;
+		GmCXt.log(10, "DELAYED notifications, guide is playing");
+	}
+
+	GmCXt.log(10, "NOTIFICATION ENABLED guides", GmCXt.notificationGuides);
+
+	GmCXt.timeout(function() {
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:show_notifications', {
+			notifications: GmCXt.notificationGuides,
+			isAutomationRunning: GmCXt.isAutomationRunning(),
+			isPageClicked: isPageClicked
+		});
+	}, delay);
+};
+
+GmCXt.filterNotifications = function(t) {
+	var arr = [];
+
+	if (!GmCXt.isEmpty(t)) {
+		arr = t.filter(function(_t) {
+			if (_t.tour_type.indexOf('overlay_tour') > -1)
+				return _t;
+		});
+	}
+
+	return arr;
+};
+
+GmCXt.filterSmartTipGuides = function(tours) {
+	var arr = [];
+
+	if (!GmCXt.isEmpty(tours)) {
+		tours.filter(function(itm) {
+			if (itm.tour_type.indexOf('smartTip') > -1) {
+				arr.push(itm);
+			}
+		});
+	}
+
+	GmCXt.tooltipTours = arr;
+
+	GmCXt.log(42, "TOOLTIP guides", arr);
+
+	return arr;
+};
+
+GmCXt.filterFtTags = function(tours) {
+	var arr = [];
+	if (!GmCXt.isEmpty(tours)) {
+		tours.filter(function(itm) {
+			if (itm.tour_type.indexOf('insights') > -1) {
+				arr.push(itm);
+			}
+		});
+	}
+	GmCXt.fTags = arr;
+
+	GmCXt.log(16, "FEATURE TAGS guides", arr);
+
+	return arr;
+};
+
+function filterBeaconTourByDiplayFrequency(tour) {
+	var beaconsViewed = GmCXt.user.settings.display_frequency_beacons;
+	var retVal = true;
+	if (!GmCXt.isEmpty(beaconsViewed)) {
+		var countObj = beaconsViewed[parseInt(tour.tour_id)];
+		if (GmCXt.isDefined(countObj)) {
+			if (parseInt(countObj.version) === parseInt(tour.version)) {
+				if (countObj.playedCount >= tour.tour_settings.beacon.displayFrequencyTimes) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return retVal;
+}
+
+GmCXt.filterBeaconGuides = function(tours) {
+	var arr = [];
+
+	if (!GmCXt.isEmpty(tours)) {
+		tours.filter(function(itm) {
+			if (itm.tour_type.indexOf('beacon_tour') > -1) {
+				if (itm.tour_settings.beacon.displayFrequency) {
+					if (filterBeaconTourByDiplayFrequency(itm)) {
+						arr.push(itm);
+					}
+				} else {
+					arr.push(itm);
+				}
+			}
+		});
+	}
+
+	GmCXt.log(48, "BEACON guides", arr);
+
+	GmCXt.beaconTours = arr;
+	return arr;
+};
+
+GmCXt.requestHandler.sendRequestForDomSelectTableRule = function(request) {
+	GmCXt.clearScreen();
+	GmCXt.unlockScroll();
+	GmCXt.closeAppPanel();
+	GmCXt.toggleStepSelectionToolbar(true);
+	GmCXt.hideBeacons();
+	GmCXt.hideSmartTips();
+
+	var data = {
+		ruleIndex: request.data.ruleIndex,
+		groupIndex: request.data.groupIndex,
+		reSelect: request.data.reSelect
+	};
+
+	var action = "mgPlayerJSTest_action:started;task:select_new_table_for_dom_select_rule";
+	GmCXt.sendMessageToAllWindows(action, data);
+};
+
+GmCXt.requestHandler.sendRequestForDomSelectRule = function(request) {
+
+	GmCXt.clearScreen();
+	GmCXt.unlockScroll();
+	GmCXt.closeAppPanel();
+	GmCXt.toggleStepSelectionToolbar(true);
+	GmCXt.hideBeacons();
+	GmCXt.hideSmartTips();
+
+	var data = {
+		ruleIndex: request.data.ruleIndex,
+		groupIndex: request.data.groupIndex,
+		reSelect: request.data.reSelect
+	};
+
+	var action = "mgPlayerJSTest_action:started;task:select_new_element_for_dom_select_rule";
+	GmCXt.sendMessageToAllWindows(action, data);
+};
+
+GmCXt.requestHandler.playLinkedGuide = function(data) {
+	GmCXt.playerI = {
+		tour: null,
+		tourId: data.tourId
+	};
+
+	var d = {
+		tour_id: data.tourId
+	};
+
+	if (GmCXt.getOrgSettings()) {
+		GmCXt.getTourDetails(d)
+			.then(function(tour) {
+
+				GmCXt.playerI.tour = tour;
+				GmCXt.playerI.startStepId = 0;
+
+				GmCXt.storage().set({
+					'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': GmCXt.playerI,
+					'guide_play_event': GmCXt.guidePlayTracker
+				}).then(function() {
+					GmCXt.playTour();
+				});
+			});
+	}
+};
+
+GmCXt.requestHandler.playGuide = function(data) {
+	GmCXt.closeNotificationPopup();
+	if (data.playerInstance)
+		GmCXt.playerI = mg$.extend({}, data.playerInstance);
+	else
+		GmCXt.playerI = mg$.extend({}, data);
+
+	if (GmCXt.isFirstNonAutomationStep())
+		GmCXt.checkPreviousHoverStep = false;
+	else
+		GmCXt.checkPreviousHoverStep = true;
+
+	if (!GmCXt.playerI.currentStepId && !GmCXt.isMicroPlayer()) {
+		var firstStepId = GmCXt.playerI.tour.steps[0].step_id;
+		if (data.tour) {
+			var ts = data.tour.tour_settings;
+			if (ts.play_structure.length) {
+				firstStepId = ts.play_structure[0].id;
+			}
+		}
+
+		if (firstStepId) {
+			GmCXt.playerI.currentStepId = firstStepId;
+		}
+	}
+
+	GmCXt.playerI.startStepId = GmCXt.playerI.currentStepId;
+
+	var PI = GmCXt.playerI;
+
+	GmCXt.storage().set({
+		'mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY': PI,
+		'guide_play_event': GmCXt.guidePlayTracker
+	}).then(function() {
+		GmCXt.playTour();
+	});
+};
+
+GmCXt.updatePlayerI = function() {
+	var PI = GmCXt.playerI;
+
+	if (PI && PI.completeEventTracked) {
+		PI.currentStepId = PI.startStepId;
+		PI.completeEventTracked = false;
+		PI.lastPlayedStepId = 0;
+
+		++PI.currentLoop;
+
+		GmCXt.playerI = PI;
+
+		GmCXt.log(33, 'Player Instance updated for looping.');
+	}
+};
+
+GmCXt.requestHandler.playAutoTour = function() {
+
+	GmCXt.updatePlayerI();
+
+	if (GmCXt.isLooping()) {
+		GmCXt.timeout(function() {
+			if (!GmCXt.tourPlayerI) {
+				GmCXt.tourPlayerI = GmCXt.tourPlayer();
+			}
+			GmCXt.tourPlayerI.start();
+		}, 500);
+
+	} else {
+		GmCXt.log(33, 'Tour Player ' + GmCXt.playerI.loops + ' times.');
+
+		if (GmCXt.tourPlayerI) {
+			GmCXt.tourPlayerI.stop();
+		} else {
+			GmCXt.cleanPlayer();
+		}
+
+		GmCXt.storage().set({
+			'loopingCompleted': true
+		});
+	}
+};
+
+GmCXt.newIframesFound = false;
+GmCXt.requestHandler.newIframeFound = function(iframeIdentifier) {
+
+	GmCXt.newIframesFound = true; //This will load tooltips and beacons in new iframe
+
+	if (GmCXt.DomSelectorToolActive === true) {
+		GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:started;task:select_new_dom_element', {
+			enableNavigateTool: GmCXt.enableNavigateTool
+		});
+	}
+
+	GmCXt.log(1, "IFRAME found, ID: " + iframeIdentifier);
+
+	var d = {
+		org: GmCXt.organization,
+		user: GmCXt.user,
+		debugMode: GmCXt.debugMode,
+		urlParts: GmCXt.urlParts,
+		featureTracking: GmCXt.trackerUtil.featureTracking,
+		pageTracking: GmCXt.trackerUtil.pageTracking,
+		sessionInfo: GmCXt.sessionInfo,
+		showPlayer: GmCXt.showPlayer,
+		rules: GmCXt.rulesIframeQueue
+	};
+
+	d.domainInApp = GmCXt.isDomainInActiveApp();
+
+	if (GmCXt.tourPlayerI && GmCXt.tourPlayerI.currentStepReq && !GmCXt.isLastStepPlayed()) {
+		d.req = GmCXt.tourPlayerI.currentStepReq;
+	}
+
+	if (!GmCXt.isEmpty(GmCXt.appList)) {
+
+		var activeApp = GmCXt.appList['app:' + GmCXt.activeAppId];
+		d.activeAppSettings = {};
+		if (activeApp && activeApp.settings) {
+			d.activeAppSettings = activeApp.settings;
+		}
+	}
+
+	if (window.self === window.top) {
+		GmCXt.iframeCount++;
+	}
+
+	var m = {
+		action: "mgPlayerJSTest_action:task:init_new_iframe",
+		data: d
+	};
+	GmCXt.sendToIframes(m, iframeIdentifier);
+};
+
+GmCXt.sendMessageToRenderBeacons = function() {
+
+	if (GmCXt.beaconTours.length) {
+		var tours = mg$.extend([], GmCXt.beaconTours);
+		GmCXt.renderBeacons(tours);
+	}
+};
+
+GmCXt.sendMessageToRenderSmartTip = function() {
+
+	if (GmCXt.tooltipTours.length) {
+		var tours = mg$.extend([], GmCXt.tooltipTours);
+		GmCXt.renderSmartTips(tours);
+	}
+};
+
+GmCXt.addWidgetIcon = function() {
+
+	return new Promise(function(resolve, reject) {
+		GmCXt.getWidgetIcon().then(function(wUrl) {
+
+			var str = "<wmgPlayerJSTest_ style='display:none' " +
+				" id='mgPlayerJSTest_btn-start-button' class='mgPlayerJSTest_start-button " + GmCXt.getStartBtnClass() + "'> " +
+				" <wmgPlayerJSTest_ class='mgPlayerJSTest_start-button-cnt' ></wmgPlayerJSTest_>" +
+				" <img src='" + wUrl + "' aria-label='My Guide Widget' tabindex='0' class='mgPlayerJSTest_custom-image' " +
+				" err-src='" + GmCXt.getDefaultIcon() + "'/> " +
+				" </wmgPlayerJSTest_>";
+
+			mg$("html").append(str);
+			GmCXt.positionWidget();
+			GmCXt.widgetIconCustomize();
+
+			GmCXt.log(8, "WIDGET HTML added");
+			resolve();
+		});
+	});
+};
+
+GmCXt.addChatIcon = function() {
+
+	return new Promise(function(resolve, reject) {
+		GmCXt.getChatIcon().then(function(wUrl) {
+
+			var str = "<wmgPlayerJSTest_ style='display:none' " +
+				" id='mgPlayerJSTest_btn-chat-button' class='mgPlayerJSTest_chat-button " + GmCXt.getStartBtnClass() + "'> " +
+				" <img src='" + wUrl + "' class='mgPlayerJSTest_custom-image' " +
+				" err-src='" + GmCXt.getChatDefaultIcon() + "'/> " +
+				" </wmgPlayerJSTest_>";
+
+			mg$("html").append(str);
+			GmCXt.positionChatIcon();
+			GmCXt.chatIconCustomize();
+
+			GmCXt.log(8, "CHAT ICON HTML added");
+			resolve();
+		});
+	});
+};
+
+GmCXt.addWidgetIconEvents = function() {
+
+	dragElement(document.getElementById("mgPlayerJSTest_btn-start-button"));
+
+	function dragElement(elmnt) {
+		var pos1 = 0,
+			pos2 = 0,
+			pos3 = 0,
+			pos4 = 0,
+			drag = false;
+
+		if (!elmnt) return;
+
+		elmnt.onmousedown = dragMouseDown;
+
+		function dragMouseDown(e) {
+			e = e || window.event;
+			e.preventDefault();
+			// get the mouse cursor position at startup:
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			document.onmouseup = closeDragElement;
+			// call a function whenever the cursor moves:
+			document.onmousemove = elementDrag;
+
+		}
+
+		function elementDrag(e) {
+			e = e || window.event;
+			e.preventDefault();
+			mg$('iframe').css('pointer-events', 'none');
+			mg$('body').css('pointer-events', 'none');
+			// calculate the new cursor position:
+			pos1 = pos3 - e.clientX;
+			pos2 = pos4 - e.clientY;
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			// set the element's new position:
+			elmnt.style.setProperty("top", (elmnt.offsetTop - pos2) + "px", "important");
+			elmnt.style.setProperty("left", (elmnt.offsetLeft - pos1) + "px", "important");
+			drag = true;
+		}
+
+		function closeDragElement(e) {
+			/* stop moving when mouse button is released:*/
+
+			mg$('iframe').css('pointer-events', 'initial');
+			mg$('body').css('pointer-events', 'initial');
+			document.onmouseup = null;
+			document.onmousemove = null;
+			if (!drag) {
+				GmCXt.onClickGuideMeIcon(e);
+			}
+			if (elmnt.style.top !== 'initial') {
+				GmCXt.dragWidgetPose.top = elmnt.style.top;
+				GmCXt.dragWidgetPose.left = elmnt.style.left;
+			}
+
+			GmCXt.timeout(function() {
+				drag = false;
+			}, 500);
+		}
+	}
+};
+
+GmCXt.addChatIconEvents = function() {
+
+	dragElement(document.getElementById("mgPlayerJSTest_btn-chat-button"));
+
+	function dragElement(elmnt) {
+		var pos1 = 0,
+			pos2 = 0,
+			pos3 = 0,
+			pos4 = 0,
+			drag = false;
+
+		if (!elmnt) return;
+
+		elmnt.onmousedown = dragMouseDown;
+
+		function dragMouseDown(e) {
+			e = e || window.event;
+			e.preventDefault();
+			// get the mouse cursor position at startup:
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			document.onmouseup = closeDragElement;
+			// call a function whenever the cursor moves:
+			document.onmousemove = elementDrag;
+
+		}
+
+		function elementDrag(e) {
+			e = e || window.event;
+			e.preventDefault();
+			mg$('iframe').css('pointer-events', 'none');
+			mg$('body').css('pointer-events', 'none');
+			// calculate the new cursor position:
+			pos1 = pos3 - e.clientX;
+			pos2 = pos4 - e.clientY;
+			pos3 = e.clientX;
+			pos4 = e.clientY;
+			// set the element's new position:
+			elmnt.style.setProperty("top", (elmnt.offsetTop - pos2) + "px", "important");
+			elmnt.style.setProperty("left", (elmnt.offsetLeft - pos1) + "px", "important");
+			drag = true;
+		}
+
+		function closeDragElement(e) {
+			/* stop moving when mouse button is released:*/
+
+			mg$('iframe').css('pointer-events', 'initial');
+			mg$('body').css('pointer-events', 'initial');
+			document.onmouseup = null;
+			document.onmousemove = null;
+			if (!drag) {
+				GmCXt.onClickChatIcon(e);
+			}
+			if (elmnt.style.top !== 'initial') {
+				GmCXt.dragChatPose.top = elmnt.style.top;
+				GmCXt.dragChatPose.left = elmnt.style.left;
+			}
+
+			GmCXt.timeout(function() {
+				drag = false;
+			}, 500);
+		}
+	}
+};
+
+GmCXt.removeWidget = function() {
+	var widget = GmCXt.getWidgetInstance();
+	if (widget.length) widget.remove();
+};
+
+GmCXt.removeChatIcon = function() {
+	var chat = GmCXt.getChatIconInstance();
+	if (chat.length) chat.remove();
+};
+
+// Widget Test Cases
+// 1. Show default widget icon before login
+// 2. Update widget icon and position after login
+// 3. Update widget icon and position after Org settings change
+// 4. Set default widget icon after logout
+// 5. Hide widget if its hidden in Org settings
+
+GmCXt.addingWidgetIcon = false;
+
+GmCXt.showWidget = function() {
+
+	if (GmCXt.APP_PANEL_OPEN) return;
+
+	if (GmCXt.getWidgetVisibility()) {
+
+		var show = function() {
+
+			GmCXt.log(8, "SHOW WIDGET");
+
+			GmCXt.positionWidget();
+			GmCXt.widgetIconCustomize();
+
+			GmCXt.showCurrentPageGuidesIndicator();
+
+			GmCXt.displayWidget();
+		};
+
+		var widget = GmCXt.getWidgetInstance();
+
+		if (widget.length) {
+			GmCXt.getWidgetIcon().then(function(wURl) {
+				mg$(".mgPlayerJSTest_start-button img").attr('src', wURl);
+				show();
+			});
+
+		} else if (!GmCXt.addingWidgetIcon) {
+
+			GmCXt.addingWidgetIcon = true;
+			GmCXt.addWidgetIcon().then(function() {
+
+				GmCXt.addingWidgetIcon = false;
+				GmCXt.addWidgetIconEvents();
+				show();
+			});
+		}
+
+	} else {
+		GmCXt.removeWidget();
+	}
+};
+
+GmCXt.showChatIcon = function() {
+
+	if (!GmCXt.checkPrecedence()) return;
+	if (GmCXt.APP_PANEL_OPEN) return;
+	if (!GmCXt.organization && GmCXt.isEmpty(GmCXt.organization)) return;
+
+
+	if (GmCXt.isPlayer() && GmCXt.isChatEnable() && GmCXt.getChatIconVisibility()) {
+
+		var show = function() {
+
+			GmCXt.log(8, "SHOW CHAT ICON");
+
+			GmCXt.positionChatIcon();
+			GmCXt.chatIconCustomize();
+
+			GmCXt.displayChatIcon();
+		};
+
+		var chat = GmCXt.getChatIconInstance();
+
+		if (chat.length) {
+			GmCXt.getChatIcon().then(function(wURl) {
+				mg$("#mgPlayerJSTest_btn-chat-button img").attr('src', wURl);
+				show();
+			});
+
+		} else if (!GmCXt.addingChatIcon) {
+
+			GmCXt.addingChatIcon = true;
+			GmCXt.addChatIcon().then(function() {
+
+				GmCXt.addingChatIcon = false;
+				GmCXt.addChatIconEvents();
+				show();
+			});
+		}
+
+	} else {
+		GmCXt.removeChatIcon();
+	}
+};
+
+GmCXt.resetBeaconsandTooltips = function() {
+
+	for (var prop in GmCXt.onScreenTooltipGuideInfo) delete GmCXt.onScreenTooltipGuideInfo[prop];
+
+	GmCXt.onScreenTooltipGuideIds = [];
+
+	GmCXt.beaconTours = [];
+	GmCXt.beaconsOnScreen = [];
+	GmCXt.tooltipTours = [];
+	GmCXt.partialVisibleTooltipsIds = [];
+};
+
+GmCXt.positionWidget = function() {
+
+	var s = GmCXt.getWidgetSettings();
+	if (GmCXt.isEmpty(s)) return;
+
+	var widget = GmCXt.getWidgetInstance();
+
+	var oldCSS = widget.attr('style');
+	if (oldCSS.length > 0 && oldCSS.lastIndexOf(";") !== oldCSS.length - 1) {
+		oldCSS += ";";
+	}
+	var strCss = '';
+
+	if (GmCXt.dragWidgetPose.left) {
+		strCss = "top:" + GmCXt.dragWidgetPose.top + " !important;" +
+			"left:" + GmCXt.dragWidgetPose.left + " !important;" +
+			"bottom: initial;right: initial";
+	} else {
+		switch (s.widgetIconPos) {
+			case 'top-left':
+				strCss = "top: " + s.widget_icon_pos.widget_icon_top_pos + s.widget_icon_pos.widget_icon_top_pos_unit + " !important;" +
+					"left: " + s.widget_icon_pos.widget_icon_left_pos + s.widget_icon_pos.widget_icon_left_pos_unit + " !important;" +
+					"bottom: initial; right: initial;";
+				break;
+
+			case 'top-right':
+
+				strCss = "top:" + s.widget_icon_pos.widget_icon_top_pos + s.widget_icon_pos.widget_icon_top_pos_unit + " !important;" +
+					"right:" + s.widget_icon_pos.widget_icon_right_pos + s.widget_icon_pos.widget_icon_right_pos_unit + " !important;" +
+					"left: initial; bottom: initial";
+
+				break;
+
+			case 'bottom-left':
+				strCss = "bottom: " + (s.widget_icon_pos.widget_icon_bottom_pos + s.widget_icon_pos.widget_icon_bottom_pos_unit) + " !important;" +
+					"left: " + s.widget_icon_pos.widget_icon_left_pos + s.widget_icon_pos.widget_icon_left_pos_unit + " !important;" +
+					"top: initial; right: initial;";
+				break;
+
+			case 'bottom-right':
+
+				strCss = "bottom: " + s.widget_icon_pos.widget_icon_bottom_pos + s.widget_icon_pos.widget_icon_bottom_pos_unit + " !important;" +
+					"right:" + s.widget_icon_pos.widget_icon_right_pos + s.widget_icon_pos.widget_icon_right_pos_unit + " !important;" +
+					"top: initial; left: initial;";
+
+				break;
+		}
+	}
+
+	widget.attr('style', oldCSS + strCss);
+};
+
+GmCXt.positionChatIcon = function() {
+
+	var s = GmCXt.getAppSetting();
+
+	if (GmCXt.isEmpty(s)) return;
+
+	var chat = GmCXt.getChatIconInstance();
+
+	var oldCSS = chat.attr('style');
+	if (oldCSS.length > 0 && oldCSS.lastIndexOf(";") !== oldCSS.length - 1) {
+		oldCSS += ";";
+	}
+	var strCss = '';
+
+	if (GmCXt.dragChatPose.left) {
+		strCss = "top:" + GmCXt.dragChatPose.top + " !important;" +
+			"left:" + GmCXt.dragChatPose.left + " !important;" +
+			"bottom: 'initial';right: 'initial'";
+	} else {
+		switch (s.chatIconPos) {
+			case 'top-left':
+				strCss = "top: " + s.chat_icon_pos.chat_icon_top_pos + s.chat_icon_pos.chat_icon_top_pos_unit + " !important;" +
+					"left: " + s.chat_icon_pos.chat_icon_left_pos + s.chat_icon_pos.chat_icon_left_pos_unit + " !important;" +
+					"bottom: 'initial'; right: 'initial';";
+				break;
+
+			case 'top-right':
+
+				strCss = "top:" + s.chat_icon_pos.chat_icon_top_pos + s.chat_icon_pos.chat_icon_top_pos_unit + " !important;" +
+					"right:" + s.chat_icon_pos.chat_icon_right_pos + s.chat_icon_pos.chat_icon_right_pos_unit + " !important;" +
+					"left: 'initial'; bottom: 'initial'";
+
+				break;
+
+			case 'bottom-left':
+				strCss = "bottom: " + (s.chat_icon_pos.chat_icon_bottom_pos + s.chat_icon_pos.chat_icon_bottom_pos_unit) + " !important;" +
+					"left: " + s.chat_icon_pos.chat_icon_left_pos + s.chat_icon_pos.chat_icon_left_pos_unit + " !important;" +
+					"top: 'initial'; right: 'initial';";
+				break;
+
+			case 'bottom-right':
+
+				strCss = "bottom: " + s.chat_icon_pos.chat_icon_bottom_pos + s.chat_icon_pos.chat_icon_bottom_pos_unit + " !important;" +
+					"right:" + s.chat_icon_pos.chat_icon_right_pos + s.chat_icon_pos.chat_icon_right_pos_unit + " !important;" +
+					"top: 'initial'; left: 'initial';";
+
+				break;
+		}
+	}
+
+	chat.attr('style', oldCSS + strCss);
+};
+
+GmCXt.requestHandler.selectBeaconPosition = function(request) {
+	GmCXt.hideWidgetIcon();
+
+	GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:started;task:select_dom_element_for_beacon");
+	GmCXt.toggleStepSelectionToolbar(true);
+};
+
+GmCXt.requestHandler.closeStep = function() {
+	GmCXt.closeAppPanel();
+
+	if (GmCXt.tourPlayerI) GmCXt.tourPlayerI.closeStep();
+};
+
+GmCXt.requestHandler.closeSlideshow = function() {
+
+	GmCXt.showSmartTips();
+	GmCXt.showBeacons();
+
+	var pi = GmCXt.playerI;
+
+	if (pi && pi.totalStepCount > 1 && GmCXt.firstStepAutoLaunch()) {
+
+		var options = {
+			tour: pi.tour,
+			slideshow: true
+		};
+		GmCXt.showPushOptions(options).show();
+
+	} else {
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:stop_slideshow');
+
+		if (pi) {
+			GmCXt.markAutoLaunchTourDoNotShow(pi.tour);
+			GmCXt.getSurveyScreen(mg$.extend({}, pi)).then(function(f) {
+				if (!f)
+					GmCXt.openAppPanel();
+			});
+			GmCXt.cleanPlayer();
+		}
+	}
+};
+
+GmCXt.requestHandler.pageClickForGuide = function(msg) {
+	var e = msg.data;
+	var stepPlaying = mg$('.mgPlayerJSTest_preview-step-popup-container').length;
+
+	if (GmCXt.playerI && stepPlaying && GmCXt.enforceGuideMePopup !== true && !GmCXt.isSurveyVisible) {
+
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+		var watchState = true;
+
+		if (step.step_type === GmCXt.STEP_TYPE_INLINE && e.state && e.state !== 'watch') { //e.state = undefined for iframes
+			watchState = false;
+		}
+
+		if (step && watchState) {
+			var s = step.step_settings;
+			var playNext = false;
+			var notClickOnPageStep = (!s.onClickAnywhere && !s.onPageClickNext && !s.onChangeNext);
+			var forceMode = (s.doNotForceGuide !== true && GmCXt.playerI.forceGuideMe === true);
+
+			if (forceMode && s.onRightClickNext) {
+				if (!e.onRightClickElem) {
+					GmCXt.showForceMode();
+				}
+			} else if (forceMode && notClickOnPageStep && !e.onElem && !e.inColumn) {
+				if (step.step_type === GmCXt.STEP_TYPE_INLINE || step.step_type === GmCXt.STEP_TYPE_MESSAGE) {
+					GmCXt.showForceMode();
+				}
+			} else if (s.onClickTooltip === true && e.onElem) {
+				playNext = true;
+			} else if (s.pageReloadOption === "restart_parent" && (e.onElem || s.onClickAnywhere)) {
+				GmCXt.restartInParent();
+				playNext = true;
+			} else if (s.headerNext && e.inColumn) {
+				playNext = true;
+			} else if (s.onClickAnywhere === true) {
+				playNext = true;
+			} else if (s.onPageClickNext === true) {
+				GmCXt.pauseGuide();
+			}
+
+			if (playNext) {
+
+				if (s.checkOnScreenError) {
+
+					GmCXt.timeout(function() {
+						if (GmCXt.checkForErrorOnScreen()) return;
+						GmCXt.requestHandler.playTourNextStep();
+					}, 3000);
+
+				} else {
+					GmCXt.requestHandler.playTourNextStep();
+				}
+			}
+		}
+	}
+};
+
+GmCXt.requestHandler.playTourNextStep = function() {
+
+	GmCXt.log(33, "Executing play next step handler.");
+
+	if (!GmCXt.isTrue(GmCXt.nextStepPlayEventReceived)) {
+
+		GmCXt.nextStepPlayEventReceived = true;
+
+		if (GmCXt.tourPlayerI) {
+			GmCXt.tourPlayerI.currentStepReq = null;
+			GmCXt.tourPlayerI.playNextStep();
+		}
+	}
+};
+
+GmCXt.requestHandler.playTourPrevStep = function() {
+
+	GmCXt.log(33, "Executing play previous step handler.");
+
+	if (GmCXt.tourPlayerI) {
+		GmCXt.tourPlayerI.currentStepReq = null;
+		GmCXt.tourPlayerI.playPreviousStep();
+	}
+};
+
+GmCXt.requestHandler.playVideo = function(data) {
+	GmCXt.closeAppPanel();
+	GmCXt.hideBeacons();
+	GmCXt.hideSmartTips();
+
+	mg$(window).focus();
+
+	GmCXt.playerI = data;
+
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:play_video');
+};
+
+GmCXt.requestHandler.videoAssignmentPlayed = function() {
+
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:lms_video_assignment_complete');
+
+	GmCXt.showSmartTips();
+	GmCXt.showBeacons();
+
+	GmCXt.openAppPanel("byPassRoute");
+
+	GmCXt.cleanPlayer();
+};
+
+GmCXt.playTour = function(data) {
+	GmCXt.closeAppPanel();
+	GmCXt.playerI.tour.steps = GmCXt.getStepsForPS(GmCXt.playerI.tour.steps);
+
+	var mode = GmCXt.playerI.mode;
+
+	if (!GmCXt.isAutomationRunning()) {
+		GmCXt.hideBeacons();
+	}
+
+	if (mode === 'slideshow' || mode === 'video' || mode === 'blog' || mode === 'giphy') {
+		GmCXt.tourPlayerI = GmCXt.tourPlayer();
+		GmCXt.playerI.tour.steps = GmCXt.playerI.tour.steps.filter(function(step) {
+			return step.step_type !== 'survey';
+		});
+		GmCXt.openAppPanel("playSlideShow");
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:play_slideshow', {
+			mode: mode
+		});
+
+	} else {
+
+		mg$(window).focus();
+
+		GmCXt.tourPlayerI = GmCXt.tourPlayer(data);
+		GmCXt.tourPlayerI.start();
+	}
+};
+
+GmCXt.checkVisible = function(pos) {
+	var winHeight = mg$(window).height();
+	var winWidth = mg$(window).width();
+
+	return GmCXt.visibleInViewport(pos, winHeight, winWidth);
+};
+
+GmCXt.requestHandler.findOtherTooltips = function(message) {
+	var data = message.data;
+	delete data.isOptional;
+	data.timeout = Date.now() + parseInt(GmCXt.t.tooltipTimeout);
+	data.findOther = true;
+
+	var action = 'mgPlayerJSTest_action:started;task:select_dom_element_tooltips';
+	GmCXt.sendMessageToAllWindows(action, data);
+};
+
+GmCXt.requestHandler.handleEventSelectDOMElTooltip = function(event, message) {
+	if (window.self === window.top) {
+		var pi = GmCXt.playerI;
+
+		if (!GmCXt.isNotNull(pi) || !GmCXt.isDefined(pi)) {
+			return;
+		}
+
+		var d = message.data;
+
+		if (event && message.status === GmCXt.ELEMENT_FOUND) {
+			var pos = d.element.position;
+			d.element.position = GmCXt.addFrameOffset(event, pos);
+		}
+
+		if (GmCXt.tourPlayerI &&
+			d.requestId === pi.currentStepId && message.status === GmCXt.ELEMENT_FOUND) {
+
+			d.element.position = GmCXt.addScrollOffset(
+				d.element.position,
+				d.element.cssPosition
+			);
+
+			GmCXt.tourPlayerI.cssPosition = d.element.cssPosition;
+			var render = false;
+
+			if (d.watch) {
+				if (d.posChanged) {
+					GmCXt.log(33, "Tooltip element position changed.");
+					render = true;
+				} else if (mg$('.gm-tip-' + d.tooltipId).is(":hidden")) {
+					GmCXt.log(33, "Tooltip PopUp is hidden.");
+					render = true;
+				}
+			} else {
+				GmCXt.log(33, "Show tooltip at first.");
+				render = true;
+			}
+
+			if (render) {
+
+				GmCXt.tourPlayerI.onSuccessTooltipElementFound(d.element.position,
+					d.tooltipId);
+			}
+		} else if (message.status === GmCXt.ELEMENT_NOT_FOUND) {
+			GmCXt.tourPlayerI.onFailureTooltipElementNotFound(d.tooltipId);
+		}
+
+		GmCXt.playerI = pi;
+	}
+};
+
+GmCXt.requestHandler.handleEventSelectDOMElement = function(event, message) {
+
+	if (window.self === window.top) {
+
+		var d = message.data;
+
+		if (event && message.status === GmCXt.ELEMENT_FOUND) {
+			var pos = d.element.position;
+			if (!event.source) {
+				event.source = GmCXt.iframeEls[d.id];
+			}
+			d.element.position = GmCXt.addFrameOffset(event, pos);
+		}
+
+		if (message.action == 'mgPlayerJSTest_action:completed;task:select_existing_dom_element') {
+
+			if (message.status === GmCXt.ELEMENT_FOUND && !d.watch) {
+				var visible = GmCXt.checkVisible(d.element.position);
+				if (!visible)
+					GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:bring_element_in_viewport', d);
+			}
+
+			if (GmCXt.isEmpty(GmCXt.playerI)) return;
+
+			if (GmCXt.tourPlayerI && d.requestId === GmCXt.playerI.currentStepId) {
+
+				switch (message.status) {
+
+					case GmCXt.ELEMENT_FOUND:
+
+						d.element.position = GmCXt.addScrollOffset(
+							d.element.position,
+							d.element.cssPosition
+						);
+
+						GmCXt.tourPlayerI.cssPosition = d.element.cssPosition;
+						var render = false;
+
+						if (d.watch) {
+							if (d.posChanged) {
+								GmCXt.log(33, "POS CHANGED element");
+								render = true;
+							} else if (mg$('.mgPlayerJSTest_preview-step-popup-container').is(":hidden")) {
+								GmCXt.log(33, "SHOW AGAIN. Step popup is hidden");
+								render = true;
+							}
+						} else {
+							GmCXt.log(33, "SHOW step popup");
+							render = true;
+						}
+
+						if (render) {
+							GmCXt.tourPlayerI.onSuccessElementFound(d.element.position, d.workdayEdit, d.id);
+						}
+						GmCXt.hideToastMsg();
+
+						break;
+
+					case GmCXt.ELEMENT_NOT_FOUND:
+						GmCXt.tourPlayerI.onFailureElementNotFound(false, d.rca);
+						break;
+				}
+			}
+		}
+	}
+};
+
+GmCXt.requestHandler.enableNextButton = function(message) {
+	mg$(".mgPlayerJSTest_play-step-next").css({
+		"opacity": 1,
+		"pointer-events": "initial"
+	});
+};
+
+GmCXt.getTooltipText = function(message) {
+
+	var text = '';
+	var opts = message.options;
+
+	if (message.derivedType === 'validation') {
+
+		// From v1.3.27, added support multiple validations on a tooltip
+		if (opts.rules && opts.rules.message) {
+
+			mg$('.mgPlayerJSTest_smarttip-valid-' + message.stepId).hide();
+
+			for (var rule in opts.rules) {
+
+				if (opts.validationType && opts.validationType[rule] === true && GmCXt.tooltipValidRulesArr.indexOf(rule) === -1) {
+					text += GmCXt.escapeHtml(opts.rules.message[rule]) + ' <br/> ';
+				}
+			}
+
+		} else if (opts.validationMessage) {
+			text = GmCXt.escapeHtml(opts.validationMessage);
+		}
+
+	} else if (message.derivedType === 'guidance') {
+		text = opts.guidanceMessage;
+	}
+
+	return text;
+};
+
+GmCXt.requestHandler.setBeaconPosition = function(m, ev) {
+
+	if (ev && !ev.source) {
+		ev.source = GmCXt.iframeEls[m.reqId];
+	}
+	var css_ = GmCXt.addFrameOffset(ev, m.css_);
+
+	if (!m.isPositionFixed && window.top === window.self) {
+		css_.left = css_.left + mg$(window).scrollLeft();
+		css_.top = css_.top + mg$(window).scrollTop();
+	}
+	var beaconObj = mg$("#mgPlayerJSTest_beacon-icon-" + m.tourId);
+
+	if (beaconObj.length) {
+		beaconObj.css(css_);
+
+		if (m.isPreview) {
+			GmCXt.previewBeacons(m.tourId);
+		}
+	} else {
+		var beaconIcon = m.beaconIcon;
+		var beaconImgUrl = beaconIcon;
+
+		if (beaconImgUrl.indexOf('default_beacon') === -1) {
+			beaconImgUrl = GmCXt.restoreAssetSrc(beaconIcon);
+		} else {
+			beaconImgUrl = GmCXt.conf.staticContentPath + "default_beacon.png";
+		}
+
+		var beaconClass = "mgPlayerJSTest_beacon-icon mgPlayerJSTest_beacon-icon-tour-" + m.tourId;
+		if (GmCXt.beaconsAreHidden && !m.isPreview) {
+			beaconClass += " mgPlayerJSTest_hidden";
+		}
+
+		if (m.isPreview) beaconClass += " mgPlayerJSTest_preview-beacon";
+
+		var titleAlign = m.align;
+		if (m.requestData.beaconSettings.beaconMsgPosition) {
+			titleAlign = m.requestData.beaconSettings.beaconMsgPosition;
+		}
+
+		var t = GmCXt.escapeHtml(m.tourTitle);
+		var c = GmCXt.singleLineTitle(t);
+
+		var html_ = "<wmgPlayerJSTest_ id='mgPlayerJSTest_beacon-icon-" + m.tourId +
+			"' class='" + beaconClass + "'>" +
+			"   <img src='" + beaconImgUrl + "' class='mgPlayerJSTest_custom-image' />" +
+			"   <div class='mgPlayerJSTest_tour-title-on-beacon " + c + " mgPlayerJSTest_tour-title-on-beacon-" +
+			titleAlign + "'>" +
+			t +
+			"</div>" +
+			"</wmgPlayerJSTest_>";
+
+		mg$(html_)
+			.css(css_)
+			.appendTo('html:first')
+			.on('click', function() {
+				if (!m.isPreview) {
+					GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:play_tour;event:beacon_click', {
+						tourId: m.tourId,
+						userKey: m.userKey
+					});
+					GmCXt.trackerV1.trackBeacons(m.requestData.tour, 'click');
+				}
+			})
+			.on('mouseover', function() {
+				this.style.zIndex = GmCXt.updateZIndex(this.style.zIndex, true); // passing true for incrementing z-index
+				if (!m.isPreview) {
+					GmCXt.trackerV1.trackBeacons(m.requestData.tour, 'hover');
+				}
+			})
+			.on('mouseout', function() {
+				this.style.zIndex = GmCXt.updateZIndex(this.style.zIndex);
+			});
+
+		if (!m.isPreview) {
+			GmCXt.updateBeaconsOnScreen(m.jobId.slice(1), true);
+			GmCXt.trackerV1.trackBeacons(m.requestData.tour, 'display');
+		}
+	}
+};
+
+GmCXt.requestHandler.toggleBeacon = function(m) {
+	var beaconImg = mg$(".mgPlayerJSTest_beacon-icon.mgPlayerJSTest_beacon-icon-tour-" + m.tourId);
+	if (m.remove) {
+		mg$(beaconImg).remove();
+	} else if (!m.show) {
+		mg$(beaconImg).hide();
+	} else {
+		mg$(beaconImg).show();
+	}
+};
+
+//To show validation message and show guidance tooltip on user action
+GmCXt.requestHandler.showSmarttip = function(m, ev) {
+
+	if (!m.options) return;
+
+	if (m.hideTooltip) {
+		GmCXt.requestHandler.hideSmartTip(m);
+	}
+	if (m.options.type == 'disableElement') {
+		var text = m.options.ductTapeDescription;
+	} else {
+		var text = GmCXt.getTooltipText(m);
+	}
+	// disable smarttips in step creation mode
+	if (GmCXt.stepReq &&
+		GmCXt.stepReq.action.indexOf('inline_step') !== -1) {
+		return;
+	}
+
+	var left = m.rect.left,
+		top = m.rect.top,
+		zIndex = m.zIndex,
+		id = 'mgPlayerJSTest_smarttip-' + m.stepId,
+		className = 'smarttip-guidance-msg mgPlayerJSTest_hover-smarttip-msg mgPlayerJSTest_smarttip-tour-' + m.step.tour_id;
+
+	if (m.derivedType === 'validation') {
+		className += ' mgPlayerJSTest_smarttip-valid';
+		className += ' mgPlayerJSTest_smarttip-valid-' + m.stepId;
+		left = m.left;
+		top = m.top - m.scrollTop;
+		id = 'mgPlayerJSTest_smarttip-valid-' + m.stepId;
+	}
+
+	if (m.tipPosition) {
+		className += ' ' + m.tipPosition;
+	}
+
+	if (m.isPreview)
+		className += ' mgPlayerJSTest_preview-smarttip';
+
+	className += ' mgPlayerJSTest_guidence-message-' + m.tourId;
+
+	if (m.options.type == 'disableElement') {
+		mg$('#' + id + "-alert").remove();
+	} else {
+		mg$('#' + id).remove();
+	}
+	mg$('.mgPlayerJSTest_smarttip-hover-element').hide();
+
+	if (ev) {
+		if (!ev.source) {
+			ev.source = GmCXt.iframeEls[m.reqId];
+		}
+		var obj = {
+			left: left,
+			top: top
+		};
+		obj = GmCXt.addFrameOffset(ev, obj);
+		left = obj.left + mg$(window).scrollLeft();
+		top = obj.top + mg$(window).scrollTop();
+	} else {
+		top = m.top;
+	}
+
+	text = GmCXt.updateOrgAndAddSignature(GmCXt.replaceVariableWithValue(text));
+	var c = GmCXt.singleLineTitle(text);
+
+	var alignment = 'top';
+	if (m.alignment) {
+		alignment = m.alignment;
+	}
+
+	if (m.derivedType === 'validation') {
+		if (m.options.rules.alignment)
+			alignment = m.options.rules.alignment;
+
+		if (alignment !== "top" || alignment !== "bottom")
+			className += " smarttip-guidance-msg-" + alignment + " mgPlayerJSTest_smarttip-valid-" + alignment;
+		else if (alignment !== "bottom")
+			className += " mgPlayerJSTest_smarttip ";
+
+		className += " mgPlayerJSTest_smarttip-valid-" + alignment;
+	}
+
+	if (m.actionType === 'hover') {
+		className += " mgPlayerJSTest_smarttip-hover-element";
+	}
+
+	var popupSize = m.options.popupSize;
+	var popupStyle = "";
+	if (popupSize) {
+		var popupWidth = popupSize.popupWidth ? popupSize.popupWidth : '250';
+		var popupHeight = popupSize.popupHeight ? popupSize.popupHeight : '250';
+		popupStyle = "max-width:" +
+			popupWidth + "px; max-height:" + popupHeight + "px;";
+	}
+
+	var os = m.os;
+	var tTheme = {};
+
+	if (m.derivedType !== 'validation') {
+		tTheme = GmCXt.tooltipTheme(os, 'wmgPlayerJSTest_', m.options);
+		var popupFooter = "<wmgPlayerJSTest_ class='mgPlayerJSTest_smarttip-popup-footer mgPlayerJSTest_width-100 mgPlayerJSTest_display-flex mgPlayerJSTest_align-items-center mgPlayerJSTest_justify-content-flex-start'>" +
+			"                 <img class='mgPlayerJSTest_custom-image' src='" + GmCXt.brandLogo() + "'>" +
+			"              </wmgPlayerJSTest_>";
+	}
+
+	if (m.options.type == 'disableElement') {
+
+		id = id + '-alert';
+		mg$("<wmgPlayerJSTest_  class='" + className + " " + c + "' id='" + id + "' style=' " + (tTheme.tooltipBorderC ? tTheme.tooltipBorderC : '') + (tTheme.tooltipBgColor ? tTheme.tooltipBgColor : '') + (tTheme.tooltipBorderW ? tTheme.tooltipBorderW : '') + (tTheme.tooltipBorderRadius ? tTheme.tooltipBorderRadius : '') + popupStyle + "'><wmgPlayerJSTest_ class='mgPlayerJSTest_hover-smarttip-msg-inner'  style='" + popupStyle + (tTheme.tooltipBorderRadius ? tTheme.tooltipBorderRadius : '') + (tTheme.tooltipDescColor ? tTheme.tooltipDescColor : '') + (tTheme.tooltipDescFsize ? tTheme.tooltipDescFsize : '') + (tTheme.tooltipDescFfamily ? tTheme.tooltipDescFfamily : '') + (tTheme.tooltipMwidth ? tTheme.tooltipMwidth : '') + (tTheme.tooltipWidth ? tTheme.tooltipWidth : '') + "'>" + text + "</wmgPlayerJSTest_>" + ((tTheme.tooltipBgColor && tTheme.tooltipBgColor.length > 0) ? popupFooter : '') + "</wmgPlayerJSTest_>")
+			.css({
+				left: left,
+				zIndex: zIndex,
+				top: top,
+			})
+			.appendTo('html');
+	} else {
+		mg$("<wmgPlayerJSTest_  class='" + className + " " + c + "' id='" + id + "' style=' " + (tTheme.tooltipBorderC ? tTheme.tooltipBorderC : '') + (tTheme.tooltipBgColor ? tTheme.tooltipBgColor : '') + (tTheme.tooltipBorderW ? tTheme.tooltipBorderW : '') + (tTheme.tooltipBorderRadius ? tTheme.tooltipBorderRadius : '') + popupStyle + "'><wmgPlayerJSTest_ class='mgPlayerJSTest_hover-smarttip-msg-inner'  style='" + popupStyle + (tTheme.tooltipBorderRadius ? tTheme.tooltipBorderRadius : '') + (tTheme.tooltipDescColor ? tTheme.tooltipDescColor : '') + (tTheme.tooltipDescFsize ? tTheme.tooltipDescFsize : '') + (tTheme.tooltipDescFfamily ? tTheme.tooltipDescFfamily : '') + (tTheme.tooltipMwidth ? tTheme.tooltipMwidth : '') + (tTheme.tooltipWidth ? tTheme.tooltipWidth : '') + "'>" + text + "</wmgPlayerJSTest_>" + ((tTheme.tooltipBgColor && tTheme.tooltipBgColor.length > 0) ? popupFooter : '') + "</wmgPlayerJSTest_>")
+			.css({
+				left: left,
+				zIndex: zIndex,
+				top: top,
+			})
+			.appendTo('html');
+	}
+	GmCXt.imageSizeStyle('#' + id + ' .mgPlayerJSTest_hover-smarttip-msg-inner img');
+
+	GmCXt.zoomImage(text, ".mgPlayerJSTest_hover-smarttip-msg-inner");
+
+	if (text.indexOf('target = "gssPlayGuide"' !== -1)) {
+		GmCXt.setLinkGuidePlay(text, ".mgPlayerJSTest_hover-smarttip-msg-inner");
+	}
+
+	if (GmCXt.isElectron()) {
+		GmCXt.setLinkClickhandler(text, ".mgPlayerJSTest_hover-smarttip-msg-inner");
+	}
+
+	if (m.zIndex) {
+		mg$('#' + id).css('z-index', parseInt(m.zIndex));
+	}
+
+	var elArea = GmCXt.getRectObject(m.highlightedArea);
+
+	if (ev) {
+		elArea = GmCXt.addFrameOffset(ev, elArea);
+
+		if (m.tipPosition !== 'mgPlayerJSTest_absolute-position')
+			elArea.top = elArea.top - m.scrollTop;
+
+	} else if (m.tipPosition === 'mgPlayerJSTest_absolute-position') {
+		elArea.top = elArea.top + m.scrollTop;
+		if (alignment === "bottom")
+			m.highlightedArea.top += 8;
+	}
+
+	var opts = {
+		popup: mg$("#" + id),
+		alignment: alignment,
+		highlightedArea: elArea,
+		doNotApplyArrow: true,
+		isGuidance: true,
+		customPos: m.options.customPosition
+	};
+
+	if (m.derivedType !== 'validation') {
+
+		var alignment = GmCXt.alignPopup(opts).start();
+
+		if (alignment) {
+			mg$("#" + id).addClass(alignment);
+		}
+
+		if (!m.inTopWindow) {
+			mg$("#" + id).css({
+				top: mg$("#" + id).offset().top + mg$(window).scrollTop(),
+				left: mg$("#" + id).offset().left + mg$(window).scrollLeft()
+			});
+		}
+
+		if (m.options.hideAfter !== 'showAlways') {
+			mg$('#' + id).off('mouseover').on('mouseover', function() {
+				GmCXt.clearTooltipTimeout();
+			}).off('mouseout').on('mouseout', function(e) {
+				var topEl = document.elementFromPoint(e.clientX, e.clientY);
+
+				if (!GmCXt.isParentElementId(topEl, id))
+					GmCXt.hideTooltipDelay(m.step, m.options);
+			});
+		}
+
+		var toolTipActionData = {};
+		toolTipActionData.settings = m.step.step_settings;
+		toolTipActionData.step = m.step;
+
+		GmCXt.addEventOnTooltip(toolTipActionData);
+
+		if (!m.isPreview) {
+			GmCXt.updateOnScreenTooltipGuideInfo(m.tour, m.tourId, m.stepId, true, m.options, GmCXt.urlParts.fullUrl);
+		}
+	}
+
+	if (!m.isPreview) {
+		GmCXt.updateTooltipActionInfo(m.tourId, m.stepId, m.options, m.actionType);
+	}
+};
+
+GmCXt.getNotificationDelay = function() {
+
+	var delay = GmCXt.getAppSetting('notificationDelay');
+	delay = parseInt(delay);
+
+	if (!isNaN(delay)) {
+		if (delay) {
+			GmCXt.log(10, "DELAYED notification loading: " + delay + " seconds");
+		}
+		return delay * 1000;
+	} else
+		return 0;
+};
+
+GmCXt.requestHandler.onElementFoundForDomSelectRule = function(message) {
+
+	if (message.data.fromSidePanel) {
+		GmCXt.sendMessageToApp(message.action, message.data);
+	} else {
+		GmCXt.ruleEngine.onSuccessDOMRuleMatch(message.data);
+	}
+};
+
+GmCXt.sendStorageResponseToApp = function(res, id) {
+	var d = {
+		"id": id,
+		"data": res
+	};
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:receive_lxp_storage', d);
+};
+
+GmCXt.removeLxpStorageAll = function() {
+	for (i = 0; i < window.localStorage.length; i++) {
+		key = window.localStorage.key(i);
+		if (key.slice(0, 5) === "mgLxp") {
+			GmCXt.storage().remove(key);
+		}
+	}
+};
+
+GmCXt.addOverlay = function() {
+	var html = "<wmgPlayerJSTest_ class='mgPlayerJSTest_global-black-overlay' style='display:none' > </wmgPlayerJSTest_>";
+	mg$("html").append(html);
+};
+
+GmCXt.hideResumePopup = function() {
+	mg$('.mgPlayerJSTest_play-pause-toolbar').hide();
+	GmCXt.setResumeWinDisplayed(false);
+};
+
+GmCXt.addPauseGuideHtml = function() {
+	var html = "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-toolbar' style='display:none;'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-toolbar-head'>" +
+		"<wmgPlayerJSTest_ id='mgPlayerJSTest_play-pause-toolbar-title' class='mgPlayerJSTest_play-pause-toolbar-title'>" + GmCXt.label.resumeGuide + "</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_action-icons-wrapper'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-position-top'>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-position-bottom'>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-toolbar-close'>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-toolbar-inner mgPlayerJSTest_inline-block-vm'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-pause-toolbar-resume mgPlayerJSTest_inline-block-vm'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_toolbar-resume-icon'>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ id='mgPlayerJSTest_play-pause-resume-message' class='mgPlayerJSTest_label-resume mgPlayerJSTest_inline-block-vm'>" + GmCXt.label.resume + "</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+	mg$("html").append(html);
+
+	mg$(".mgPlayerJSTest_play-pause-position-top").html(GmCXt.svgs.down_arrow);
+	mg$(".mgPlayerJSTest_play-pause-position-bottom").html(GmCXt.svgs.down_arrow);
+	mg$(".mgPlayerJSTest_play-pause-toolbar-close").html(GmCXt.svgs.close_resume);
+	mg$(".mgPlayerJSTest_toolbar-resume-icon").html(GmCXt.svgs.resume);
+
+	mg$('.mgPlayerJSTest_play-pause-toolbar-resume').on("click", function() {
+		GmCXt.hideResumePopup();
+
+		GmCXt.storage().get(['mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY', 'guide_play_event']).then(function(result) {
+
+			GmCXt.guidePlayTracker = result.guide_play_event || {};
+
+			if (result.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY) {
+
+				GmCXt.playerI.currentStepId = result.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY.lastPlayedStepId;
+
+				GmCXt.playerI.guideState = 'live';
+				GmCXt.tourPlayerI.guideState = 'live';
+
+				GmCXt.requestHandler.playTourNextStep();
+			}
+		});
+	});
+
+	mg$('.mgPlayerJSTest_play-pause-toolbar-close').on("click", function() {
+		GmCXt.hideResumePopup();
+		GmCXt.displayWidget();
+
+		if (GmCXt.tourPlayerI) GmCXt.tourPlayerI.stop();
+	});
+
+	mg$('.mgPlayerJSTest_play-pause-position-top').on('click', function(e) {
+		mg$('.mgPlayerJSTest_play-pause-position-top').hide();
+		mg$('.mgPlayerJSTest_play-pause-position-bottom').show();
+		mg$('.mgPlayerJSTest_play-pause-position-bottom').css({
+			'display': 'inline-block'
+		});
+		GmCXt.sendMessageToParentWindow('mgPlayerJSTest_action:position_play_pause_toolbar', {
+			position: 'top'
+		});
+	});
+
+	mg$('.mgPlayerJSTest_play-pause-position-bottom').on('click', function(e) {
+		mg$('.mgPlayerJSTest_play-pause-position-bottom').hide();
+		mg$('.mgPlayerJSTest_play-pause-position-top').show();
+		mg$('.mgPlayerJSTest_play-pause-position-top').css({
+			'display': 'inline-block'
+		});
+		GmCXt.sendMessageToParentWindow('mgPlayerJSTest_action:position_play_pause_toolbar', {
+			position: 'bottom'
+		});
+	});
+};
+
+GmCXt.addImagePopHtml = function() {
+	var html =
+		"<wmgPlayerJSTest_ id='mgPlayerJSTest_image_popup' class='mgPlayerJSTest_image-popup' style='display:none;'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_close-img-popup'>&times;</wmgPlayerJSTest_>" +
+		"<img class='mgPlayerJSTest_modal-content mgPlayerJSTest_custom-image' id='mgPlayerJSTest_img_desc'>" +
+		"</wmgPlayerJSTest_>";
+	mg$("html").append(html);
+};
+
+GmCXt.addStepPreviewHtml = function(popupObj) {
+	var t = popupObj.tour;
+	var a = popupObj.settings.automation;
+	var audioIcon = "<span class='mgPlayerJSTest_popup-audio-on mgPlayerJSTest_popup-audio-icon'></span>";
+	var os = GmCXt.getStepSettings();
+
+	var popupDesign = os.popupDesign;
+	var labelBtnPrev = ((popupDesign.type === 'classic' &&
+		GmCXt.getAppSetting("userLabels").btnPrev === GmCXt.engLbls.defaultBtnPrev) ? GmCXt.label.btnPrevious : GmCXt.label.btnPrev);
+
+	var html =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_preview-step-popup-container mgPlayerJSTest_step-popup' id='mgPlayerJSTest_preview-step-popup-container' style='display:none;'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-header'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-s-num mgPlayerJSTest_inline-block-vm'></wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-ctrls-wrapper mgPlayerJSTest_position-relative' > ";
+
+	if (a.hasHumanInteraction) {
+		html += "<wmgPlayerJSTest_ id='mgPlayerJSTest_play-step-automation-indicator-wrapper' class='mgPlayerJSTest_play-step-automation-indicator-wrapper'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-user-icon'>" +
+			"<img src='" + GmCXt.getBaseUrl('common/icons/mg-user-icon.png') + "'/>" +
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>";
+	} else {
+		html += "<wmgPlayerJSTest_ id='mgPlayerJSTest_play-step-automation-indicator-wrapper' class='mgPlayerJSTest_play-step-automation-indicator-wrapper'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-auto-gear mgPlayerJSTest_inline-block-vm' id='mgPlayerJSTest_play_step_auto_gear'></wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_automation-progress-wrapper'>" +
+			"<wmgPlayerJSTest_ id='mgPlayerJSTest_auto-progress-1' class='mgPlayerJSTest_automation-progress mgPlayerJSTest_inline-block-vm''></wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ id='mgPlayerJSTest_auto-progress-2' class='mgPlayerJSTest_automation-progress mgPlayerJSTest_inline-block-vm''></wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ id='mgPlayerJSTest_auto-progress-3' class='mgPlayerJSTest_automation-progress mgPlayerJSTest_inline-block-vm''></wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>";
+	}
+
+	html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-drag mgPlayerJSTest_message-popup-drag mgPlayerJSTest_inline-block-vm mgPlayerJSTest_play-step-popup-icon-common' aria-label='step popup drag button' id='mgPlayerJSTest_play_step_popup_drag' tabindex='0'>" +
+		"<span id='mgPlayerJSTest_play-step-popup-drag-icon' ></span>" +
+		"</wmgPlayerJSTest_>";
+
+	var audioPreference = GmCXt.getAudioPreference();
+
+	if (!audioPreference || GmCXt.isPageReloaded) {
+		audioIcon = "<span class='mgPlayerJSTest_popup-audio-off mgPlayerJSTest_popup-audio-icon'></span>";
+	}
+
+	if (GmCXt.FT.audio) {
+		html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-audio mgPlayerJSTest_inline-block-vm mgPlayerJSTest_play-step-popup-icon-common' id='mgPlayerJSTest_play_step_audio' tabindex='0'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_audio-pop-icons' >" +
+			audioIcon +
+			"</wmgPlayerJSTest_>" +
+			"<iframe id='mgPlayerJSTest_play-step-audio-iframe' title='Guideme step audio iframe'  class='mgPlayerJSTest_play-step-audio-iframe' src='" + GmCXt.getBasePath('common/audio/audio.html') + "' ></iframe>" +
+			"</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-audio-loader mgPlayerJSTest_inline-block-vm'>" +
+			"<img src='" + GmCXt.loader() + "' />" + "</wmgPlayerJSTest_>";
+	}
+	if (GmCXt.FT.creatorApp && t && !t.is_published && !(GmCXt.isDesktop())) {
+		html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-edit mgPlayerJSTest_inline-block-vm mgPlayerJSTest_play-step-popup-icon-common' id ='mgPlayerJSTest_play_step_popup_edit' tabindex='0'>" +
+			"<span id='mgPlayerJSTest_play-step-popup-edit-icon' class='mgPlayerJSTest_play-step-popup-edit-icon'></span>" +
+			"</wmgPlayerJSTest_>";
+	}
+
+	if (!GmCXt.isAutomationRunning()) {
+		html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-close mgPlayerJSTest_inline-block-vm mgPlayerJSTest_play-step-popup-icon-common' aria-label='step popup close button' id='mgPlayerJSTest_play_step_popup_close' tabindex='0'>" +
+			"<span id='mgPlayerJSTest_play-step-popup-close-svg' class='mgPlayerJSTest_play-step-popup-close-svg' ></span>" +
+			"</wmgPlayerJSTest_>";
+	}
+
+	html += "</wmgPlayerJSTest_>";
+
+	html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-content-wrapper'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-s-title mgPlayerJSTest_step-title mgPlayerJSTest_inline-block-vm' tabindex='0'></wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-description' tabindex='0'></wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-footer'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-popup-logo mgPlayerJSTest_inline-block-vm'>" +
+		"<img src='' class='mgPlayerJSTest_custom-image'  alt='" + GmCXt.label.brandLogo + "' tabindex='0'/>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-navigation mgPlayerJSTest_inline-block-vm'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-prev mgPlayerJSTest_inline-block-vm' aria-label='step popup " + labelBtnPrev + " button' id='mgPlayerJSTest_play_step_prev' tabindex='0'>" +
+		"<span class='mgPlayerJSTest_width-auto mgPlayerJSTest_text-overflow-ellipsis'>" + labelBtnPrev + "</span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-next mgPlayerJSTest_play-step-next-done mgPlayerJSTest_inline-block-vm' aria-label='step popup " + GmCXt.label.next + " button' id='mgPlayerJSTest_play_step_next' tabindex='0'>" +
+		"<span class='mgPlayerJSTest_width-auto mgPlayerJSTest_text-overflow-ellipsis'>" + GmCXt.label.next + "</span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-next mgPlayerJSTest_play-step-next-done mgPlayerJSTest_play-step mgPlayerJSTest_inline-block-vm' aria-label='step popup done button' id='mgPlayerJSTest_play_step_next_done' style='display:none;text-align:center !important;font-size: 15px !important;' tabindex='0'>" +
+		"<span id='mgPlayerJSTest_play-step-next-done-svg' class='mgPlayerJSTest_width-auto'></span>" +
+		"</wmgPlayerJSTest_>";
+
+	if (!GmCXt.isAutomationRunning()) {
+		html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_play-step-pause mgPlayerJSTest_inline-block-vm' aria-label='step popup pause button' id='mgPlayerJSTest_play_step_pause' style='display:none;text-align:center !important;font-size: 15px !important;' tabindex='0'>" +
+			"<span id='mgPlayerJSTest_play-step-pause-svg' class='mgPlayerJSTest_inline-block-vt mgPlayerJSTest_width-auto'></span>" +
+			"</wmgPlayerJSTest_>";
+	}
+
+	html += "</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='preview-step-popup-navigation-wrapper mgPlayerJSTest_inline-block-vt popup-classic-design-navigation'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-classic-navigation-next mgPlayerJSTest_play-step-next mgPlayerJSTest_play-step-next-done mgPlayerJSTest_play-step mgPlayerJSTest_play-step-classic-done mgPlayerJSTest_inline-block-vt' aria-label='step popup " + GmCXt.label.close + " button' id='mgPlayerJSTest_play_step_next_done_classic' style='display:none;' tabindex='0'>" +
+		"<span class='popup-classic-next mgPlayerJSTest_width-auto' style='margin: 0 !important;'>" + GmCXt.label.close + "</span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-classic-navigation-next mgPlayerJSTest_play-step-next mgPlayerJSTest_inline-block-vt' aria-label='step popup " + GmCXt.label.next + " button' id='mgPlayerJSTest_play_step_next_classic' tabindex='0'>" +
+		"<span class='mgPlayerJSTest_width-auto mgPlayerJSTest_text-span mgPlayerJSTest_width-auto mgPlayerJSTest_text-overflow-ellipsis'>" + GmCXt.label.next + "</span>" +
+		"<span id='mgPlayerJSTest_popup-classic-navigation-next-svg'  class='mgPlayerJSTest_width-auto' style='margin: 0 !important;'></span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='popup-classic-design-navigation-prev mgPlayerJSTest_play-step-prev mgPlayerJSTest_inline-block-vt' aria-label='step popup " + labelBtnPrev + " button' id='mgPlayerJSTest_play_step_prev_classic' tabindex='0'>" +
+		"<span id='mgPlayerJSTest_popup-classic-navigation-prev-svg' class='mgPlayerJSTest_width-auto' style='margin: 0 !important;'></span>" +
+		"<span class='mgPlayerJSTest_width-auto mgPlayerJSTest_text-overflow-ellipsis'>" + labelBtnPrev + "</span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-classic-navigation-pause mgPlayerJSTest_play-step-pause-classic mgPlayerJSTest_inline-block-vt' aria-label='step popup pause button' id='mgPlayerJSTest_play_step_pause_classic' style='display:none;' tabindex='0'>" +
+		"<span id='mgPlayerJSTest_popup-classic-nav-pause-svg' class='mgPlayerJSTest_inline-block-vt mgPlayerJSTest_width-auto'></span>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_clear'></wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	mg$("html:first").append(html);
+
+	mg$("#mgPlayerJSTest_play-step-popup-drag-icon").html(GmCXt.svgs.iconPopupDrag);
+	mg$("#mgPlayerJSTest_play_step_auto_gear").html(GmCXt.svgs.iconStepAutoGear);
+	mg$(".mgPlayerJSTest_popup-audio-on").html(GmCXt.svgs.iconStepPlayAudioOn);
+	mg$(".mgPlayerJSTest_popup-audio-off").html(GmCXt.svgs.iconStepPlayAudioOff);
+	mg$("#mgPlayerJSTest_play-step-popup-edit-icon").html(GmCXt.svgs.iconPopupEdit);
+	mg$("#mgPlayerJSTest_play-step-popup-close-svg").html(GmCXt.svgs.iconClosePopup);
+	mg$("#mgPlayerJSTest_play-step-pause-svg").html(GmCXt.svgs.iconPause);
+	mg$("#mgPlayerJSTest_popup-classic-navigation-next-svg").html(GmCXt.svgs.iconClassicNavNext);
+	mg$("#mgPlayerJSTest_popup-classic-navigation-prev-svg").html(GmCXt.svgs.iconClassicNavPrev);
+	mg$("#mgPlayerJSTest_play-step-next-done-svg").html(GmCXt.svgs.iconPlayStepNext);
+	mg$("#mgPlayerJSTest_popup-classic-nav-pause-svg").html(GmCXt.svgs.iconPause);
+
+	if (!GmCXt.FT.audio) {
+		mg$('.mgPlayerJSTest_play-step-popup-drag').css('right', '30px');
+		mg$('.mgPlayerJSTest_play-step-popup-edit').css('right', '50px');
+	}
+};
+
+GmCXt.setResumeWinDisplayed = function(status) {
+	GmCXt.storage().set({
+		'resumeWinDisplayed': status
+	});
+};
+
+GmCXt.addStopTestMePanel = function() {
+	var html =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-active' style='display:none;'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-active-head'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-active-countdown'></wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-action-icons-wrapper'>" +
+		"<button class='mgPlayerJSTest_play-pause-position-top mgPlayerJSTest_lbl-btn'>" +
+		"</button>" +
+		"<button class='mgPlayerJSTest_play-pause-position-bottom mgPlayerJSTest_lbl-btn'>" +
+		"</button>" +
+		"<button class='mgPlayerJSTest_testme-active-close mgPlayerJSTest_lbl-btn'>" +
+		"</button>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-active-inner'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-active-title'>" + GmCXt.label.testMeStopMessage + "</wmgPlayerJSTest_>" +
+		"<button class='mgPlayerJSTest_testme-active-stop mgPlayerJSTest_lbl-btn'>" +
+		"<img class='mgPlayerJSTest_testme-stop-img' src='" + GmCXt.conf.staticContentPath + "white_stop.png'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_testme-stop-label'>" + GmCXt.label.stop + "</wmgPlayerJSTest_>" +
+		"</button>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+	mg$("html").append(html);
+
+	mg$(".mgPlayerJSTest_play-pause-position-top").html(GmCXt.svgs.down_arrow);
+	mg$(".mgPlayerJSTest_play-pause-position-bottom").html(GmCXt.svgs.down_arrow);
+	mg$(".mgPlayerJSTest_testme-active-close").html(GmCXt.svgs.close_resume);
+
+	function stopTestMe() {
+		GmCXt.requestHandler.stopToolTestMe();
+	}
+
+	mg$('.mgPlayerJSTest_testme-active-stop').on("click", stopTestMe);
+	mg$('.mgPlayerJSTest_testme-active-close').on("click", stopTestMe);
+
+	mg$('.mgPlayerJSTest_play-pause-position-top').on('click', function(e) {
+		mg$(this).hide();
+		mg$('.mgPlayerJSTest_play-pause-position-bottom').show().css({
+			'display': 'inline-block'
+		});
+		mg$('.mgPlayerJSTest_testme-active').css({
+			top: '5px'
+		});
+	});
+
+	mg$('.mgPlayerJSTest_play-pause-position-bottom').on('click', function(e) {
+		mg$(this).hide();
+		mg$('.mgPlayerJSTest_play-pause-position-top').show().css({
+			'display': 'inline-block'
+		});
+		var bpos = mg$(window).height() - 127;
+		mg$('.mgPlayerJSTest_testme-active').css({
+			top: bpos + 'px'
+		});
+	});
+};
+
+GmCXt.addFeedBackToolbar = function() {
+	var html = "<wmgPlayerJSTest_ id='mg-feedback-container-wrapper' style='display:none;'>" +
+		"	<div id='mg-feedback-flex-container' class='mgPlayerJSTest_feedback-flex-container'>" +
+		"		<div id='mgPlayerJSTest_blackout' class='mgPlayerJSTest_blackout'></div>" +
+		"		<div id='mgPlayerJSTest_highlight' class='mgPlayerJSTest_highlight'></div>" +
+		"		<div id='mg-feedback-popup' class='mgPlayerJSTest_feedback-modal-content'>" +
+		"			<div class='mgPlayerJSTest_feedback-popup-inner-container'>" +
+		"				<div class='mgPlayerJSTest_feedback-header'>" +
+		"					<div class='mgPlayerJSTest_feedback-header-text'>" + GmCXt.label.sendFeedback + "</div>" +
+		"				</div>" +
+		"				<textarea class='mgPlayerJSTest_feedback-textarea' id='mg-feedback' name='feedback' rows='4' cols='5' maxlength='3000' placeholder='" + GmCXt.label.feedbackPlaceholder + "'></textarea>" +
+		"				<div class='mgPlayerJSTest_feedback-body'>" +
+		"					<div class='mgPlayerJSTest_feedback-check'>" +
+		"						<input type='checkbox' id='mg-feedback-screenshot-check' class='mgPlayerJSTest_feedback-checkbox' checked>" +
+		"						<div class='mgPlayerJSTest_feedback-label'>" + GmCXt.label.includeScreen + "</div>" +
+		"					</div>" +
+		"					<div class='mgPlayerJSTest_feedback-img-container'>" +
+		"						<button class='mgPlayerJSTest_feedback-re-edit-btn click-reEditImage'>" +
+		"							<img id='mg-feedback-screenshot-image' class='mgPlayerJSTest_feedback-img' src=''>" +
+		"							<div class='mgPlayerJSTest_feedback-overlay-svg'>" +
+		"								<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>" +
+		"									<path d='M16.1 8.43V5.36a1 1 0 1 1 2 0v3.07a1 1 0 0 1-2 0Zm7 3.49a1 1 0 0 0 .71-.29L26 9.46a1 1 0 0 0 0-1.41 1 1 0 0 0-1.41 0l-2.17 2.17a1 1 0 0 0 .7 1.7ZM10.37 22.26 8.2 24.43a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l2.17-2.17a1 1 0 1 0-1.42-1.42ZM9.58 17a1 1 0 0 0-1-1H5.52a1 1 0 0 0 0 2h3.06a1 1 0 0 0 1-1Zm0-8.9A1 1 0 0 0 8.2 9.46l2.17 2.17a1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29 1 1 0 0 0 0-1.41Zm17.57 19.3a1 1 0 0 1-1.41 0l-3.63-3.63-2.58 3.35a1 1 0 0 1-.79.39h-.17a1 1 0 0 1-.78-.68L14.28 15.7a1 1 0 0 1 1.26-1.26L26.61 18a1 1 0 0 1 .31 1.75l-3.35 2.58 3.62 3.62a1 1 0 0 1 0 1.4Zm-5.89-5.8.07-.06.07-.06 2.74-2.11L16.73 17l2.37 7.4Z' />" +
+		"								</svg>" +
+		"								<span class='mgPlayerJSTest_feedback-svg-text'>" + GmCXt.label.feedbackOptBtn + "</span>" +
+		"							</div>" +
+		"						</button>" +
+		"						<div class='mgPlayerJSTest_feedback-overlay-svg-error'>" + GmCXt.label.feedbackImgErrorMsg + " </div>" +
+		"					</div>" +
+		"				</div>" +
+		"				<div class='mgPlayerJSTest_feedback-footer'>" +
+		"					<button type='submit' class='mgPlayerJSTest_feedback-cancel'>" + GmCXt.label.btnCancel + "</button>" +
+		"					<button type='submit' class='mgPlayerJSTest_feedback-send-btn'>" + GmCXt.label.send + "</button>" +
+		"				</div>" +
+		"			</div>" +
+		"		</div>" +
+		"		<div id='mg-feedback-selector-toolbar' class='mgPlayerJSTest_feedback-selector-toolbar mgPlayerJSTest_feedback-modal-content'>" +
+		"			<button id='mg-feedback-highlight-btn' class='selector-btn btn-border'>" + GmCXt.label.highlight + "</button>" +
+		"			<button id='mg-feedback-hide-btn' class='selector-btn btn-border'>" + GmCXt.label.hide + "</button>" +
+		"			<button id='mg-feedback-done-btn' class='selector-btn'>" + GmCXt.label.done + "</button>" +
+		"		</div>" +
+		"	</div>" +
+		"</wmgPlayerJSTest_>";
+
+	mg$("html").append(html);
+
+	mg$('.mgPlayerJSTest_feedback-send-btn').off('click').on('click', function() {
+		GmCXt.sendFeedback();
+	});
+	mg$('.mgPlayerJSTest_feedback-cancel').off('click').on('click', function() {
+		GmCXt.clearFeedBackView();
+	});
+	mg$('.click-reEditImage').off('click').on('click', function() {
+		GmCXt.onEditScreenshotClick();
+	});
+	mg$('#mg-feedback-highlight-btn').off('click').on('click', function() {
+		GmCXt.onClickFeedbackHighlightArea();
+	});
+	mg$('#mg-feedback-hide-btn').off('click').on('click', function() {
+		GmCXt.onClickFeedbackHideArea();
+	});
+	mg$('#mg-feedback-done-btn').off('click').on('click', function() {
+		GmCXt.onClickFeedbackEditDone();
+	});
+};
+
+GmCXt.addListenersToDesktopApp = function() {
+
+	if (GmCXt.isEnt()) {
+		document.addEventListener('start_creator_session', createSession);
+
+		document.addEventListener('start_guide_automation', function(e) {
+			GmCXt.log(37, "input data", e.detail.playJSON);
+			var data = GmCXt.parseJSON(e.detail.playJSON);
+			syncDesktopRequest(e).then(function() {
+				GmCXt.sendMessageToApp('mgPlayerJSTest_action:switch_app', {
+					app: GmCXt.appList['app:' + data.application_id]
+				});
+				GmCXt.startAuto(data);
+			});
+		});
+	}
+
+	if (GmCXt.isPlayer()) {
+		document.addEventListener('start_player_session', createSession);
+	}
+
+	function syncDesktopRequest(e) {
+
+		var deskReq = e.detail;
+		return GmCXt.storage().get(['desktopReq']).then(function(st) {
+			if (st && st.desktopReq) {
+				deskReq = Object.assign({}, st.desktopReq, deskReq);
+			}
+			GmCXt.deskReq = deskReq;
+
+			GmCXt.sendMessageToApp('mgPlayerJSTest_action:connected_from_app', {
+				data: deskReq
+			});
+			return deskReq;
+		});
+	}
+
+	function startTour(e) {
+		return syncDesktopRequest(e).then(GmCXt.startTourFromDesktopApp);
+	}
+
+	function createSession(e) {
+		return syncDesktopRequest(e).then(function() {
+			if (!e.detail.user) {
+				return;
+			}
+			var data = {};
+			data.user = GmCXt.validateDataModel(GmCXt.parseJSON(e.detail.user), GmCXt.model.user);
+			if (!GmCXt.user && data.user && !GmCXt.isEmpty(data.user)) {
+				GmCXt.sendMessageToApp('mgPlayerJSTest_action:user_signed_in', {
+					data: data
+				});
+			}
+		});
+	}
+};
+
+GmCXt.addDragPopUpFunction = function() {
+	var elmnt = document.getElementById("mgPlayerJSTest_preview-step-popup-container");
+	var dragEl = document.getElementById('mgPlayerJSTest_play_step_popup_drag');
+
+	GmCXt.attachDragEvents(elmnt, dragEl);
+};
+
+GmCXt.addDragMicroPlayerFunction = function() {
+	var elmnt = document.getElementsByClassName('mgPlayerJSTest_panel mgPlayerJSTest_theme-mplayer')[0];
+	var dragEl = document.getElementById('mgPlayerJSTest_mPlayer-drag');
+
+	GmCXt.attachDragEvents(elmnt, dragEl);
+};
+
+GmCXt.addStepToolbar = function() {
+
+	var cname = 'mgPlayerJSTest_toolbar-iframe';
+	if (GmCXt.isEnt()) {
+		cname += ' ' + GmCXt.conf.appName + '-step-toolbar';
+	}
+
+	var html = "<div class='mgPlayerJSTest_toolbar-panel'>" +
+		"<iframe id='mgPlayerJSTest_toolbar-iframe' class='" + cname + "' name='guideme-iframe' title='Guideme toolbar iframe' src='" +
+		GmCXt.getBaseUrl("content_script/toolbar/toolbar.html") +
+		"' width='100%' marginwidth='0' marginheight='0' scrolling='no' frameborder='0'></iframe> " +
+		"</div>";
+
+	mg$("html").append(html);
+};
+
+GmCXt.getSidePanelIframe = function() {
+	var u = GmCXt.getBaseUrl("side_panel/sidepanel_1749722599831.html") + "?domainName=" + GmCXt.getPageDomain();
+	var aria_hidden = "aria-hidden = 'true' tabindex = '-1'";
+	var html = "<wmgPlayerJSTest_ class='mgPlayerJSTest_panel mgPlayerJSTest_mobile-view " + (GmCXt.isWBMicroPlayer() ? 'mgPlayerJSTest_panel-micro' : '') + (GmCXt.isMicroPlayer() ? 'mgPlayerJSTest_theme-mplayer' : '') + "' " + aria_hidden + ">";
+
+	if (GmCXt.isWBMicroPlayer()) {
+		html +=
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_panel-micro-header mgPlayerJSTest_position-relative'>" +
+			"	<wmgPlayerJSTest_ class='mgPlayerJSTest_player-title-wrapper mgPlayerJSTest_wb-micro-font-family'>" +
+			GmCXt.label.wbMplayerTitle + "</wmgPlayerJSTest_>" +
+			"	<wmgPlayerJSTest_ id='mgPlayerJSTest_micro_player_drag' class='mgPlayerJSTest_player-drag-wrapper'>" +
+			" 		<span id='mgPlayerJSTest_micro_player_drag-svg'></span> " +
+			"  		<wmgPlayerJSTest_ class='mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-top-left'>" +
+			"     		<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-title mgPlayerJSTest_wb-micro-font-family'>" + GmCXt.label.wbDragTooltip + "</wmgPlayerJSTest_>" +
+			"		</wmgPlayerJSTest_>" +
+			"	</wmgPlayerJSTest_>" +
+			"	<wmgPlayerJSTest_ class='mgPlayerJSTest_player-close-wrapper'>" +
+			"       <span id='mgPlayerJSTest_mplayer-close-svg'></span>" +
+			"		<wmgPlayerJSTest_ class='mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-top-left'>" +
+			"		<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-title mgPlayerJSTest_wb-micro-font-family'>" + GmCXt.label.close + "</wmgPlayerJSTest_>" +
+			"		</wmgPlayerJSTest_>" +
+			"	</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>";
+
+	}
+
+	// micro player drag element
+	html += "<wmgPlayerJSTest_ id='mgPlayerJSTest_mPlayer-drag'> </wmgPlayerJSTest_>";
+
+	var cname = 'mgPlayerJSTest_app';
+	if (GmCXt.isWBMicroPlayer()) {
+		cname += ' mgPlayerJSTest_app-micro';
+	}
+
+	if (GmCXt.isEnt() || GmCXt.isPlayer()) {
+		cname += ' ' + GmCXt.conf.appName + '-side-panel';
+	}
+
+	var scormText = "";
+	if (GmCXt.FT.isPlayer && window.location.hostname === "cloud.scorm.com") {
+		scormText = 'onload="updateIframesLoadedCount()"';
+	}
+
+	html += "<iframe id='mgPlayerJSTest_app' name='guideme-iframe' title='Guideme sidepanel iframe' " +
+		"	class='" + cname + "'" + aria_hidden +
+		"	src='" + u + "' allowfullscreen='true' allow='microphone; camera' " + scormText + "></iframe> " +
+		"</wmgPlayerJSTest_>";
+
+	return html;
+};
+
+function initialiseTestAutomationData() {
+	GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:construct_test_automation');
+}
+
+GmCXt.bootApplication = function() {
+
+	GmCXt.log(33, "BOOT APP", 1);
+	var lang = GmCXt.mgActiveLang;
+
+	if (!GmCXt.mgActiveLang && GmCXt.browserLang) {
+		lang = GmCXt.browserLang;
+		GmCXt.mgActiveLang = lang;
+	}
+
+	GmCXt.getAllLabels(lang);
+	GmCXt.addOverlay();
+	GmCXt.addPauseGuideHtml();
+	GmCXt.addStopTestMePanel();
+	initialiseTestAutomationData();
+
+	var imgStepLoader = '';
+	var editStepLoader = '';
+
+	if (GmCXt.FT.creatorApp) {
+		editStepLoader = "<div class='mgPlayerJSTest_edit-step-loader'>" +
+			"<img src='" + GmCXt.loader() + "' /></div>";
+		imgStepLoader = "<div class='mgPlayerJSTest_image-step-loader'>" +
+			"<img src='" + GmCXt.loader() + "' /></div>";
+
+		GmCXt.addStepToolbar();
+	}
+
+	var html = GmCXt.getSidePanelIframe() +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_screen-blackout'></wmgPlayerJSTest_>" +
+		editStepLoader +
+		imgStepLoader +
+		"<wmgPlayerJSTest_ id='mgPlayerJSTest_toast-msg'></wmgPlayerJSTest_>";
+
+	if (GmCXt.browserApp === 'ie') {
+		mg$("body").append(html);
+	} else {
+		mg$("html").append(html);
+	}
+
+	mg$("#mgPlayerJSTest_micro_player_drag-svg").html(GmCXt.svgs.micro_drag);
+	mg$("#mgPlayerJSTest_mplayer-close-svg").html(GmCXt.svgs.mplayer_close);
+	mg$("#mgPlayerJSTest_close-lbl-svg").html(GmCXt.svgs.close);
+
+	GmCXt.initialization.sidePanel = false;
+
+	mg$(".mgPlayerJSTest_panel-close .mgPlayerJSTest_panel-close-btn-wrapper").click(function() {
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:close_video');
+		GmCXt.closeAppPanel();
+	});
+
+	mg$(".mgPlayerJSTest_player-close-wrapper").click(function() {
+		GmCXt.sendMessageToApp('mgPlayerJSTest_action:close_video');
+		GmCXt.closeAppPanel();
+	});
+
+	var newStyle = GmCXt.getCustomFontStyle();
+	mg$("html:first").append(newStyle);
+
+	// Guide Automation result popup should be visible even if user did a page refresh.
+	// It should show until user clicked the Insights link in it or closed it.
+	if (GmCXt.auto) {
+		GmCXt.auto.getTestResultsFromStorage(function(response) {
+			GmCXt.auto.showResults(response);
+		});
+	}
+};
+
+GmCXt.isSumtotalCalendarIframe = function(name) {
+	if (GmCXt.isSumtotal() && name.toLowerCase().indexOf('calendar') !== -1) {
+		return true;
+	}
+	return false;
+};
+
+GmCXt.isSabaSCORMIframe = function(name) {
+	if (GmCXt.isSbx() && name.toLowerCase().indexOf('sco') !== -1) {
+		return true;
+	}
+	return false;
+};
+
+GmCXt.isAllowedIframe = function(name) {
+	var isAllowed = true;
+	if (name.indexOf('guideme-iframe') !== -1 || GmCXt.isSumtotalCalendarIframe(name) || GmCXt.isSabaSCORMIframe(name)) {
+		isAllowed = false;
+	}
+	return isAllowed;
+};
+
+GmCXt.showCookieDisabledPopup = function() {
+	var m = {
+		action: 'mgPlayerJSTest_action:to_background;task:show_cookie_disabled_popup'
+	};
+	GmCXt.sendMessageToBackgroundService(m);
+
+	if (GmCXt.FT.isPlayer) {
+		console.dir("Cookies are disabled in this browser. To use MyGuide, please enable cookies");
+	}
+};
+
+GmCXt.setSession = function() {
+	var mgInfo = sessionStorage.getItem('mgInfo');
+
+	if (mgInfo) {
+		GmCXt.sessionInfo = GmCXt.parseJSON(mgInfo);
+	} else {
+
+		var mgInfo = {
+			session_id: GmCXt.getUUID()
+		};
+
+		//new session
+		sessionStorage.setItem(
+			'mgInfo', JSON.stringify(mgInfo)
+		);
+	}
+
+	GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:update_session_info", {
+		sessionInfo: GmCXt.parseJSON(mgInfo)
+	});
+};
+
+GmCXt.main = function() {
+
+	if (!navigator.cookieEnabled) {
+		GmCXt.showCookieDisabledPopup();
+		return;
+	}
+
+	if ((GmCXt.isHumana() || GmCXt.isMcKesson()) && GmCXt.isSalesForcePopOutSide()) {
+		return;
+	}
+
+	GmCXt.initDebugMode();
+
+	GmCXt.isPageRefresh = GmCXt.convertType(localStorage.getItem('mg_pageRefreshEvent'));
+	localStorage.setItem("mg_pageRefreshEvent", false);
+
+	GmCXt.setSession();
+
+	var m = {
+		action: 'mgPlayerJSTest_action:to_background;task:disable_browser_action_popup'
+	};
+	GmCXt.sendMessageToBackgroundService(m, function() {});
+
+	if (!GmCXt.isClientJs()) {
+		GmCXt.storage().get(['login_state']).then(function(o) {
+			if (o.login_state) {
+				GmCXt.reportPresence();
+			}
+		});
+	} else {
+		GmCXt.reportPresence();
+	}
+
+	GmCXt.addListenersToDesktopApp();
+
+	GmCXt.startMsgChannel('Guide:workerSelf');
+	GmCXt.bootApplication();
+
+	// Close side panel on Escape keypress
+	mg$(document).on('keydown', function(e) {
+		if (e.which === 27) GmCXt.closeAppPanel();
+	});
+
+	if (GmCXt.isLXP()) {
+		var lxpBtn = mg$('[aria-label="MyGuide"]')[0];
+		mg$(lxpBtn).off('click').on('click', function() {
+
+			if (!GmCXt.APP_PANEL_OPEN) {
+				GmCXt.trackerV1.trackPanelOpen('client');
+			}
+		});
+	}
+
+	GmCXt.readExternalVars();
+
+	if (GmCXt.isExtension()) {
+		if (GmCXt.browserApp === 'chrome') {
+			chrome.runtime.onMessage.addListener(GmCXt.listenerBackgroud);
+		} else if (GmCXt.browserApp === 'Safari') {
+			safari.self.addEventListener("message", GmCXt.listenerBackgroud);
+		} else {
+			browser.runtime.onMessage.addListener(GmCXt.listenerBackgroud);
+		}
+	}
+};
+
+GmCXt.readExternalVars = function() {
+
+	if (GmCXt.FT.isPlayer) {
+		if (window.guideMe) {
+
+			GmCXt.client.tourId = window.guideMe.tourId;
+			GmCXt.client.liveTourInvocation = window.guideMe.type;
+			GmCXt.client.orgkey = window.guideMe.orgkey;
+
+			GmCXt.conf.orgSecrret = GmCXt.client.orgkey;
+			localStorage.setItem(GmCXt.storagePrefix + "orgkey", GmCXt.client.orgkey);
+
+		} else {
+			window.guideMe = {};
+		}
+
+		GmCXt.loginUsingAuthKey();
+	}
+
+	var tourId = GmCXt.getUrlParameter('guideMe-tourId');
+	var automation = GmCXt.getUrlParameter('automation');
+
+	if (tourId) {
+		GmCXt.client.tourId = tourId;
+		GmCXt.client.automation = automation === "true" ? true : false;
+		GmCXt.client.isUrlTour = true;
+	}
+};
+
+GmCXt.updateGmConfig = function() {
+	GmCXt.sendMessageToolbar("mgPlayerJSTest_action:update_guideme_config");
+};
+
+GmCXt.onClickGuideMeIcon = function(e) {
+	e.stopPropagation();
+
+	if (!GmCXt.initialization.sidePanel) return true;
+
+	GmCXt.openAppPanel(null, 'widget');
+};
+
+GmCXt.onClickChatIcon = function(e) {
+	e.stopPropagation();
+
+	if (!GmCXt.initialization.sidePanel) return true;
+
+	GmCXt.openAppPanel('chatbot', 'chatbotWidget');
+};
+
+GmCXt.getStartBtnClass = function() {
+
+	// This class is only used to set position
+
+	var n = "mgPlayerJSTest_start-button-creator";
+
+	if (GmCXt.FT.isPlayer) {
+
+		if (GmCXt.isExtension())
+			n = "mgPlayerJSTest_start-button-playerxt";
+		else
+			n = "mgPlayerJSTest_start-button-clientJS";
+	}
+
+	return n;
+};
+
+/**
+	* Check if user was playing live tour.
+	* Play the last step again if user has selected 'Redirect to Live tour' option.
+	* Play next step is user has clicked on the element (highlighted in inline step).
+	*/
+
+GmCXt.executeRequestPlayTour = function() {
+
+	GmCXt.playerI = mg$.extend({}, GmCXt.playerI);
+
+	if (GmCXt.playerI.testAutomation) {
+		// Show the Guide Automation Progress bar
+		GmCXt.auto.get(function(state) {
+			if (!state) {
+				GmCXt.cleanPlayer();
+			} else {
+				GmCXt.auto.showProgress();
+			}
+		});
+	}
+
+	if (GmCXt.playerI && GmCXt.playerI.tour &&
+		GmCXt.playerI.tour.steps &&
+		GmCXt.playerI.tour.steps.length > 0
+	) {
+
+		var step = GmCXt.getStepFromPlayerI(GmCXt.playerI.currentStepId);
+		if (!step) return;
+
+		if (GmCXt.playerI.completeEventTracked && GmCXt.isLooping()) {
+			GmCXt.requestHandler.playAutoTour();
+			return;
+		}
+
+		var playMode = GmCXt.playerI.mode;
+
+		GmCXt.log(33, "Page reloaded. Guide started.");
+
+		if (GmCXt.playerI.guideState === 'pause' &&
+			GmCXt.playerI.pausedOn === GmCXt.urlParts.host + GmCXt.urlParts.pathname &&
+			playMode !== 'slideshow'
+		) {
+			GmCXt.playTour();
+			return;
+		}
+
+		var settings = step.step_settings;
+
+		var inlineStepCheck = step.step_type === GmCXt.STEP_TYPE_INLINE;
+		var isAutomationStep = GmCXt.isAutomationStep(step);
+		var messageStepCheck = (step.step_type === GmCXt.STEP_TYPE_MESSAGE && !settings.keepNext);
+		var transportStepCheck = step.step_type === GmCXt.STEP_TYPE_TRANSPORT;
+
+		// If request is not coming from "redirect to live step" option,
+		// and last step is played successfully
+		// then increment stepIndex
+
+		if (GmCXt.playerI.lastAction !== "redirection" &&
+			(inlineStepCheck || messageStepCheck || isAutomationStep || transportStepCheck) &&
+			GmCXt.playerI.lastPlayedStepId === GmCXt.playerI.currentStepId) {
+
+			GmCXt.playerI.currentStepId = GmCXt.getTail(GmCXt.playerI.currentStepId, GmCXt.playerI.playStructure);
+
+			step = GmCXt.getStepFromPlayerI(GmCXt.playerI.currentStepId);
+			if (!step) {
+				GmCXt.log(33, "Step not Found in Tour. Halt Guide Play.", GmCXt.playerI);
+				if (transportStepCheck) {
+					GmCXt.playerI.currentStepId = GmCXt.playerI.lastPlayedStepId;
+					GmCXt.tourPlayerI = GmCXt.tourPlayer();
+					GmCXt.tourPlayerI.closeGuide();
+				}
+				GmCXt.cleanPlayer();
+				return;
+			}
+
+			GmCXt.log(33, "Page reloaded. Pointer incremented to next step.");
+		}
+
+		if (step.step_type === "guide") {
+
+			var d = {
+				tour_id: step.step_settings.tour_id
+			};
+
+			GmCXt.getGuideFirstStep(d)
+				.then(function(s) {
+					GmCXt.executeNextStep();
+				});
+
+		} else {
+			GmCXt.executeNextStep();
+		}
+	}
+};
+
+GmCXt.getGuideFirstStep = function(d) {
+	return new Promise(function(resolve, reject) {
+		GmCXt.getTourDetails(d)
+			.then(function(tour) {
+				var s = {};
+				if (tour) s = tour.steps[0];
+				resolve(s);
+			});
+	});
+};
+
+GmCXt.executeNextStep = function() {
+	function proceed() {
+		GmCXt.playerI.onPageLoad = true;
+		GmCXt.playTour();
+	}
+
+	GmCXt.playerI.lastAction = null;
+
+	if (GmCXt.playerI.currentStepId) {
+		var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+
+		if (step.step_type === GmCXt.STEP_TYPE_GUIDE) {
+			proceed();
+		} else {
+			GmCXt.checkProceedToPlay(step, GmCXt.playerI.tour).then(function(y) {
+				if (y && GmCXt.playerI) {
+					proceed();
+				}
+			});
+		}
+
+	} else {
+		GmCXt.cleanPlayer();
+	}
+};
+
+GmCXt.gEvent = {};
+
+GmCXt.triggerChangeListeners = function(eType) {
+
+	if (GmCXt.currentUrl !== GmCXt._location().href) {
+		GmCXt.currentUrl = GmCXt._location().href;
+		GmCXt.saveCurrentURL();
+		eType = 'url';
+	}
+
+	if (GmCXt.pageTitle !== GmCXt.getDocTitle()) {
+		GmCXt.setPageTitle();
+		eType = 'page_title';
+	}
+
+	if (eType === 'url' || eType === 'page_title' || eType === 'page_click') {
+		GmCXt.gEvent.type = eType;
+		GmCXt.gEvent.time = Date.now();
+		GmCXt.clearAllRuleJobs();
+	}
+
+	// Process page_title and url change events after 0.5 sec of occurrence
+	if ((GmCXt.gEvent.type === 'url' || GmCXt.gEvent.type === 'page_title') && (Date.now() - GmCXt.gEvent.time > 500)) {
+		GmCXt.changeEvent(GmCXt.gEvent.type);
+		GmCXt.gEvent = {};
+
+	} else if (GmCXt.gEvent.type === 'page_click' && (Date.now() - GmCXt.gEvent.time > 1500)) { // Process page_click event after 1.5 sec of occurrence
+		GmCXt.changeEvent(GmCXt.gEvent.type);
+		GmCXt.gEvent = {};
+	}
+};
+
+GmCXt.clearAllRuleJobs = function() {
+	GmCXt.ruleEngine.clearJobs();
+	if (!(GmCXt.isHumana() && GmCXt.checkSalesForceSite())) {
+		GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:clear_rule_jobs', {
+			trigger: GmCXt.gEvent.type
+		});
+	}
+	GmCXt.sendMessageToApp("mgPlayerJSTest_action:clear_current_page", {});
+};
+
+GmCXt.changeEvent = function(type) {
+
+	if (GmCXt.isExcludeDomain()) return;
+
+	GmCXt.log(1, "CHANGE EVENT: " + type);
+
+	// To track events and for player sync
+	if (GmCXt.user) {
+		if (GmCXt.isClientJs()) {
+			GmCXt.processLastActionTime();
+
+		} else {
+			var m = {
+				action: "mgPlayerJSTest_action:record_user_activity",
+				data: {
+					organization: GmCXt.organization,
+					user: GmCXt.user
+				}
+			};
+			GmCXt.sendMessageToBackgroundService(m);
+		}
+	}
+
+	GmCXt.validatedSegments = {};
+
+	if (type === 'url' || type === 'page_title') {
+		GmCXt.onContextChange(type);
+	} else {
+		GmCXt.onPageClicked();
+	}
+};
+
+GmCXt.filterGuidesByRuleType = function(type) {
+	var id, rules, found;
+	var idList = [];
+
+	var toursOnScreen = GmCXt.partialVisibleTooltipsIds.concat(GmCXt.onScreenTooltipGuideIds);
+
+	for (var i = 0; i < toursOnScreen.length; i++) {
+		id = toursOnScreen[i];
+		rules = GmCXt.onScreenTooltipGuideInfo['tour_' + id].rules;
+		found = false;
+		if (type === 'url') {
+			found = rules.some(function(r) {
+				return ["URL Path", "URL", "URL Hostname", "URL Parameters", "URL Hash"].indexOf(r) >= 0;
+			});
+		} else if (type === 'page_title') {
+			found = rules.indexOf("Page Title") >= 0;
+		}
+
+		//Return toolip guides which should be removed when rules become invalid
+		if (found && GmCXt.onScreenTooltipGuideInfo['tour_' + id].watchRules) {
+			idList.push(id);
+		}
+	}
+	return idList;
+};
+
+GmCXt.onContextChange = function(eventType) {
+	GmCXt.pageTours = {};
+	GmCXt.clearBeaconsAndTooltips(false, GmCXt.filterGuidesByRuleType(eventType));
+	GmCXt.rulesIframeQueue = [];
+
+	GmCXt.storage().get(['mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY', 'testMe', 'guide_play_event'])
+		.then(function(st) {
+
+			var pi = st.mgPlayerJSTest_mgPlayerJSTest_GM_PLAYER_STORAGE_KEY;
+
+			if (pi && pi.testAutomation) {
+				GmCXt.guidePlayTracker = st.guide_play_event || {};
+			}
+
+			// Neglect change event
+
+			if (GmCXt.isTestMeOn(st.testMe)) {
+				return true;
+			} else if (!GmCXt.isPlayer()) {
+				return true;
+			}
+
+			GmCXt.getContextGuides(eventType);
+		});
+};
+
+GmCXt.neglectChangeEvent = function() {
+	if (GmCXt.isAutomationRunning()) {
+		return false;
+	}
+	if (GmCXt.playerI) {
+		return true;
+	} else if (GmCXt.isTestMeOn(GmCXt.testMe)) {
+		return true;
+	} else if (!GmCXt.isPlayer()) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+GmCXt.removeInvalidSegmentSmartipAndBeacon = function(tList, tListType) {
+	if (tList.length) {
+		for (var b = 0; b < tList.length; b++) {
+			var segmentGrp = tList[b].tour_settings.segment_groups;
+			if (!GmCXt.isEmpty(segmentGrp)) {
+				for (var sg = 0; sg < segmentGrp.length; sg++) {
+					var seg = GmCXt.getSegmentById(segmentGrp[sg]);
+					if (seg && seg.rule_check) {
+						if (tListType === "beacon") {
+							GmCXt.removeBeaconElement(tList[b]);
+							var tindx = GmCXt.beaconsOnScreen.indexOf(parseInt(tList[b].tour_id));
+							if (tindx !== -1) {
+								GmCXt.beaconsOnScreen.splice(tindx, 1);
+							}
+						} else if (tListType === "smarttip") {
+							var tindx = GmCXt.onScreenTooltipGuideIds.indexOf(tList[b].tour_id);
+							if (tindx !== -1) {
+								GmCXt.onScreenTooltipGuideIds.splice(tindx, 1);
+							}
+							GmCXt.removeTooltips(tList[b]);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+};
+
+GmCXt.onPageClicked = function() {
+
+	if (GmCXt.neglectChangeEvent() && !GmCXt.user) return;
+
+	GmCXt.rulesIframeQueue = [];
+	GmCXt.setPageTitle();
+
+	if (!GmCXt.checkPrecedence()) {
+		return;
+	}
+
+	if (GmCXt.user) {
+		GmCXt.trackerV1.trackUserPulse();
+	}
+
+	var gotTours = function(tours) {
+
+		if (GmCXt.isPlayer() && !GmCXt.isEmpty(tours)) tours = GmCXt.filterScheduleTours(tours);
+
+		GmCXt.pageTours = tours;
+
+		var beaconTours = tours ? GmCXt.filterBeaconGuides(tours) : mg$.extend([], GmCXt.beaconTours);
+		var tooltipTours = tours ? GmCXt.filterSmartTipGuides(tours) : mg$.extend([], GmCXt.tooltipTours);
+		if (GmCXt.organization.admin_settings.efficient_rule_mode) {
+			if (beaconTours.length) {
+				GmCXt.removeInvalidSegmentSmartipAndBeacon(beaconTours, "beacon");
+			}
+
+			if (tooltipTours.length) {
+				GmCXt.removeInvalidSegmentSmartipAndBeacon(tooltipTours, "smarttip");
+			}
+		}
+
+		if (beaconTours.length) {
+			GmCXt.renderBeacons(beaconTours, false, true);
+		}
+
+		if (tooltipTours.length) {
+			GmCXt.renderSmartTips(tooltipTours, false, true);
+		}
+
+		if (tours) {
+			GmCXt.notificationGuides = mg$.extend([], GmCXt.filterNotifications(tours));
+			if (GmCXt.trackerUtil.featureTracking) {
+				GmCXt.validateFtGuideRules(GmCXt.filterFtTags(tours));
+			}
+		}
+
+		if ((!GmCXt.stopNotification(false) || GmCXt.isAutomationRunning()) && GmCXt.notificationGuides && GmCXt.notificationGuides.length) {
+			GmCXt.removeNotif();
+			GmCXt.showNotifications();
+		}
+	};
+
+	if (GmCXt.inPlayer) {
+		if (GmCXt.isEmpty(GmCXt.pageTours)) {
+			GmCXt.callApi({
+				url: GmCXt.getUrl(),
+				organization_id: GmCXt.organization.organization_id
+			}, "tour/contextual").then(gotTours);
+		} else {
+			gotTours(GmCXt.pageTours);
+		}
+
+	} else {
+		gotTours(GmCXt.pageTours);
+	}
+
+	var gc = GmCXt.getAppSetting('guide_count_on_widget');
+	var hw = GmCXt.getAppSetting('hide_widget_if_noguide');
+	if ((gc && !GmCXt.isWestpac()) || hw || GmCXt.APP_PANEL_OPEN) {
+		GmCXt.sendMessageToApp("mgPlayerJSTest_action:refresh_current_page", {
+			eventType: 'page_click'
+		});
+	}
+};
+
+window.getMyGuides = async function(url) {
+	let tours = [];
+	try {
+		await GmCXt.callApi({
+			url: url
+		}, "tour/companion").then((t) => {
+			tours = t;
+		});
+	} catch (err) {
+		console.error("Error fetching data:", err);
+	}
+	return tours;
+}
+
+window.playMyGuide = function(id) {
+	GmCXt.getTourDetails({
+		'tour_id': id
+	}).then(function(tour) {
+		if (tour.steps.length) {
+			GmCXt.playLiveTour(tour, tour.steps[0].step_id, 'companion', null, 'slideshow', null, 'slideshow')
+		}
+	});
+};
+
+GmCXt.getTourDetails = function(d) {
+	return GmCXt.callApi(d, "tour");
+};
+
+GmCXt.getTourAndPlay = function(tourId, initiator, origin) {
+	GmCXt.log(33, "Fetching tour for Guide Play");
+	var d = {
+		tour_id: tourId
+	};
+
+	GmCXt.getTourDetails(d).then(function(tour) {
+		GmCXt.log(33, "Tour response received for Guide Play", tour);
+		if (tour && tour.is_published) {
+			GmCXt.playLiveTour(tour, 0, initiator, false, false, origin);
+		}
+	});
+};
+
+GmCXt.getTourDetailsCallback = function(tour, domains, initiator, type) {
+	if (tour && domains) {
+		tour.allDomains = domains;
+	}
+	GmCXt.playLiveTour(tour, 0, initiator, undefined, type);
+};
+
+GmCXt.invokeLiveTour = function() {
+	if (GmCXt.playerI) {
+		if (GmCXt._location().href && GmCXt._location().href.indexOf("chrome/newtab") === -1) {
+			GmCXt.executeRequestPlayTour();
+		}
+	}
+};
+
+GmCXt.getOverlayToursInCat = function(category) {
+	return new Promise(function(resolve, reject) {
+		var options = {
+			limit: 100,
+			offset: 0,
+			category_id: category.category_id
+		};
+
+		GmCXt.api.getTours(options)
+			.then(function(result) {
+				if (result.error === false) resolve(result);
+				else reject(result);
+			});
+	});
+};
+
+GmCXt.playLiveTour = function(tour, currentStepId, initiator, isAutolaunch, type, origin, mode) {
+
+	mode = mode ? mode : "live";
+
+	if (isAutolaunch) GmCXt.isPageReloaded = true;
+
+	if (GmCXt.FT.isPlayer && tour.tour_settings.slideshow_mode) {
+		mode = "slideshow";
+		type = "slideshow";
+	}
+
+	var isAutomation = GmCXt.getUrlParameter('automation');
+	if (initiator === 'doitforme') {
+		isAutomation = true;
+	}
+
+	var testAutomation = false;
+	if (initiator === 'automation') {
+		testAutomation = true;
+	}
+
+	if (initiator === 'beaconTour' || initiator === 'overlayTourPopup') {
+
+		var ts = tour.tour_settings;
+		mode = ts.defaultPlayAction;
+
+		if (mode === 'Default') {
+			mode = GmCXt.getAppSetting('defaultPlayAction');
+		}
+
+		if (mode === 'doitforme') {
+			isAutomation = true;
+		} else if (mode === 'slideshow') {
+			type = 'slideshow';
+			ts.play_structure = GmCXt.getGuidePlayStructure(tour);
+			currentStepId = ts.play_structure[0].id;
+		}
+	}
+
+	GmCXt.playerI = {
+		type: type || 'slideshow',
+		tour: tour,
+		mode: mode,
+		currentStepId: currentStepId,
+		initiator: initiator,
+		isAutomation: isAutomation,
+		isAutolaunch: isAutolaunch,
+		testAutomation: testAutomation,
+		previousTourType: tour.previousTourType,
+		origin: origin || initiator
+	};
+	GmCXt.playTour();
+};
+
+GmCXt.onDocumentMouseDown = function() {
+
+	if (GmCXt.playerI && GmCXt.playerI.completeEventTracked) GmCXt.saveSurveyTrigger();
+
+	GmCXt.clickTime = new Date().getTime();
+
+	if (GmCXt.testMe || GmCXt.testMe === null) {
+		GmCXt.storage().set({
+			'testMe': GmCXt.testMe
+		});
+	}
+};
+
+GmCXt.saveSurveyTrigger = function() {
+
+	if (GmCXt.playerI && GmCXt.tourPlayerI) {
+
+		var ts = GmCXt.playerI.tour.tour_settings;
+		var currentStepId = GmCXt.playerI.currentStepId;
+		var playStructure = GmCXt.playerI.playStructure;
+		var tour = GmCXt.playerI.tour;
+
+		if (GmCXt.isLastStep(currentStepId, playStructure) && GmCXt.playerI.initiator !== 'doitforme') {
+			if (tour.is_published && ts.enableSentiment == true) {
+				GmCXt.storage().set({
+					'SHOW_SURVEY': {
+						tourId: tour.tour_id,
+						version: tour.version
+					}
+				});
+			}
+		}
+	}
+};
+
+GmCXt.onWinUnload = function() {
+	// In clientJS, all the below storage calls fails,
+	// since they are async. So for clientJS only, there is document
+	// mousedown event to make storage calls.
+
+	GmCXt.log(1, "Window unload event");
+
+	if (GmCXt.FT.creatorApp && mediaRecorder) {
+		mediaRecorder.stop();
+		GmCXt.storage().set({
+			'screen_recorder_close': true
+		});
+	}
+
+	if (GmCXt.testMe || GmCXt.testMe === null) {
+		GmCXt.storage().set({
+			'testMe': GmCXt.testMe
+		});
+	}
+
+	if (GmCXt.stepReq || GmCXt.stepReq === null) {
+		GmCXt.stepReq.appId = GmCXt.activeAppId;
+		GmCXt.storage().set({
+			'stepReq': GmCXt.stepReq
+		});
+	}
+
+	var pi = GmCXt.playerI;
+
+	if (pi) {
+		if (pi.completeEventTracked) GmCXt.saveSurveyTrigger();
+
+		if (pi.guideState === 'pause') {
+			GmCXt.setResumeWinDisplayed(false);
+		}
+
+		if (GmCXt.isLastStep(pi.lastPlayedStepId, pi.playStructure) && !GmCXt.isLooping()) {
+			GmCXt.cleanPlayerI();
+		}
+	}
+
+	localStorage.setItem(GmCXt.storagePrefix + "pageRefreshEvent", false);
+
+	if (GmCXt.tourActivity) {
+		GmCXt.storage().set({
+			'tourActivity': GmCXt.tourActivity
+		});
+	}
+
+	var currentTime = GmCXt.getCurrentTimeInMilSec();
+
+	var pageRefreshed = false;
+
+	if (!GmCXt.clickTime) {
+		pageRefreshed = true;
+	} else if (currentTime - GmCXt.clickTime > 1000) {
+		pageRefreshed = true;
+	}
+
+	var mgInfo = GmCXt.parseJSON(sessionStorage.getItem('mgInfo'));
+
+	mgInfo.pageRefreshed = pageRefreshed;
+	mgInfo.lastUrl = GmCXt.urlParts.fullUrl;
+
+	sessionStorage.setItem('mgInfo', JSON.stringify(mgInfo));
+
+	localStorage.setItem("mg_pageRefreshEvent", pageRefreshed);
+
+	GmCXt.trackerV1.trackPageVisit(true);
+};
+
+GmCXt.showKeyCodePopUp = function() {
+	var ok = GmCXt.label.ok;
+
+	if (!GmCXt.keyInputGuides || !GmCXt.keyInputGuides.length) {
+		return;
+	}
+
+	mg$("html").append(GmCXt.getKeyShortPopupHtml(GmCXt.keyInputGuides, ok));
+
+	function onOK(e) {
+		GmCXt.unlockScroll();
+		GmCXt.closePopup();
+	}
+
+	GmCXt.addPopupEvents(onOK);
+};
+
+GmCXt.onVisibilityChange = function() {
+
+	if (!GmCXt.visits) GmCXt.visits = 0;
+
+	GmCXt.visits++;
+
+	if (GmCXt.visits % 2) { //blur
+
+		GmCXt.log(1, "Event: page visibility blur");
+
+		if (GmCXt.pageVisit) {
+
+			if (GmCXt.pageVisit.timeFocused) {
+				var timeSpent = GmCXt.pageVisit.timeSpent + (new Date().getTime() - GmCXt.pageVisit.timeFocused);
+			} else {
+				var timeSpent = new Date().getTime() - GmCXt.pageVisit.timeStarted;
+			}
+
+			GmCXt.pageVisit.timeSpent = timeSpent;
+
+			//if page is blur for more than 30mins
+			if (GmCXt.trackerUtil.pageTracking) {
+				GmCXt.trackerTimer = GmCXt.timeout(function() {
+					GmCXt.trackerV1.trackPageVisit();
+				}, GmCXt.t.pageTrackWait);
+			}
+		}
+
+	} else { //focus
+
+		GmCXt.log(1, "Event: page visibility focus");
+
+		if (GmCXt.pageVisit) GmCXt.pageVisit.timeFocused = new Date().getTime();
+
+		if (GmCXt.trackerTimer) clearTimeout(GmCXt.trackerTimer);
+	}
+};
+
+GmCXt.getCurrentURL = function() {
+	var url = GmCXt.getUrl();
+	return {
+		url: url,
+		urlParts: GmCXt.urlParts,
+		fullUrl: GmCXt._location().href,
+		title: GmCXt.getDocTitle(),
+		elAppName: GmCXt.isElectron() ? GmCXt.getElectronAppName() : ''
+	};
+};
+
+GmCXt.syncCurrentURL = function() {
+
+	GmCXt.urlParts.fullUrl = GmCXt.getCurrentURL().fullUrl;
+
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:page_url', GmCXt.getCurrentURL());
+
+	domainInApp = GmCXt.isDomainInActiveApp();
+
+	GmCXt.sendMessageToAllWindows('mgPlayerJSTest_action:domain_in_active_app', {
+		domainInApp: domainInApp
+	});
+};
+
+GmCXt.saveCurrentURL = function() {
+	var parser = document.createElement('a');
+	parser.href = GmCXt._location();
+
+	GmCXt.urlParts = {};
+
+	var host = parser.host;
+
+	// Remove port number from host name, In IE port number coming with host
+	if (host && host.indexOf(':') !== -1) {
+		host = host.split(':')[0];
+	}
+	GmCXt.urlParts.host = host;
+
+	GmCXt.urlParts.pathname = parser.pathname;
+	GmCXt.urlParts.search = parser.search;
+	GmCXt.urlParts.href = GmCXt.filterUrlScheme(parser.href);
+	GmCXt.urlParts.fullUrl = parser.href;
+	GmCXt.urlParts.hash = parser.hash;
+	GmCXt.urlParts.scheme = GmCXt.getUrlScheme();
+	GmCXt.urlParts.port = parser.port;
+	GmCXt.elAppName = GmCXt.isElectron() ? GmCXt.getElectronAppName() : '';
+
+	GmCXt.syncCurrentURL();
+};
+
+GmCXt.setPageTitle = function() {
+	GmCXt.pageTitle = GmCXt.getDocTitle();
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:page_title', {
+		title: GmCXt.pageTitle
+	});
+};
+
+GmCXt.requestHandler.hideSmarttipDelay = function(data, options) {
+	if (data) {
+		if (window.self === window.top) {
+			GmCXt.hideTooltipTimeout = GmCXt.timeout(function() {
+				GmCXt.requestHandler.hideSmartTip(data, options);
+			}, 200);
+		} else {
+			var m = {
+				action: 'mgPlayerJSTest_action:hide_smarttip_delay',
+				stepId: data.step_id
+			};
+			GmCXt.sendToParentWindow(m);
+		}
+	}
+};
+
+GmCXt.requestHandler.hideSmartTip = function(msg, options) {
+	if (options && (options.type == 'disableElement')) {
+		mg$('#mgPlayerJSTest_smarttip-' + msg.stepId + '-alert').hide();
+	} else {
+		mg$('#mgPlayerJSTest_smarttip-' + msg.stepId).hide();
+		mg$('.mgPlayerJSTest_smarttip-icon-wrapper-' + msg.stepId).hide();
+	}
+};
+
+GmCXt.requestHandler.hideValidationSmarttip = function(message) {
+	mg$(".mgPlayerJSTest_smarttip-valid-" + message.stepId).hide();
+
+	if (message.showGuidanceTooltip) {
+		mg$('#mgPlayerJSTest_smarttip-' + message.stepId).show();
+	}
+};
+
+GmCXt.getManifest = function() {
+
+	if (GmCXt.browserApp === 'chrome') {
+		var manifest = chrome.runtime.getManifest();
+	} else {
+		var manifest = browser.runtime.getManifest();
+	}
+};
+
+GmCXt.toggleJsonEditor = function() {
+	GmCXt.sendMessageToApp("mgPlayerJSTest_action:toggle_json_editor");
+};
+
+GmCXt.playStepFromDesktop = function(msg) {
+
+	var tour = {
+		steps: [msg.step]
+	};
+
+	tour = GmCXt.validateDataModel(tour, GmCXt.model.guide);
+
+	tour.tour_settings.play_structure = msg.step.playStructure;
+
+	var data = {
+		tour: tour,
+		source: GmCXt.sourceDesktop,
+		automate: false,
+		isHybrid: msg.isHybrid,
+		currentStepId: msg.step.currentStepId,
+		isFirstStep: msg.isFirstStep,
+		isLastStep: msg.isLastStep,
+		playType: msg.type,
+		requestId: msg.requestId
+	};
+
+	if (msg.mode === 'doitforme') {
+		data.automate = true;
+		data.initiator = 'doitforme';
+	}
+
+	GmCXt.requestHandler.playGuide(data);
+};
+
+GmCXt.sendMessageToDesktop = function(msg) {
+	if (GmCXt.wsDesktop && GmCXt.wsDesktop.readyState === GmCXt.wsDesktop.OPEN) {
+		GmCXt.wsDesktop.send(JSON.stringify(msg));
+	}
+};
+
+GmCXt.applyOverlayMessageStep = function(highLightEl) {
+	var ha = [];
+	for (var i in GmCXt.highlight_elements) {
+		ha.push(GmCXt.highlight_elements[i][0]);
+	}
+
+	var options = {
+		data: ha,
+		containerOffset: GmCXt.getContainerOffSet(false),
+		stepType: GmCXt.STEP_TYPE_INLINE,
+		overlay: true,
+	};
+
+	GmCXt.screenOverlayI = GmCXt.screenOverlay(options);
+	GmCXt.screenOverlayI.start();
+};
+
+GmCXt.getLXPLang = function() {
+	var lxpLang = window.localStorage.selectedLanguage;
+	return GmCXt.getProcessedLang(lxpLang);
+};
+
+GmCXt.mgActiveLang = '';
+/**
+	* This function sets language of the content script and then propagates to side panel and step creator frames.
+	* Useful when laguage is read from host site e.g. LXP or read from browser preference.
+	*/
+GmCXt.setLangFromCS = function(lang) {
+	GmCXt.mgActiveLang = lang;
+	GmCXt.getAllLabels(lang);
+
+	var data = {
+		'lang': lang
+	};
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:set_lang_side_panel', data);
+
+	if (GmCXt.FT.creatorApp) {
+		GmCXt.sendMessageToolbar('mgPlayerJSTest_action:set_lang_toolbar', data);
+	}
+};
+
+/**
+	* This function sets user preference language selected in the side panel.
+	* Propagates change to step creator frame
+	*/
+GmCXt.setLangPref = function(lang) {
+	GmCXt.mgActiveLang = lang;
+	GmCXt.getAllLabels(lang);
+	mg$('#mgPlayerJSTest_panel-close .mgPlayerJSTest_close-lbl').text(GmCXt.label.close);
+
+	if (GmCXt.FT.creatorApp) {
+		var data = {
+			'lang': lang
+		};
+		GmCXt.sendMessageToolbar('mgPlayerJSTest_action:set_lang_toolbar', data);
+	}
+};
+
+GmCXt.stopAudioTrack = function() {
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:stop_audio', {});
+};
+
+GmCXt.playAudioTrack = function(message) {
+	GmCXt.isPageReloaded = false;
+	GmCXt.sendMessageToApp('mgPlayerJSTest_action:play_audio', message);
+};
+
+GmCXt.filterPrivateTours = function(tours) {
+
+	var arr = [];
+
+	tours.forEach(function(tour) {
+
+		if (tour.is_private)
+			arr.push(tour);
+	});
+
+	return arr;
+};
+
+GmCXt.hidePanelCloseBtn = function() {
+	mg$('.mgPlayerJSTest_panel-close').hide();
+};
+
+GmCXt.showPanelCloseBtn = function() {
+	mg$('.mgPlayerJSTest_panel-close').show();
+};
+
+GmCXt.isExitSurvey = function() {
+	var flag = false;
+	var os = GmCXt.getOrgSettings();
+
+	if (os && os.exitSurvey) flag = true;
+	if (os && os.exitSentiment) flag = true;
+
+	return flag;
+};
+
+GmCXt.widgetIconCustomize = function() {
+	var s = GmCXt.getWidgetSettings();
+	if (!s || GmCXt.isEmpty(s)) return;
+
+	var widget = GmCXt.getWidgetInstance();
+	widget.css({
+		'z-index': ((s.widget_icon_zindex !== ('Default' || 'default')) ? s.widget_icon_zindex : GmCXt.defaultWidgetZindex)
+	});
+
+	switch (s.widgetIconType) {
+		case 'circular':
+			widget.css({
+				width: s.widgetIconSize.widgetIconWidth,
+				height: s.widgetIconSize.widgetIconWidth,
+				borderRadius: '50%'
+			});
+			widget.find('.mgPlayerJSTest_custom-image').css('border-radius', '50%');
+			break;
+
+		case 'rectangular':
+			widget.css({
+				width: s.widgetIconSize.widgetIconWidth,
+				height: s.widgetIconSize.widgetIconHeight,
+			});
+			break;
+	}
+};
+
+GmCXt.chatIconCustomize = function() {
+	var s = GmCXt.getAppSetting();
+
+	if (!s || GmCXt.isEmpty(s)) return;
+
+	var chat = GmCXt.getChatIconInstance();
+
+	if (chat) {
+		switch (s.chatIconType) {
+			case 'circular':
+				chat.css({
+					width: s.chatIconSize ? s.chatIconSize.chatIconWidth : 50,
+					height: s.chatIconSize ? s.chatIconSize.chatIconWidth : 50,
+					borderRadius: '50%'
+				});
+				chat.find('.mgPlayerJSTest_custom-image').css('border-radius', '50%');
+				break;
+
+			case 'rectangular':
+				chat.css({
+					width: s.chatIconSize ? s.chatIconSize.chatIconWidth : 50,
+					height: s.chatIconSize ? s.chatIconSize.chatIconHeight : 50,
+				});
+				break;
+		}
+	}
+};
+
+GmCXt.updateAccessibility = function(val) {
+	if (GmCXt.isDefined(val)) {
+		GmCXt.accessibility = val;
+	} else {
+		GmCXt.accessibility = false;
+	}
+};
+
+/*
+	* To change this license header, choose License Headers in Project Properties.
+	* To change this template file, choose Tools | Templates
+	* and open the template in the editor.
+	*/
+
+GmCXt.surveyStart = function(options, isExitSurvey, isPreview) {
+	options = options || {};
+	var surveyID = '';
+	var tour_id = options.tourId;
+	var surveyQuestion = [];
+	var surveyQuestionList = [];
+	var inValidFlag = true;
+	var branchQues = [];
+	var currentQues = {};
+
+	if (!isExitSurvey && options.type !== 'stepPlay') {
+		GmCXt.cleanPlayer();
+	}
+
+	clearSurveyInstance();
+	openSurvey(options);
+
+
+	function getBranchQueIndex(ques) {
+		branchQues = [];
+		bInd = -1;
+
+		if (surveyQuestion && surveyQuestion.length > 0) {
+			for (q = 0; q < surveyQuestion.length; q++) {
+				if (ques && ques.questionID === surveyQuestion[q].questionID) {
+					bInd = q;
+				}
+				if (surveyQuestion[q].isBranchNode && ((ques && bInd !== -1 && q >= bInd) || !ques)) {
+					for (var opt = 0; opt < surveyQuestion[q].options.length; opt++) {
+						if (branchQues.indexOf(surveyQuestion[q].options[opt].nextHopOnBranch) === -1) {
+							branchQues.push(surveyQuestion[q].options[opt].nextHopOnBranch);
+						}
+
+					}
+				}
+			}
+		}
+		return branchQues;
+	}
+
+	function filterBranchNodePages() {
+		var bLinkQues = getBranchQueIndex();
+		var s = [];
+		for (var i = 0; i < surveyQuestion.length; i++) {
+			if (bLinkQues.indexOf(surveyQuestion[i].pageIndex) === -1) {
+				s.push(surveyQuestion[i]);
+			}
+		}
+		return s;
+	}
+
+	function getHtml(result) {
+		surveyID = result.guide_id;
+		surveyQuestion = result.questions;
+		surveyQuestionList = filterBranchNodePages();
+		surveyName = result.questionnaire_title || result.sentimentTitle;
+
+		var surveyTitle = isExitSurvey ? GmCXt.label.exitSurvey : GmCXt.label.survey;
+		if (options.type === 'stepPlay') {
+			surveyTitle = options.step.step_title;
+		}
+
+		var previewClass = '';
+		if (isPreview) {
+			previewClass = ' mgPlayerJSTest_forbidden';
+		}
+
+		var htmlData = " <wmgPlayerJSTest_ class='mgPlayerJSTest_survey-popup-container'> " +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_survey-popup-wrapper'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_survey-header-wrapper'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_survey-logo-wrapper'>" + surveyTitle + "</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_survey-popup-close' aria-label='close survey' >" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-bottom-left'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-title'>" + GmCXt.label.close + "</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_survey-content-wrapper'>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_question-single-select-wrapper'>" +
+
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>";
+
+		var progressWrap = '';
+		if (result.questions.length > 1) {
+			progressWrap = '<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-footer-progress-wrapper mgPlayerJSTest_inline-block-vm">' +
+				'	<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-progressbar-wrapper mgPlayerJSTest_inline-block-vm">' +
+				'		<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-progressbar mgPlayerJSTest_inline-block-vm"></wmgPlayerJSTest_>' +
+				'	</wmgPlayerJSTest_>' +
+				'	<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-questions-count mgPlayerJSTest_inline-block-vm">' + GmCXt.label.question +
+				' 		<span id="current_question">1</span> <span id="mgPlayerJSTest_question_count">' + GmCXt.label.of + ' ' + surveyQuestionList.length +
+				'	</span></wmgPlayerJSTest_>' +
+				'</wmgPlayerJSTest_>';
+		}
+
+		htmlData += '<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-footer-action-wrapper">' +
+			'<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-button-back mgPlayerJSTest_btn-default mgPlayerJSTest_disabled mgPlayerJSTest_inline-block-vm" aria-label="' + GmCXt.label.back + '" >' + GmCXt.label.back + '</wmgPlayerJSTest_>' +
+			'<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-button-continue mgPlayerJSTest_btn-default mgPlayerJSTest_inline-block-vm" aria-label="' + GmCXt.label.next + '">' + GmCXt.label.next + '</wmgPlayerJSTest_>' +
+			'<wmgPlayerJSTest_ class="mgPlayerJSTest_survey-button-submit mgPlayerJSTest_inline-block-vm mgPlayerJSTest_btn-default' + previewClass + '" style="display:none" aria-label="' + GmCXt.label.btnSubmit + '">' + GmCXt.label.btnSubmit + '</wmgPlayerJSTest_>' +
+			progressWrap +
+			'</wmgPlayerJSTest_>' +
+			'</wmgPlayerJSTest_>';
+
+		return htmlData;
+	}
+
+	function cb(sd) {
+		if (sd) {
+			var htmlData = getHtml(sd.data);
+
+			mg$(".mgPlayerJSTest_user-guide-container").empty().append(htmlData).show();
+
+			mg$(".mgPlayerJSTest_survey-popup-close").html(GmCXt.svgs.close_btn);
+			currentQues = sd.data.questions[0];
+			addQuestionInSurvey(sd.data.questions[0], 1);
+			toggleBackContinueButton(0);
+			changeProgressbar(1);
+			attachDOMEvents(options);
+
+			if (GmCXt.accessibility) {
+				mg$(".mgPlayerJSTest_survey-footer-action-wrapper").addClass("mgPlayerJSTest_accessibility-theme");
+				mg$(".mgPlayerJSTest_survey-button-back").addClass("mgPlayerJSTest_ass-default-btn");
+				mg$(".mgPlayerJSTest_survey-button-continue").addClass("mgPlayerJSTest_ass-default-btn");
+				mg$(".mgPlayerJSTest_survey-button-submit").addClass("mgPlayerJSTest_ass-default-btn");
+
+			} else {
+				mg$(".mgPlayerJSTest_survey-footer-action-wrapper").removeClass("mgPlayerJSTest_accessibility-theme");
+				mg$(".mgPlayerJSTest_survey-button-back").removeClass("mgPlayerJSTest_ass-default-btn");
+				mg$(".mgPlayerJSTest_survey-button-continue").removeClass("mgPlayerJSTest_ass-default-btn");
+				mg$(".mgPlayerJSTest_survey-button-submit").removeClass("mgPlayerJSTest_ass-default-btn");
+			}
+
+			GmCXt.timeout(function() {
+				mg$(".mgPlayerJSTest_survey-popup-close").focus();
+			}, 500);
+
+		} else {
+			closeTourWithSurvey(false);
+		}
+	}
+
+	function getExitSentimentDetails() {
+		var data = {};
+		var msgId = Math.floor(Math.random() * 100000);
+		data.msgId = msgId;
+		var os = GmCXt.getOrgSettings();
+		data.sentiment = os.sentiment;
+		data.isExit = true;
+		GmCXt.sendMessageToApp("mgPlayerJSTest_action:get_survey_detail", data);
+		GmCXt.globalMsgData[msgId] = {};
+		GmCXt.globalMsgData[msgId].cb = cb;
+	}
+
+	function openSurvey(options) {
+
+		mg$("html").find('.mgPlayerJSTest_user-guide-container').remove();
+		mg$("<wmgPlayerJSTest_></wmgPlayerJSTest_>").addClass('mgPlayerJSTest_user-guide-container').appendTo('html');
+
+		if (isExitSurvey) {
+			try {
+				var os = GmCXt.getOrgSettings();
+				var surveyData = null;
+				if (os && os.exitSentiment) {
+					getExitSentimentDetails();
+				} else if (os && os.exitSurvey) {
+					if (os.survey.length > 0) {
+						surveyData = getExitSurvey(os);
+						cb(surveyData);
+					}
+				}
+			} catch (e) {
+				console.dir(e.message);
+			}
+		} else if (isPreview || (options.data && options.data.sentimentCode)) {
+			cb(options);
+		} else {
+			var data = {};
+			var msgId = Math.floor(Math.random() * 100000);
+			data.msgId = msgId;
+			if (options.type === 'stepPlay') {
+				data.sentiment = options.step.step_settings.sentiment;
+			} else if (options.type === 'guide') {
+				var ts = options.instance.tour.tour_settings;
+				if (ts.enableSentiment) {
+					data.sentiment = ts.sentiment;
+				}
+			} else if (options.tourId) {
+				data.tourId = options.tourId;
+			}
+			GmCXt.sendMessageToApp("mgPlayerJSTest_action:get_survey_detail", data);
+			GmCXt.globalMsgData[msgId] = {};
+			GmCXt.globalMsgData[msgId].cb = cb;
+		}
+	}
+
+	function getExitSurvey(os) {
+		var quesArray = [];
+		var i = 0;
+		if (os.survey[0].questions.length > 0) {
+			for (i; i < os.survey[0].questions.length; i++) {
+				var ques = {
+					question: os.survey[0].questions[i].question,
+					type: os.survey[0].questions[i].type,
+					options: os.survey[0].questions[i].options,
+					answer: []
+				};
+				quesArray.push(ques);
+			}
+		}
+
+		var surveyData = {
+			data: {
+				guide_id: '',
+				questionnaire_title: os.survey[0].surveyTitle,
+				questions: quesArray
+			}
+		};
+
+		return surveyData;
+
+	}
+
+	function clearPreviousAns(survey) {
+		var s = survey;
+		var i = 0;
+		for (i; i < s.data.questions.length; i++) {
+			s.data.questions[i].answer = [];
+		}
+		return s;
+	}
+
+	function addQuestionInSurvey(result, id) {
+		var questionType = result.type;
+		mg$('#current_question').html(id);
+		mg$('#mgPlayerJSTest_question_count').html(GmCXt.label.of + ' ' + surveyQuestionList.length);
+		var htmlData = '';
+		switch (questionType) {
+			case 'yes-no':
+				htmlData = addYesAndNoQuestion(result);
+				break;
+			case 'comment':
+				htmlData = addCommentTypeQuestion(result);
+				break;
+			case 'select':
+				htmlData = addSelectTypeQuestion(result);
+				break;
+			case 'multi-select':
+				htmlData = addMultiSelectType(result);
+				break;
+			case 'range':
+				htmlData = addRangeQuestion(result);
+				break;
+			case 'rating':
+				htmlData = addRateQuestion(result);
+				break;
+		}
+		changeProgressbar(id);
+		mg$(".mgPlayerJSTest_question-single-select-wrapper").empty().append(htmlData);
+		mg$(".mgPlayerJSTest_ext-link-svg").html(GmCXt.svgs.external_link);
+
+	}
+
+	function addCommentTypeQuestion(question) {
+		var html = "<wmgPlayerJSTest_><wmgPlayerJSTest_ class='mgPlayerJSTest_single-type-question'>" + GmCXt.escapeHtml(question.question) +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_select-option'>" +
+			"<textarea id='comment_type_" + question.questionID + "' class='mgPlayerJSTest_comment_type_question' cols='44' rows='4' data-gramm_editor='false' placeholder='" + GmCXt.label.surveyCommentPlaceholder + "' maxlength='500'></textarea>" +
+			"</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_><wmgPlayerJSTest_ id='comment_type_survey_" + question.questionID + "'>" + GmCXt.label.characters + " 0</wmgPlayerJSTest_><br><wmgPlayerJSTest_>";
+		return html;
+	}
+
+	function changeProgressbar(length) {
+		var initialProgressBar = parseInt((100 * length) / surveyQuestionList.length);
+		mg$('.mgPlayerJSTest_survey-progressbar').css('width', initialProgressBar + '%');
+	}
+
+	function addYesAndNoQuestion(question) {
+		var html = "<div id='mgPlayerJSTest_single-type-question-" + question.questionID + "'><wmgPlayerJSTest_ class='mgPlayerJSTest_single-type-question'>" + GmCXt.escapeHtml(question.question) + "</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_select-option'>" +
+			'<input type="radio" name="mgPlayerJSTest_capture-guide-radio-' + question.questionID + '" value="Yes" id="mgPlayerJSTest_capture-guide-checkbox" class="mgPlayerJSTest_input-radio-custom mgPlayerJSTest_input-radio-with-branch mgPlayerJSTest_inline-block-vm mgPlayerJSTest_input-display-block"><wmgPlayerJSTest_ class="mgPlayerJSTest_option-label mgPlayerJSTest_inline-block-vm">' + GmCXt.escapeHtml('Yes') + '</wmgPlayerJSTest_>';
+		if (!GmCXt.isFalse(question.options[0]) && !GmCXt.isFalse(question.options[0].optionReferenceLink)) {
+			html += "<a href='" + getReferenceURL(question.options[0].optionReferenceLink) + "' target='_blank' rel='noopener noreferrer'><wmgPlayerJSTest_ class='mgPlayerJSTest_ext-link-svg'></wmgPlayerJSTest_></a>";
+		}
+		html += '</wmgPlayerJSTest_>' +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_select-option'>" +
+			'<input type="radio" name="mgPlayerJSTest_capture-guide-radio-' + question.questionID + '" value="No" id="mgPlayerJSTest_capture-guide-checkbox" class="mgPlayerJSTest_input-radio-custom mgPlayerJSTest_input-radio-with-branch mgPlayerJSTest_inline-block-vm mgPlayerJSTest_input-display-block"><wmgPlayerJSTest_ class="mgPlayerJSTest_option-label mgPlayerJSTest_inline-block-vm">' + GmCXt.escapeHtml('No') + '</wmgPlayerJSTest_>';
+		if (!GmCXt.isFalse(question.options[1]) && !GmCXt.isFalse(question.options[1].optionReferenceLink)) {
+			html += "<a href='" + getReferenceURL(question.options[1].optionReferenceLink) + "' target='_blank' rel='noopener noreferrer'><wmgPlayerJSTest_ class='mgPlayerJSTest_ext-link-svg'></wmgPlayerJSTest_></a>";
+		}
+		html += '</wmgPlayerJSTest_>' +
+			"<br></div>";
+		return html;
+	}
+
+	function addSelectTypeQuestion(question) {
+		var html = "<div id='mgPlayerJSTest_single-type-question-" + question.questionID + "'><wmgPlayerJSTest_ class='mgPlayerJSTest_single-type-question'>" + GmCXt.escapeHtml(question.question) + "</wmgPlayerJSTest_>";
+		mg$.each(question.options, function(index, element) {
+			html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_select-option'>" +
+				"<input class='mgPlayerJSTest_inline-block-vm mgPlayerJSTest_input-radio-with-branch mgPlayerJSTest_input-radio-custom mgPlayerJSTest_input-display-block' type='radio' name='select_type_option_" + question.questionID + "' value='" + element.option + "' />" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_option-label mgPlayerJSTest_inline-block-vm'>" + GmCXt.escapeHtml(element.option) + "</wmgPlayerJSTest_>";
+			if (!GmCXt.isFalse(element.optionReferenceLink)) {
+				html += "<a href='" + getReferenceURL(element.optionReferenceLink) + "' target='_blank' rel='noopener noreferrer'><wmgPlayerJSTest_ class='mgPlayerJSTest_ext-link-svg'></wmgPlayerJSTest_></a>";
+			}
+			html += "</wmgPlayerJSTest_>";
+		});
+		html += "<br></div>";
+		return html;
+	}
+
+	function getReferenceURL(url) {
+		if (url.indexOf("https://") === 0 || url.indexOf("http://") === 0) {
+			return url;
+		}
+		return "https://" + url;
+	}
+
+	function addMultiSelectType(question) {
+		var html = "<wmgPlayerJSTest_ class='mgPlayerJSTest_single-type-question'>" + GmCXt.escapeHtml(question.question) + "</wmgPlayerJSTest_><div id='mgPlayerJSTest_multiselect-type-question'>";
+		mg$.each(question.options, function(index, element) {
+			html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_select-option'>" +
+				"<input class='mgPlayerJSTest_inline-block-vm mgPlayerJSTest_input-checkbox-custom mgPlayerJSTest_input-display-block' type='checkbox' name='multiselect_type_option_" + question.questionID + "[]' id='multiselect_type_option_" + question.questionID + "' value='" + GmCXt.escapeHtml(element.option) + "' />" +
+				"<wmgPlayerJSTest_ class='mgPlayerJSTest_option-label mgPlayerJSTest_inline-block-vm'>" + GmCXt.escapeHtml(element.option) + "</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>";
+		});
+		html += "<br></div>";
+		return html;
+	}
+
+	function addRangeQuestion(question) {
+		var html = "<div id='mgPlayerJSTest_single-type-question-" + question.questionID + "'><wmgPlayerJSTest_ class='mgPlayerJSTest_single-type-question'> " + GmCXt.escapeHtml(question.question) + "</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_range-question-wrapper'>";
+
+		for (var i = 1; i < 10; i++) {
+			html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_value-range mgPlayerJSTest_inline-block-vm' id='mgPlayerJSTest_value-range-" + i + "' aria-label='range'>" + i + "</wmgPlayerJSTest_>";
+		}
+
+		html += "<wmgPlayerJSTest_ class='mgPlayerJSTest_value-range mgPlayerJSTest_inline-block-vm' style='border-right: 1px solid #cccccc;' id='mgPlayerJSTest_value-range-10' aria-label='range'>10</wmgPlayerJSTest_>" +
+			"</wmgPlayerJSTest_>" +
+			"<br></div>";
+		return html;
+	}
+
+	function addRateQuestion(question) {
+		var html = "<div id='mgPlayerJSTest_single-type-question-" + question.questionID + "'><wmgPlayerJSTest_ class='mgPlayerJSTest_single-type-question'> " + GmCXt.escapeHtml(question.question) + "</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_rating'>";
+
+		for (var i = 1; i < 4; i++) {
+			html += "<button class='mgPlayerJSTest_lbl-btn mgPlayerJSTest_stars-rate' id='mgPlayerJSTest_rate-" + i + "' aria-label='rate' >&#9733;</button>";
+		}
+		html += "</wmgPlayerJSTest_>" +
+			"<br></div>";
+		return html;
+	}
+
+	function checkCommentTypeMess() {
+		mg$('.mgPlayerJSTest_comment_type_question').on('keyup', function(e) {
+			var qI = parseInt(mg$('#current_question').html());
+			if (!qI) {
+				qI = 1;
+			}
+			var ansLen = e.target.value.length;
+			mg$('#comment_type_survey_' + surveyQuestion[qI - 1].questionID).html(GmCXt.label.characters + ' ' + ansLen);
+			if (ansLen === 500) {
+				GmCXt.toastMsg(GmCXt.label.feedCmt).show();
+			}
+		});
+	}
+
+	function getQuesnIndex(pindex, qindex) {
+		var index = -1;
+		if (surveyQuestion && surveyQuestion.length > 0) {
+			for (q = 0; q < surveyQuestion.length; q++) {
+				if (surveyQuestion[q].pageIndex === pindex &&
+					surveyQuestion[q].indexInPage === qindex) {
+					index = q;
+				}
+			}
+		}
+		return index;
+	}
+
+	function getQListByPageIndex(pi) {
+		var qList = [];
+		if (surveyQuestion && surveyQuestion.length > 0) {
+			for (q = 0; q < surveyQuestion.length; q++) {
+				if (surveyQuestion[q].pageIndex === pi) {
+					qList.push(surveyQuestion[q]);
+				}
+			}
+		}
+		return qList;
+	}
+
+	function getListQuesnIndex(qid) {
+		var index = -1;
+		if (surveyQuestionList && surveyQuestionList.length > 0) {
+			for (q = 0; q < surveyQuestionList.length; q++) {
+				if (surveyQuestionList[q].questionID === qid) {
+					index = q;
+				}
+			}
+		}
+		return index;
+	}
+
+	function onNextQuesClick() {
+		var qI = parseInt(mg$('#current_question').html());
+		if (!qI) {
+			qI = 1;
+		}
+
+		var status = storeQuestionAnswer(qI - 1);
+
+		var ind = -1;
+
+		if (!GmCXt.isEmpty(status)) {
+			if (currentQues.isBranchNode) {
+				if (currentQues.type === "select" || currentQues.type === 'yes-no') {
+					for (a = 0; a < currentQues.options.length; a++) {
+						if (currentQues.options[a].option === status) {
+							ind = getQuesnIndex(currentQues.options[a].nextHopOnBranch, 1);
+							break;
+						}
+					}
+				}
+			}
+
+			if (ind !== -1) {
+				//get all qusetion of next page
+				var nq = getQListByPageIndex(surveyQuestion[ind].pageIndex);
+				//Remove other Question with same page index of branch ques
+
+				if (currentQues.isBranchNode) {
+					surveyQuestionList = surveyQuestionList.filter(function(q) {
+						return ((q.questionID === currentQues.questionID &&
+								q.pageIndex === currentQues.pageIndex) ||
+							(q.questionID !== currentQues.questionID &&
+								(q.pageIndex !== currentQues.pageIndex ||
+									(q.pageIndex === currentQues.pageIndex &&
+										q.indexInPage < currentQues.indexInPage)) &&
+								getBranchQueIndex(currentQues).indexOf(q.pageIndex) === -1));
+
+					});
+				} else {
+					surveyQuestionList = surveyQuestionList.filter(function(q) {
+						return ((q.questionID === currentQues.questionID &&
+								q.pageIndex === currentQues.pageIndex) ||
+							(q.questionID !== currentQues.questionID &&
+								q.pageIndex !== currentQues.pageIndex));
+
+					});
+				}
+
+				var inx = getListQuesnIndex(currentQues.questionID);
+				surveyQuestionList.splice(inx + 1, 0, nq);
+				if (surveyQuestionList.length) {
+					surveyQuestionList = surveyQuestionList.flat();
+				}
+			}
+		}
+
+		toggleBackContinueButton(qI);
+		currentQues = surveyQuestionList[qI];
+		addQuestionInSurvey(surveyQuestionList[qI], qI + 1);
+		attachDOMEvents(options);
+		setQuestionAnswer(qI);
+	}
+
+	function onBackQuesClick() {
+		var qI = parseInt(mg$('#current_question').html()) - 1;
+		if (!qI) {
+			qI = 0;
+			if (options.type === 'stepPlay') {
+				close(false, true);
+				return;
+			}
+		}
+
+		storeQuestionAnswer(qI);
+		toggleBackContinueButton(qI - 1);
+		currentQues = surveyQuestionList[qI - 1];
+		addQuestionInSurvey(surveyQuestionList[qI - 1], qI);
+		setQuestionAnswer(qI - 1);
+	}
+
+
+	function attachDOMEvents(options) {
+
+		mg$('.mgPlayerJSTest_survey-popup-close').on('click', function(e) {
+			if (isExitSurvey) {
+				closeTourWithSurvey(true);
+			} else if (GmCXt.isPlayer() && GmCXt.playerI && options && options.type === "stepPlay" && GmCXt.isExitSurvey()) {
+				var data = {
+					tourId: GmCXt.playerI.tour.tour_id,
+					version: GmCXt.playerI.tour.version,
+					playerInstance: GmCXt.playerI
+				};
+				GmCXt.showSurveyScreen(data, true);
+			} else {
+				close(true);
+			}
+			e.stopPropagation();
+		});
+
+		checkCommentTypeMess();
+
+		mg$(document).off('click', '.mgPlayerJSTest_value-range');
+		mg$(document).on('click', '.mgPlayerJSTest_value-range', function(e) {
+			mg$('.mgPlayerJSTest_value-range').removeClass('mgPlayerJSTest_value-range-selected');
+			var selectRange = e.target.innerHTML;
+			mg$('#mgPlayerJSTest_value-range-' + selectRange).addClass('mgPlayerJSTest_value-range-selected');
+		});
+
+		mg$(document).off('click', '.mgPlayerJSTest_stars-rate');
+		mg$(document).on('click', '.mgPlayerJSTest_stars-rate', function(e) {
+			if (e.target.id.indexOf("mgPlayerJSTest_rate") !== -1) {
+				var elem = mg$('#' + e.target.id);
+				elem.toggleClass('mgPlayerJSTest_rating-filled');
+				elem.nextAll().removeClass('mgPlayerJSTest_rating-filled');
+				elem.prevAll().addClass('mgPlayerJSTest_rating-filled');
+			}
+		});
+
+		mg$(document).off('click', '.mgPlayerJSTest_survey-button-continue');
+		mg$(document).on('click', '.mgPlayerJSTest_survey-button-continue', function(e) {
+			onNextQuesClick();
+		});
+
+		mg$(document).off('change', '.mgPlayerJSTest_input-radio-with-branch');
+		mg$(document).on('change', '.mgPlayerJSTest_input-radio-with-branch', function(e) {
+			var ans = mg$("input:radio[name='" + mg$('.mgPlayerJSTest_input-radio-with-branch')[0].name +
+				"']:checked").val();
+			if (currentQues && currentQues.isBranchNode && !GmCXt.isEmpty(ans)) {
+				var isSubmitVisible = false;
+				if (mg$('.mgPlayerJSTest_survey-button-submit') && mg$('.mgPlayerJSTest_survey-button-submit')[0] &&
+					mg$('.mgPlayerJSTest_survey-button-submit')[0].style.display !== "none") {
+					isSubmitVisible = true;
+				}
+				if (isSubmitVisible) {
+					for (var o = 0; o < currentQues.options.length; o++) {
+						if (currentQues.options[o].option === ans &&
+							currentQues.options[o].nextHopOnBranch) {
+							mg$('.mgPlayerJSTest_survey-button-submit').hide();
+							mg$('.mgPlayerJSTest_survey-button-continue').show();
+							break;
+						}
+					}
+				}
+			}
+		});
+
+		mg$(document).off('click', '.mgPlayerJSTest_survey-button-back');
+		mg$(document).on('click', '.mgPlayerJSTest_survey-button-back', function(e) {
+			onBackQuesClick();
+		});
+
+		mg$(document).off('click', '.mgPlayerJSTest_survey-button-submit');
+		mg$(document).on('click', ".mgPlayerJSTest_survey-button-submit", function(e) {
+			if (!isPreview) {
+				submitSurvey();
+			}
+		});
+	}
+
+	function mergeAllSurveyQuestions() {
+		if (surveyQuestionList && surveyQuestionList.length) {
+			for (var s1 = 0; s1 < surveyQuestion.length; s1++) {
+				for (s2 = 0; s2 < surveyQuestionList.length; s2++) {
+					if (surveyQuestionList[s2].questionID === surveyQuestion[s1].questionID) {
+						surveyQuestion[s1] = surveyQuestionList[s2];
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	function submitSurvey() {
+		var data = [];
+		var dataAnalytics = [];
+
+
+		var getAnswer = function(answer) {
+			if (answer !== undefined) return answer;
+			else return '';
+		};
+
+		var pushData = function(el) {
+			return {
+				'question_id': el.questionID ? el.questionID : '',
+				'question_type': el.type,
+				'question_name': el.question ? el.question : ''
+			};
+		};
+
+		storeQuestionAnswer(surveyQuestionList.length - 1);
+
+		surveyQuestionList.filter(function(el) {
+			if (el.answer && el.answer.length > 0) {
+				inValidFlag = false;
+			}
+		});
+
+		mergeAllSurveyQuestions();
+
+		mg$.each(surveyQuestion, function(index, element) {
+
+			var valueData = '';
+
+			switch (element.type) {
+				case 'yes-no':
+					if (element.answer !== undefined)
+						valueData = (element.answer === 'Yes') ? true : (element.answer === 'No') ? false : null;
+
+					var data = pushData(element);
+					data.is_answer_yes = valueData;
+					break;
+
+				case 'comment':
+					valueData = getAnswer(element.answer);
+
+					var data = pushData(element);
+					data.comment = valueData;
+					break;
+
+				case 'multi-select':
+					valueData = getAnswer(element.answer).split(",");
+					var data = pushData(element);
+					data.option = valueData;
+					break;
+
+				case 'select':
+				case 'range':
+					valueData = getAnswer(element.answer).split();
+					var data = pushData(element);
+					data.option = valueData;
+					break;
+				case 'rating':
+					valueData = getAnswer(element.answer).split();
+					var data = pushData(element);
+					data.option = valueData;
+					break;
+			}
+
+			dataAnalytics.push(data);
+		});
+
+		var user_id = 0;
+		if (typeof GmCXt.user.user_id != 'undefined')
+			user_id = GmCXt.user.user_id;
+
+		if (!inValidFlag) {
+			if (isExitSurvey) {
+				var os = GmCXt.getOrgSettings();
+				if (os.exitSentiment) {
+					if (!options.tourId) {
+						options.tourId = options.tour.tour_id;
+					}
+					var data = {
+						trigger_source_type: 'guide_exit',
+						trigger_source_id: options.tourId,
+						sentimentCode: os.sentiment.sentimentCode
+					};
+					GmCXt.trackerV1.trackSurveyInstantResponse(dataAnalytics, data);
+				} else {
+					// Track With Insights Team
+					// GmCXt.trackerV1.trackExitSurvey(dataAnalytics, tour_id);
+				}
+
+			} else {
+				var data = {
+					trigger_source_type: options.type,
+					trigger_source_id: tour_id + ':' + options.stepId
+				};
+
+				if (options.type === 'stepPlay') {
+					data.sentimentCode = options.step.step_settings.sentiment.sentimentCode;
+					data.trigger_source_type = 'step';
+					data.trigger_source_id = options.step.tour_id + ":" + options.step.step_id;
+				} else if (options.data && GmCXt.isDefined(options.data.sentimentCode)) {
+					data.sentimentCode = options.data.sentimentCode;
+				} else if (options.type === 'guide') {
+					var ts = options.instance.tour.tour_settings;
+					if (ts.enableSentiment) {
+						data.sentimentCode = ts.sentiment.sentimentCode;
+						data.trigger_source_id = tour_id;
+						data.trigger_source_type = 'guide';
+						GmCXt.updateSurveyCompletedData({
+							tourId: tour_id,
+							version: options.version
+						});
+					}
+				}
+
+				if (GmCXt.isDefined(data.sentimentCode)) {
+					GmCXt.trackerV1.trackSurveyInstantResponse(dataAnalytics, data);
+				} else {
+					GmCXt.trackerV1.trackGuideSurveyAnswer(dataAnalytics, tour_id);
+				}
+			}
+
+			closeTourWithSurvey(false);
+			if (options.type !== 'stepPlay') {
+				GmCXt.toastMsg(GmCXt.label.surveyThanksMessage).show();
+			}
+		} else {
+			GmCXt.toastMsg(GmCXt.label.surveyErrorMsg).show();
+		}
+	}
+
+	function toggleBackButton() {
+		if (options.type === 'stepPlay') {
+			var prevStep = GmCXt.getPreviousStep();
+			if (!GmCXt.isEmpty(prevStep)) {
+				if (mg$.inArray(prevStep.step_id, GmCXt.playedPreviousSteps) !== -1 || prevStep.step_settings.optional) {
+					mg$('.mgPlayerJSTest_survey-button-back').removeClass('mgPlayerJSTest_disabled');
+				}
+			}
+		} else {
+			mg$('.mgPlayerJSTest_survey-button-back').addClass('mgPlayerJSTest_disabled');
+		}
+	}
+
+	function toggleBackContinueButton(ind) {
+
+		if (surveyQuestionList.length === 1) {
+			//Only One Question in Survey
+			mg$('.mgPlayerJSTest_survey-button-submit').show();
+			mg$('.mgPlayerJSTest_survey-button-continue').hide();
+			mg$('.mgPlayerJSTest_survey-button-back').show();
+			toggleBackButton();
+		} else if (surveyQuestionList.length > 1 && ind === 0) {
+			//More than one question and current question no 1
+			mg$('.mgPlayerJSTest_survey-button-submit').hide();
+			mg$('.mgPlayerJSTest_survey-button-continue').show();
+			mg$('.mgPlayerJSTest_survey-button-back').show();
+			toggleBackButton();
+
+		} else if (surveyQuestionList.length === ind + 1) {
+			//More than one questions and current at last question
+			mg$('.mgPlayerJSTest_survey-button-submit').show();
+			mg$('.mgPlayerJSTest_survey-button-continue').hide();
+			mg$('.mgPlayerJSTest_survey-button-back').show();
+			mg$('.mgPlayerJSTest_survey-button-back').removeClass('mgPlayerJSTest_disabled');
+		} else if (surveyQuestionList.length > 1 && ind > 0) {
+			//More than one question and questions between 1st and Last Excluding the tow
+			mg$('.mgPlayerJSTest_survey-button-submit').hide();
+			mg$('.mgPlayerJSTest_survey-button-continue').show();
+			mg$('.mgPlayerJSTest_survey-button-back').show();
+			mg$('.mgPlayerJSTest_survey-button-back').removeClass('mgPlayerJSTest_disabled');
+		}
+
+	}
+
+	function close(closeIconClicked, playPrevStep) {
+		var pi = GmCXt.playerI;
+		GmCXt.isSurveyVisible = false;
+		mg$('.mgPlayerJSTest_overlay-container').hide().empty();
+		mg$('.mgPlayerJSTest_user-guide-container').hide().empty();
+		mg$('.mgPlayerJSTest_user-tip-guide-container').hide().empty();
+		if (isPreview) {
+			GmCXt.openAppPanel();
+		} else if (options.type === 'stepPlay') {
+			if (closeIconClicked && GmCXt.tourPlayerI) {
+				GmCXt.markAutoLaunchTourDoNotShow(GmCXt.playerI.tour);
+
+				if (GmCXt.FT.isPlayer && pi) {
+					GmCXt.tourActivity['t:' + pi.tour.tour_id] = pi.lastPlayedStepId;
+
+					GmCXt.sendMessageToApp("mgPlayerJSTest_action:update_tour_activity", {
+						tourActivity: GmCXt.tourActivity
+					});
+				}
+			} else if (GmCXt.tourPlayerI && playPrevStep) {
+				GmCXt.tourPlayerI.playPreviousStep();
+			} else if (GmCXt.tourPlayerI) {
+				GmCXt.tourPlayerI.playNextStep();
+			}
+
+		} else {
+			GmCXt.showSmartTips();
+			GmCXt.showBeacons();
+			GmCXt.resumeAutomation();
+
+			if (GmCXt.playerI) {
+				var step = GmCXt.getCurrentStep(GmCXt.playerI.currentStepId);
+				if (step.step_type === "video") {
+					GmCXt.toggleSidePanel(true);
+				}
+			}
+		}
+	}
+
+	function closeTourWithSurvey(closeIconClicked) {
+		if (GmCXt.tourPlayerI && isExitSurvey) GmCXt.tourPlayerI.closeGuide();
+		close(closeIconClicked);
+	}
+
+	function hideAllQuestions() {
+		mg$('.question:visible').each(function(index, element) {
+			mg$(element).hide();
+		});
+	}
+
+	function storeQuestionAnswer(id) {
+		var questionType = surveyQuestionList[id].type;
+		var qId = surveyQuestionList[id].questionID;
+		var retVal = true;
+
+		switch (questionType) {
+			case 'yes-no':
+				surveyQuestionList[id].answer = mg$('input:radio[name=mgPlayerJSTest_capture-guide-radio-' + qId + ']:checked').val() || '';
+				break;
+			case 'comment':
+				var ans = mg$('textarea#comment_type_' + qId + '').val();
+				if (ans.length > 500) {
+					GmCXt.toastMsg(GmCXt.label.feedCmt).show();
+					retVal = false;
+					break;
+				} else {
+					surveyQuestionList[id].answer = ans;
+				}
+				break;
+			case 'select':
+				surveyQuestionList[id].answer = mg$('input:radio[name=select_type_option_' + qId + ']:checked').val() || '';
+				break;
+			case 'multi-select':
+				var values = [];
+				mg$.each(mg$("input:checkbox[name='multiselect_type_option_" + qId + "[]']:checked"), function() {
+					values.push(mg$(this).val());
+				});
+
+				if (values.length) surveyQuestionList[id].answer = values.toString();
+				else surveyQuestionList[id].answer = "";
+
+				break;
+			case 'range':
+				var rangeValue = mg$('#mgPlayerJSTest_single-type-question-' + qId + '').find('.mgPlayerJSTest_value-range-selected');
+				surveyQuestionList[id].answer = rangeValue.length ? rangeValue[0].textContent : '';
+				break;
+			case 'rating':
+				var rateValue = mg$('#mgPlayerJSTest_single-type-question-' + qId + '').find('.mgPlayerJSTest_rating-filled');
+				surveyQuestionList[id].answer = rateValue.length ? rateValue.length.toString() : '';
+				break;
+		}
+
+		return surveyQuestionList[id].answer;
+	}
+
+	function setQuestionAnswer(id) {
+		var questionType = surveyQuestionList[id].type;
+		var qId = surveyQuestionList[id].questionID;
+		var questionAns = surveyQuestionList[id].answer || '';
+
+		switch (questionType) {
+			case 'yes-no':
+				mg$('input:radio[name=mgPlayerJSTest_capture-guide-radio-' + qId + '][value="' + questionAns + '"]').prop('checked', true);
+				break;
+			case 'comment':
+				mg$('textarea#comment_type_' + qId + '').val(questionAns);
+				mg$('#comment_type_survey_' + qId).html(GmCXt.label.characters + ' ' + questionAns.length);
+				checkCommentTypeMess();
+				break;
+			case 'select':
+				mg$('input:radio[name=select_type_option_' + qId + '][value="' + questionAns + '"]').prop('checked', true);
+				break;
+			case 'multi-select':
+				mg$.each(questionAns.split(","), function(index, element) {
+					mg$('input:checkbox[name="multiselect_type_option_' + qId + '[]"][value="' + element + '"]').prop('checked', true);
+				});
+				break;
+			case 'range':
+				mg$('#mgPlayerJSTest_single-type-question-' + qId + '').find('#mgPlayerJSTest_value-range-' + questionAns + '').addClass('mgPlayerJSTest_value-range-selected');
+				break;
+			case 'rating':
+				mg$('.mgPlayerJSTest_stars-rate').removeClass('mgPlayerJSTest_rating-filled');
+				var elem = mg$('#mgPlayerJSTest_single-type-question-' + qId + '').find('#mgPlayerJSTest_rate-' + questionAns + '');
+				elem.addClass('mgPlayerJSTest_rating-filled');
+				elem.prevAll().addClass('mgPlayerJSTest_rating-filled');
+				break;
+		}
+	}
+
+	function clearSurveyInstance() {
+		GmCXt.storage().set({
+			'SHOW_SURVEY': null
+		});
+		GmCXt.storage().remove(['SHOW_SURVEY']);
+	}
+
+};
+GmCXt.requestHandler.startToolTestMe = function(data) {
+	GmCXt.testMe = {};
+	GmCXt.testMe.message = mg$.extend(true, {}, data);
+	GmCXt.testMe.eventCount = 0;
+	GmCXt.testMe.hitCount = 0;
+	GmCXt.testMe.steps = data.tour.steps;
+	GmCXt.testMe.tourId = data.tour.tour_id;
+	GmCXt.testMe.url = data.tour.url;
+
+	GmCXt.closeAppPanel();
+	GmCXt.requestHandler.startTestMeWatcher();
+
+	GmCXt.testMe.startTime = Date.now();
+
+	//Number of inline steps in a guide
+	GmCXt.testMe.stepCount = 0;
+
+	if (GmCXt.testMe.steps) {
+		GmCXt.testMe.goalStep = GmCXt.testMe.steps[GmCXt.testMe.steps.length - 1];
+
+		for (var i = 0, j = GmCXt.testMe.steps.length; i < j; i++) {
+			var step = GmCXt.testMe.steps[i];
+			if (step.step_type === GmCXt.STEP_TYPE_INLINE) {
+				GmCXt.testMe.stepCount++;
+			}
+		}
+	}
+
+	//Expected time to play guide 1 step = 10 sec
+	GmCXt.testMe.expectedTime = GmCXt.testMe.stepCount * 10;
+	GmCXt.testMe.countDownTime = new Date().getTime() + GmCXt.testMe.expectedTime * 1000;
+};
+
+GmCXt.showTestMeCountdown = function() {
+
+	GmCXt.testMe.timer = setInterval(function() {
+
+		if (GmCXt.testMe) {
+			var now = new Date().getTime();
+
+			var distance = GmCXt.testMe.countDownTime - now;
+
+			// Time calculations for minutes and seconds
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			// Count down is over
+			if (distance < 0) {
+				clearInterval(GmCXt.testMe.timer);
+				GmCXt.requestHandler.stopToolTestMe();
+			} else {
+				var str = "";
+				if (minutes > 0) {
+					str += minutes + GmCXt.label.charM + " ";
+				}
+				if (seconds > 0) {
+					str += seconds + GmCXt.label.charS + " ";
+				}
+				mg$('.mgPlayerJSTest_testme-active-countdown').html(str);
+			}
+		}
+	}, 1000);
+};
+
+GmCXt.requestHandler.startTestMeWatcher = function() {
+
+	GmCXt.log(58, 'MyTest started');
+	mg$('.mgPlayerJSTest_testme-active').show();
+	mg$('.mgPlayerJSTest_testme-active-title').html(GmCXt.label.testMeStopMessage);
+	mg$('.mgPlayerJSTest_testme-stop-label').html(GmCXt.label.stop);
+
+	GmCXt.showTestMeCountdown();
+	GmCXt.hideWidgetIcon();
+	GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:start_watcher;testMe");
+};
+
+GmCXt.requestHandler.recordEventTestMe = function(data) {
+
+	if (!GmCXt.testMe) return;
+
+	GmCXt.log(58, "Recording events for testMe");
+
+	var new_ = data.element;
+
+	if (data.event === 'click') {
+		GmCXt.log(58, data.event.toUpperCase() + " Event Occured");
+	}
+
+	//Loop through all the steps of a tour
+	for (var i = 0; i < GmCXt.testMe.steps.length; i++) {
+
+		var step = GmCXt.testMe.steps[i];
+
+		if (step.step_type === GmCXt.STEP_TYPE_INLINE) {
+
+			var settings = step.step_settings;
+			var match = false;
+
+			if (data.event === 'click' &&
+				(settings.clickNext === true ||
+					settings.onRightClickNext === true ||
+					settings.onChangeNext === true ||
+					settings.onKeyupNext === true)
+			) {
+				GmCXt.testMe.eventCount++;
+				match = matchStep(step);
+
+			} else if (data.event === 'mouseover' &&
+				(settings.hoverNext === true ||
+					settings.keepNext === true ||
+					settings.closeAfterDelay === true)
+			) {
+				match = matchStep(step);
+				if (match === true) {
+					GmCXt.log(58, data.event.toUpperCase() + " Event Occured");
+					GmCXt.testMe.eventCount++;
+				}
+			}
+
+			if (match === true) {
+
+				GmCXt.log(58, "STEP MATCHED Id: " + step.step_id);
+				GmCXt.testMe.hitCount++;
+				GmCXt.testMe.steps.splice(i, 1);
+
+				if (GmCXt.testMe.goalStep.step_id == step.step_id) {
+					GmCXt.log(58, "GOAL STEP MATCHED, STOP TEST TOOL");
+					GmCXt.requestHandler.stopToolTestMe();
+				} else {
+					break;
+				}
+			}
+		}
+	}
+
+	function compareAttributes(elObj, stepEl) {
+		var elAttr1 = mg$.extend(true, {}, elObj.meta.elAttributes);
+		var elAttr2 = mg$.extend(true, {}, stepEl.meta.elAttributes);
+
+		if (elAttr1 && elAttr2) {
+			elAttr1.class = GmCXt.dom.filterValidClasses(elAttr1.class) ? GmCXt.dom.filterValidClasses(elAttr1.class).split('.') : [];
+			elAttr2.class = GmCXt.dom.filterValidClasses(elAttr2.class) ? GmCXt.dom.filterValidClasses(elAttr2.class).split('.') : [];
+		}
+
+		return GmCXt.compareObjectsByPercentMatch(elAttr1, elAttr2, 60);
+	}
+
+	function matchStep(step) {
+
+		var stepSettings = step.step_settings;
+		var stepEl = stepSettings.element;
+		var match = false;
+		var old_ = stepEl;
+
+		if (!mg$.isArray(new_)) {
+			new_ = [new_];
+		}
+
+		for (var i = 0; i < new_.length; i++) {
+			if (compareAttributes(new_[i], old_)) {
+				match = true;
+				break;
+			}
+		}
+		return match;
+	}
+
+	function compareSelector(prop, old, new_) {
+
+		var match = false;
+		var oldSelector = old[prop];
+		var newSelector = new_[prop];
+
+		if (oldSelector && newSelector) {
+
+			var len = newSelector.length;
+			var o = 0;
+			var n = 0;
+
+			//Compare each selector
+			for (var j = 0; j < len; j++) {
+				if (oldSelector[o] === newSelector[n]) {
+					o++;
+					n++;
+					match = true;
+				} else if (match === true) {
+					match = false;
+					break;
+				}
+
+				if (match === false && oldSelector[o] !== newSelector[n]) {
+					n++;
+				}
+			}
+		}
+
+		return match;
+	}
+};
+
+GmCXt.requestHandler.stopToolTestMe = function() {
+	GmCXt.log(58, 'MyTest ENDED');
+	clearInterval(GmCXt.testMe.timer);
+	mg$('.mgPlayerJSTest_testme-active').hide();
+	GmCXt.testMe.stopTime = Date.now();
+	GmCXt.requestHandler.stopTestMeWatcher();
+	GmCXt.requestHandler.showTestMeReport();
+};
+
+GmCXt.requestHandler.stopTestMeWatcher = function() {
+	GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:stop_watcher;testMe");
+};
+
+GmCXt.requestHandler.showTestMeReport = function() {
+	GmCXt.testMe.userTime = parseInt((GmCXt.testMe.stopTime - GmCXt.testMe.startTime) / 1000) || 1;
+	GmCXt.testMe.testEfficiency = null;
+	GmCXt.testMe.testEffectiveness = null;
+	GmCXt.testMe.testResult = "Failed";
+
+	if (GmCXt.testMe.hitCount === GmCXt.testMe.stepCount) {
+
+		GmCXt.testMe.testResult = "Passed";
+
+		//(Expected time to complete a guide / Total time taken by user) * 100;
+		GmCXt.testMe.testEfficiency =
+			parseFloat(((GmCXt.testMe.expectedTime / GmCXt.testMe.userTime) * 100).toFixed(2));
+
+		// (Number of inline steps in a guide / Number of steps performed by user) * 100
+		GmCXt.testMe.testEffectiveness =
+			parseFloat(((GmCXt.testMe.stepCount / GmCXt.testMe.eventCount) * 100).toFixed(2));
+	}
+
+	GmCXt.showTestMeReportUI();
+
+	//call analytics tracker
+	GmCXt.trackerV1.trackTestMe(GmCXt.testMe);
+	GmCXt.retakeTest = GmCXt.testMe;
+	GmCXt.storage().set({
+		'testMe': null
+	});
+	GmCXt.testMe = {steps:[]};
+};
+
+GmCXt.showTestMeReportUI = function() {
+
+	var testMeResultHeader =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-test-me-result-header'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-test-me-result-title'>" +
+		GmCXt.label.testMeResultTitle +
+		"</wmgPlayerJSTest_>" +
+		"<button class='mgPlayerJSTest_popup-test-me-result-close mgPlayerJSTest_lbl-btn'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-test-me-close-svg'></wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_title-tooltip-wrapper mgPlayerJSTest_position-bottom-left'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_tooltip-title'>" + GmCXt.label.close + "</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</button>" +
+		"</wmgPlayerJSTest_>";
+
+	var testMeUserResultPass =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_result-passed-container'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_message-icon-passed'>" +
+		"<span class='mgPlayerJSTest_message-icon-passed-svg'></span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_message-text-passed'>" +
+		"<span>" + GmCXt.label.testMePassedMessage + "</span>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	var testMeUserResultFail =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_result-failed-container'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_message-icon-failed'>" +
+		"<span class='mgPlayerJSTest_message-icon-failed-svg'></span>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_message-text-failed'>" +
+		"<span>" + GmCXt.label.testMeFailedMessage + "</span>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	//Get test time in min-sec format
+	if (GmCXt.testMe.userTime > 60) {
+		var testMeUserTime = Math.floor(GmCXt.testMe.userTime / 60) + " min " +
+			parseInt(GmCXt.testMe.userTime - Math.floor(GmCXt.testMe.userTime / 60) * 60) + " sec";
+	} else {
+		var testMeUserTime = Math.floor(GmCXt.testMe.userTime) + " sec";
+	}
+
+	if (GmCXt.testMe.expectedTime > 60) {
+		var testMeExpectedTime = Math.floor(GmCXt.testMe.expectedTime / 60) + " min " +
+			parseInt(GmCXt.testMe.expectedTime - Math.floor(GmCXt.testMe.expectedTime / 60) * 60) + " sec";
+	} else {
+		var testMeExpectedTime = Math.floor(GmCXt.testMe.expectedTime) + " sec";
+	}
+
+	GmCXt.testMe.testMeExpectedTime = testMeExpectedTime;
+
+	var testMeEfficiency = GmCXt.testMe.testEfficiency;
+	var testMeEffectiveness = GmCXt.testMe.testEffectiveness;
+	if (GmCXt.testMe.testEfficiency === null ||
+		GmCXt.testMe.testEffectiveness === null) {
+
+		testMeEfficiency = 0;
+		testMeEffectiveness = 0;
+	}
+
+	var efficiencyResult =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_text-guide-efficiency'>" +
+		GmCXt.label.testMeGuideEfficiency + " " + testMeEfficiency + "%" +
+		"</wmgPlayerJSTest_>";
+
+	var effectivenessResult =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_text-guide-effectiveness'>" +
+		GmCXt.label.testMeGuideEffectiveness + " " + testMeEffectiveness + "%" +
+		"</wmgPlayerJSTest_>";
+
+	var testEfficiency =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_guide-efficiency-wrapper'>" +
+		efficiencyResult +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_verticle-line'>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_text-time-wrapper'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_time-taken-text'>" + GmCXt.label.testMeTestTime + "</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_time-user'>" + testMeUserTime + "</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_text-expected-time-wrapper'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_expected-time-text'>" + GmCXt.label.testMeExpectedTime + "</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_time-expected'>" + testMeExpectedTime + "</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	var testEffectiveness =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_guide-effectiveness-wrapper'>" +
+		effectivenessResult +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_verticle-line'>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_text-test-wrapper'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_test-steps-text'>" + GmCXt.label.testMeStepsTaken + "</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_count-steps'>" + GmCXt.testMe.eventCount + "</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_text-required-steps-wrapper'>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_required-steps-text'>" + GmCXt.label.testMeExpectedSteps + "</wmgPlayerJSTest_>" +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_count-steps'>" + GmCXt.testMe.stepCount + "</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	if (GmCXt.testMe.testResult === "Passed") {
+		var bottomButtons =
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_test-me-btn-action'>" +
+			"<button class='mgPlayerJSTest_btn-default mgPlayerJSTest_btn-neutral mgPlayerJSTest_btn-esc-test-me mgPlayerJSTest_inline-block-vt mgPlayerJSTest_lbl-btn'>" + GmCXt.label.close + "</button>" +
+			"</wmgPlayerJSTest_>";
+	} else {
+		var bottomButtons =
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_test-me-btn-action'>" +
+			"<button class='mgPlayerJSTest_btn-default mgPlayerJSTest_btn-start-test mgPlayerJSTest_inline-block-vt mgPlayerJSTest_lbl-btn'>" + GmCXt.label.testMeRetakeTestBtn + "</button>" +
+			"<button class='mgPlayerJSTest_btn-default mgPlayerJSTest_btn-neutral mgPlayerJSTest_btn-esc-test-me mgPlayerJSTest_inline-block-vt mgPlayerJSTest_lbl-btn'>" + GmCXt.label.close + "</button>" +
+			"</wmgPlayerJSTest_>";
+	}
+
+	var testMeFailedDescription = "";
+
+	if (GmCXt.testMe.testResult === "Passed") {
+		testMeUserResultFail = "";
+	} else {
+		testMeUserResultPass = "";
+		testEfficiency = "";
+		testEffectiveness = "";
+
+		//Show this message instead of Test Efficiency and Test Effectiveness when Test is failed.
+
+		var msg = GmCXt.label.testMeFailedErrorMessage;
+        msg = msg.replace(/{CORRECT_STEPS}/g, GmCXt.testMe.hitCount);
+        msg = msg.replace(/{TOTAL_STEPS}/g, GmCXt.testMe.stepCount);
+
+        testMeFailedDescription = "<wmgPlayerJSTest_ class='mgPlayerJSTest_text-guide-message-failed'>" + msg + "</wmgPlayerJSTest_>";
+	}
+
+	var html =
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-test-me-result-preview'>" +
+		testMeResultHeader +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-test-me-result-container'>" +
+		testMeUserResultFail +
+		testMeUserResultPass +
+		"<wmgPlayerJSTest_ class='mgPlayerJSTest_result-score-container'>" +
+		testEfficiency +
+		testEffectiveness +
+		testMeFailedDescription +
+		"</wmgPlayerJSTest_>" +
+		bottomButtons +
+		"</wmgPlayerJSTest_>" +
+		"</wmgPlayerJSTest_>";
+
+	mg$("html").append(html);
+
+	mg$(".mgPlayerJSTest_popup-test-me-close-svg").html(GmCXt.svgs.close_btn);
+	mg$(".mgPlayerJSTest_message-icon-passed-svg").html(GmCXt.svgs.testme_result_passed);
+	mg$(".mgPlayerJSTest_message-icon-failed-svg").html(GmCXt.svgs.testme_result_failed);
+
+	function closeTestMeReport() {
+		mg$('.mgPlayerJSTest_popup-test-me-result-preview').hide();
+		GmCXt.openAppPanel();
+		GmCXt.displayWidget();
+		GmCXt.testMe = null;
+		GmCXt.storage().set({
+			'testMe': null
+		});
+	}
+
+	function reStartTestMe() {
+		GmCXt.testMe = GmCXt.retakeTest;
+		GmCXt.storage().set({
+			'testMe': GmCXt.testMe
+		});
+		mg$('.mgPlayerJSTest_popup-test-me-result-preview').hide();
+		GmCXt.hideWidgetIcon();
+		var testMeMessage = mg$.extend(true, {}, GmCXt.testMe.message);
+
+		//Start TestMe Tool
+		GmCXt.testMe = null;
+		GmCXt.storage().set({
+			'testMe': null
+		});
+		GmCXt.requestHandler.startToolTestMe(testMeMessage);
+		var firstStepId = testMeMessage.tour.tour_settings.play_structure[0].id;
+		var firstStep = GmCXt.getStepFromSteps(firstStepId, testMeMessage.tour.steps);
+		const currentUrl = new URL(window.location.href);
+		const guideUrl = new URL(`https://${firstStep.step_url}`);
+		if (guideUrl.hostname !== currentUrl.hostname || guideUrl.pathname !== currentUrl.pathname) {
+			window.location.href = `https://${firstStep.step_url}`;
+		}
+	}
+
+	//Close report on clicking close icon/Esc button
+	mg$(".mgPlayerJSTest_popup-test-me-result-close").on("click", closeTestMeReport);
+	mg$(".mgPlayerJSTest_btn-esc-test-me").on("click", closeTestMeReport);
+
+	mg$(".mgPlayerJSTest_btn-start-test").on("click", reStartTestMe);
+
+};
+
+GmCXt.requestHandler.checkTestMeDomain = function(data) {
+	GmCXt.storage().set({
+		'testMe': null
+	});
+	GmCXt.closeAppPanel();
+	var windowHost = GmCXt.getPageDomain();
+	var stepUrlHost = GmCXt.getDomain(data.tour.steps[0].step_url);
+
+	if (windowHost !== stepUrlHost) {
+		return false;
+	} else {
+		return true;
+	}
+
+};
+
+GmCXt.requestHandler.redirectToUrl = function(data) {
+
+	function button1Callback() {
+		var message = {
+			currStepUrl: 'https://' + data.tour.steps[0].step_url,
+			action: "mgPlayerJSTest_action:start_tool;testMe",
+			data: data
+		};
+		GmCXt.sendMessageToParentWindow('mgPlayerJSTest_action:redirectTestMe', message);
+	}
+
+	var options = {
+		description: GmCXt.label.ConfirmIfTestMeModeRidirect,
+		button1: GmCXt.label.redirect,
+		button1Callback: button1Callback,
+		button2: GmCXt.label.btnCancel
+		// button2Callback: button2Callback
+	};
+
+	alertV1(options).show();
+
+};
+
+alertV1 = function(options) {
+	options = options || {};
+
+	var pub = {};
+
+	var self = {
+		description: options.description,
+		button1: options.button1,
+		button1Callback: options.button1Callback,
+		button2: options.button2,
+		button2Callback: options.button2Callback,
+		keepScrollLock: options.keepScrollLock || false,
+		closeTour: false,
+		showInputField: options.showInputField || false
+	};
+
+	var popupInputField = 'none';
+	if (self.showInputField) {
+		popupInputField = 'block';
+	}
+	pub.show = function() {
+
+		var html = " <wmgPlayerJSTest_ class='mgPlayerJSTest_overlay-container'></wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup'>" +
+			"<img class='mgPlayerJSTest_popup-close-button' src='" + GmCXt.conf.staticContentPath + "close.png'/>" +
+			"<wmgPlayerJSTest_ style='display:" + popupInputField + "'><input type='text'  maxlength='250' class='mgPlayerJSTest_popup-input-field'/></wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-content-wrapper'>" + self.description + "</wmgPlayerJSTest_>" +
+			"<wmgPlayerJSTest_ class='mgPlayerJSTest_popup-btn-wrapper'>";
+
+		if (self.button1) {
+			html += "<wmgPlayerJSTest_ title='" + self.button1 + "' aria-label='popup " + self.button1 + " button' class='mgPlayerJSTest_popup-ok-btn mgPlayerJSTest_btn-default mgPlayerJSTest_text-overflow-ellipsis mgPlayerJSTest_inline-block-vt'>" + self.button1 + "</wmgPlayerJSTest_>";
+		}
+		if (self.button2) {
+			html += "<wmgPlayerJSTest_ title='" + self.button2 + "' aria-label='popup " + self.button2 + " button' class='mgPlayerJSTest_popup-cancel-btn mgPlayerJSTest_btn-default mgPlayerJSTest_text-overflow-ellipsis mgPlayerJSTest_inline-block-vt'>" + self.button2 + "</wmgPlayerJSTest_>" +
+				"</wmgPlayerJSTest_>";
+		}
+		html += "</wmgPlayerJSTest_>";
+
+		mg$("html").append(html);
+
+		var windowHeight = mg$(window).height();
+		var popupTop = (windowHeight - mg$('.mgPlayerJSTest_popup').height()) / 2;
+		mg$('.mgPlayerJSTest_popup').css("top", popupTop);
+
+		mg$(".mgPlayerJSTest_popup-ok-btn").on("click", function() {
+			var popupInputFieldValue = mg$('.mgPlayerJSTest_popup-input-field').val();
+			pub.close();
+			if (mg$.isFunction(self.button1Callback))
+				self.button1Callback(popupInputFieldValue);
+		});
+
+		mg$(".mgPlayerJSTest_popup-cancel-btn").on("click", function() {
+			pub.close(self.keepScrollLock);
+			GmCXt.openAppPanel();
+		});
+
+		mg$(".mgPlayerJSTest_popup-close-button").on("click", function() {
+			pub.close(self.keepScrollLock);
+		});
+	};
+
+	pub.close = function(keepScrollLock) {
+
+		if (!keepScrollLock)
+			GmCXt.unlockScroll();
+
+		mg$(".mgPlayerJSTest_popup").remove();
+		mg$(".mgPlayerJSTest_overlay-container").remove();
+	};
+
+	return pub;
+};
+/**
+	* @file Guideme HTTP service
+	* @author Nilesh Pachpande
+	*/
+
+GmCXt.userApiKeySignin = function(data) {
+
+	var myGuideOrgKey = data.myGuideOrgKey;
+	delete data.myGuideOrgKey;
+
+	var serviceName = GmCXt.getCustomerSpecificURL("user/sso/login");
+	serviceName = serviceName + '?mg_source_name=' + GmCXt.conf.appConfig.customer;
+
+	var params = {
+		url: serviceName,
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			"Authorization": myGuideOrgKey
+		},
+		data: JSON.stringify(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.getAnonymousUserPrefrence = function(data, accesstoken) {
+
+	var params = {
+		url: 'user/preference',
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			AccessToken: accesstoken
+		},
+		data: JSON.stringify(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.setAnonymousUserPrefrence = function(data) {
+
+	var params = {
+		url: 'user/preference',
+		method: 'PUT',
+		headers: {
+			'Content-Type': "application/json",
+			AccessToken: GmCXt.user.accesstoken
+		},
+		data: JSON.stringify(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+
+GmCXt.apiGetHandOffToken = function() {
+	var params = {
+		url: "accounts/v1/handoff-token/generate/",
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json",
+			AccessToken: GmCXt.user.accesstoken,
+			RefreshToken: GmCXt.user.refreshtoken
+		},
+		data: ''
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiRegisterClientInsight = function() {
+	var params = {
+		url: "event/v1/client/register/?org_id=" + GmCXt.organization.organization_id,
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			AccessToken: GmCXt.user.accesstoken
+		},
+		data: ''
+	};
+	return GmCXt.xhrAnalytics(params, true);
+};
+
+GmCXt.apiGetClientSecretInsight = function(o) {
+	var params = {
+		url: "event/v1/client/secret/?org_id=" + GmCXt.organization.organization_id,
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: JSON.stringify({
+			"app_client_id": o
+		})
+	};
+	return GmCXt.xhrAnalytics(params, true);
+};
+
+GmCXt.apiTrackEventV1 = function(o) {
+
+	var params = {
+		url: "event/v1/push/?org_id=" + o.payload[0].org_id + "&app_code=" + o.payload[0].app_code + "&event_type=" + o.payload[0].event_type,
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apitrackSentiment = function(o) {
+	var params = {
+		url: "register/v1/sentiment/report/",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apitrackConversation = function(o) {
+	var params = {
+		url: "register/v1/conversation/report/",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiUpdateSentiment = function(o) {
+	var params = {
+		url: "sentiments/v1/questionaire/",
+		method: 'PUT',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken,
+			key: GmCXt.trackerUtil.clientKey
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiDeleteSentiment = function(o) {
+	var url = "";
+	if (o.app_code) {
+		url = "sentiments/v1/questionaire/?app_code=" + o.app_code + "&sentiment_code=" + o.sentiment_code +
+			"&time_zone=utc+0530";
+	} else {
+		url = "sentiments/v1/questionaire/?sentiment_code=" + o.sentiment_code +
+			"&time_zone=utc+0530";
+	}
+
+	var params = {
+		url: url,
+		method: 'DELETE',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+		},
+		data: ''
+	};
+
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiGetSentiment = function(o) {
+	var url = "";
+	if (o.app_code) {
+		url = "sentiments/v1/questionaire/?app_code=" + o.app_code + "&sentiment_code=" + o.sentiment_code +
+			"&time_zone=utc+0530";
+	} else {
+		url = "sentiments/v1/questionaire/?sentiment_code=" + o.sentiment_code +
+			"&time_zone=utc+0530";
+	}
+	var params = {
+		url: url,
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+		},
+		data: ''
+	};
+
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiGetBotConv = function(o) {
+	var url = "";
+	if (o.app_code) {
+		url = "conversations/v1/questionaire/?app_code=" + o.app_code + "&conversation_code=" + o.conversation_code +
+			"&time_zone=utc+0530";
+	} else {
+		url = "conversations/v1/questionaire/?conversation_code=" + o.conversation_code +
+			"&time_zone=utc+0530";
+	}
+	var params = {
+		url: url,
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+		},
+		data: ''
+	};
+
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiGetSentiments = function(o) {
+	var url = "";
+	if (o.app_code) {
+		url = "sentiments/v1/list/?app_code=" + o.app_code + "&sort_by=sentiment_title&order=asc&page_index=" +
+			o.pageIndex + "&page_size=" + o.pageSize;
+	} else {
+		url = "sentiments/v1/list/?sort_by=sentiment_title&order=asc&page_index=" +
+			o.pageIndex + "&page_size=" + o.pageSize;
+	}
+	var params = {
+		url: url,
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+		},
+		data: ''
+	};
+
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiGetBotConvList = function(o) {
+	var url = "";
+	if (o.app_code) {
+		url = "conversations/v1/list/?app_code=" + o.app_code + "&sort_by=conversation_title&order=asc&page_index=" +
+			o.pageIndex + "&page_size=" + o.pageSize;
+	} else {
+		url = "conversations/v1/list/?sort_by=conversation_title&order=asc&page_index=" +
+			o.pageIndex + "&page_size=" + o.pageSize;
+	}
+	var params = {
+		url: url,
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken
+			
+		},
+		data: ''
+	};
+
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiPostSurvey = function(o, user) {
+	var params = {
+		url: "v3/survey/questionnaire/" + o.guide_id + "/",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: user.accesstoken,
+			key: GmCXt.trackerUtil.clientKey
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiPostSentiment = function(o) {
+	var params = {
+		url: "sentiments/v1/questionaire/",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			accesstoken: GmCXt.user.accesstoken,
+			key: GmCXt.trackerUtil.clientKey
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiUpdateUserProfile = function(user) {
+	user.settings = JSON.stringify(user.settings);
+	var params = {
+		url: "user",
+		method: 'PUT',
+		data: JSON.stringify(user)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.apiUpdateUserGuidevView = function(data) {
+	var guideView = {
+		guide_view: JSON.stringify(data)
+	};
+
+	var params = {
+		url: "user/guide_view",
+		method: 'PUT',
+		data: JSON.stringify(guideView)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.logoutUser = function() {
+	GmCXt.msgToApp('mgPlayerJSTest_action:to_signin_page', {}, senderTabId);
+};
+
+GmCXt.loginFromConsole = function(email, password) {
+	if (!GmCXt.isBackgroundPage) {
+		GmCXt.msgToApp('mgPlayerJSTest_action:signin_from_console', {
+			email: email,
+			password: password
+		}, senderTabId);
+	}
+};
+
+GmCXt.saveMyBotReport = function(o) {
+	var params = {
+		url: "register/v1/mybot/report/",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			'AccessToken': GmCXt.user.accesstoken
+		},
+		data: JSON.stringify(o)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.getElementsDetailInsights = function(id) {
+	var params = {
+		url: "tracker/v1/element/metedata/contextual/?app_code=" + id + "&url=" + GmCXt.urlParts.host,
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json",
+			'AccessToken': GmCXt.user.accesstoken
+		}
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.createNewElTrackObject = function(obj) {
+	var params = {
+		url: "tracker/v1/element/metedata/",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json",
+			'AccessToken': GmCXt.user.accesstoken
+		},
+		data: JSON.stringify(obj)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.updateElTrackObject = function(obj) {
+	var params = {
+		url: "tracker/v1/element/metedata/",
+		method: 'PUT',
+		headers: {
+			'Content-Type': "application/json",
+			'AccessToken': GmCXt.user.accesstoken
+		},
+		data: JSON.stringify(obj)
+	};
+	return GmCXt.xhrAnalytics(params);
+};
+
+GmCXt.apiGetSegmentGroupList = function(o) {
+	var params = {
+		url: "segment/group/list?organization_id=" + o.organization_id,
+		method: "GET",
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: ''
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.apiPostSegmentGroupList = function(data) {
+	var params = {
+		url: "segment/group",
+		method: "POST",
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: JSON.stringify(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.apiPutSegmentGroupList = function(data) {
+	var params = {
+		url: "segment/group",
+		method: "PUT",
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: JSON.stringify(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.apiDeleteSegmentGroupList = function(data) {
+
+	var params = {
+		url: 'segment/group',
+		method: 'DELETE',
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: JSON.stringify(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.callGetCdnSignature = function(data) {
+
+	var params = {
+		url: 'organization/signature?',
+		method: 'GET',
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: GmCXt.encode(data)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.sendFeedbackEmail = function(obj) {
+	var params = {
+		url: "organization/feedback",
+		method: 'POST',
+		headers: {
+			'Content-Type': "application/json"
+		},
+		data: JSON.stringify(obj)
+	};
+	return GmCXt.xhr(params);
+};
+
+GmCXt.getSearchURL = function(url, searchData) {
+	var searchParams = new URLSearchParams(searchData);
+	var searchParamsStr = searchParams.toString();
+	if (searchParamsStr.length && searchParamsStr.indexOf("?") === -1 && url.indexOf("?") === -1) {
+		searchParams = "?" + searchParams.toString();
+	}
+	url = url + searchParams;
+	return url;
+};
+
+GmCXt.xhr = function(params, doNotAddWebURL, extApi) {
+
+	return new Promise(function(resolve, reject) {
+		var host = "";
+
+		if (!GmCXt.isEmpty(GmCXt.urlParts)) {
+			host = GmCXt.urlParts.host;
+		}
+
+		var headers = {
+			'x-mg-host': host,
+			'x-mg-source': GmCXt.conf.appName,
+			'x-mg-orgId': ''
+		};
+
+		var showMaintenance = function() {
+			if (GmCXt.isBackgroundPage === true) {
+				GmCXt.sendMessageToPanel('mgPlayerJSTest_action:maintenance');
+			} else {
+				GmCXt.sendMessageToApp('mgPlayerJSTest_action:maintenance');
+			}
+		};
+
+		var onError = function(error) {
+			if (error) {
+				error.url = params.url;
+				error.paramsData = params.data;
+				error.method = params.method;
+
+				var code = error.code;
+
+				if (code == 1003 || code === 2004 || (code === 2036 && (error.url.indexOf('user/signout') > 0 || error.url.indexOf('user/token') > 0))) { // AccessToken Invalid || Session Expired
+					if (GmCXt.isBackgroundPage) {
+						GmCXt.createStepJobs = [];
+					}
+					GmCXt.logoutUser();
+					reject(error);
+
+				} else if (code == 1007) { // AccessToken expired
+					GmCXt.getAccessToken().then(function(r) {
+						GmCXt.saveToken(r);
+						headers.AccessToken = GmCXt.user.accesstoken;
+						callApi_();
+					}).catch(function() {
+						GmCXt.logoutUser();
+					});
+
+				} else if (code === 1014) {
+					showMaintenance();
+					reject(error);
+
+				} else {
+					reject(error);
+				}
+
+			} else {
+				reject();
+			}
+		};
+
+		var onSuccess = function(result) {
+
+			result.code = parseInt(result.code);
+
+			if (doNotAddWebURL) {
+				resolve(result);
+				return;
+			}
+
+			var code = result.code;
+			if (result.error === false) {
+
+				if (params.url && params.url.indexOf('user/token') !== -1) {
+					result = GmCXt.validateDataModel(result.data, GmCXt.model.userToken);
+				}
+				if (params.onSuccess) {
+					params.onSuccess(result);
+				}
+
+				resolve(result);
+			} else if (code === 1005) {
+				resolve(result);
+
+			} else if (code === 1018) {
+				resolve(result);
+
+			} else if (code === 1014) {
+				showMaintenance();
+				reject(result);
+
+			} else if (code == 1003 || code == 2004 || (code === 2036 && (params.url.indexOf('user/signout') > 0 || params.url.indexOf('user/token') > 0))) { // AccessToken Invalid || Session Expired
+
+				if (GmCXt.isBackgroundPage) {
+					GmCXt.createStepJobs = [];
+				}
+				GmCXt.logoutUser();
+				reject(result);
+
+			} else if (code == 1007) { // AccessToken expired
+				GmCXt.getAccessToken().then(function(r) {
+					GmCXt.saveToken(r);
+					headers.AccessToken = GmCXt.user.accesstoken;
+					callApi_();
+				}).catch(function() {
+					GmCXt.logoutUser();
+				});
+
+			} else {
+				reject(result);
+			}
+		};
+
+		function callApi_() {
+
+			for (var key in params.headers) {
+				if (params.headers.hasOwnProperty(key)) headers[key] = params.headers[key];
+			}
+
+			if (GmCXt.user && GmCXt.organization) {
+				headers.appType = GmCXt.conf.appType;
+				headers.orgId = GmCXt.organization.organization_id;
+				headers['x-mg-orgId'] = GmCXt.organization.organization_id;
+
+				headers.AccessToken = GmCXt.user.accesstoken;
+
+				processApi();
+			} else {
+				GmCXt.getDatafromPanel().then(function(d) {
+					GmCXt.user = d.user;
+					GmCXt.organization = d.organization;
+					if (GmCXt.user) {
+						headers.appType = GmCXt.conf.appType;
+						headers.orgId = GmCXt.organization.organization_id;
+						headers.AccessToken = GmCXt.user.accesstoken;
+						headers['x-mg-orgId'] = GmCXt.organization.organization_id;
+					}
+					processApi();
+				}).catch(function(e) {
+					console.log('Error while fetching user data', e);
+				});
+			}
+		}
+
+		function processApi() {
+
+			var url = GmCXt.conf.webServiceUrl + "" + params.url;
+
+			if (doNotAddWebURL) {
+				url = params.url;
+			}
+
+			if (params.method === 'GET') {
+
+				fetch(GmCXt.getSearchURL(url, params.data), {
+						headers: headers,
+						method: params.method
+					})
+					.then(function(response) {
+
+						if (doNotAddWebURL && !extApi) {
+
+							if (response.status === 200) {
+								resolve();
+							} else {
+								reject();
+							}
+
+						} else {
+							response.json()
+								.then(onSuccess)
+								.catch(onError);
+						}
+
+					}).catch(onError);
+
+			} else {
+				fetch(url, {
+						headers: headers,
+						method: params.method,
+						body: params.data
+					})
+					.then(function(response) {
+						response.json()
+							.then(onSuccess)
+							.catch(onError);
+					}).catch(onError);
+			}
+		}
+
+		callApi_();
+	});
+};
+
+GmCXt.getDetailTour = function(o) {
+	return new Promise(function(resolve, reject) {
+		var params = {
+			url: "tour",
+			method: 'GET',
+			headers: {
+				'Content-Type': "application/json"
+			},
+			data: GmCXt.encode(o)
+		};
+
+		function gotTour(tour) {
+			tour = GmCXt.migrateTour(tour);
+
+			resolve(tour);
+		}
+
+		function onSuccess(r) {
+			if (r && r.data) {
+				GmCXt.validateApiResp(gotTour,
+					"tour",
+					r.data.tour,
+					GmCXt.model.guide);
+			} else {
+				resolve();
+			}
+		}
+
+		GmCXt.xhr(params).then(onSuccess);
+	});
+};
+
+GmCXt.xhrAnalytics = function(params, isInsight) {
+
+	return new Promise(function(resolve, reject) {
+
+		function OnAccessTokenError() {
+			GmCXt.getAccessToken().then(function(r) {
+				r = r || {};
+				GmCXt.saveToken(r);
+
+				params.headers.accesstoken = GmCXt.user.accesstoken;
+				ajax();
+			}).catch(function() {
+				GmCXt.logoutUser();
+			});
+		}
+
+		var onSuccess = function(result) {
+
+			result = GmCXt.parseJSON(result);
+
+			if (result.status === 'success') {
+
+				if (result.data.event_chain_id) {
+					if (isInsight) {
+						GmCXt.INSIGHTS_EVENT_CHAIN_ID = result.data.event_chain_id;
+					} else {
+						GmCXt.ANALYTICS_EVENT_CHAIN_ID = result.data.event_chain_id;
+					}
+				}
+				resolve(result);
+			} else {
+				if (!GmCXt.isEmpty(result) && GmCXt.isDefined(result.status) &&
+					result.status === 'error' &&
+					result.description === "Access token expired.") {
+					OnAccessTokenError();
+				} else {
+					reject(result);
+				}
+			}
+		};
+
+		var onError = function(xhr) {
+
+			console.log(xhr);
+			if (xhr.responseJSON) {
+
+				if (xhr.responseJSON.description == "Access token expired.") {
+					OnAccessTokenError();
+
+				} else {
+					var error = xhr.responseJSON;
+					error.apiUrl = params.url;
+					reject(error);
+				}
+			} else {
+				reject(error);
+			}
+		};
+
+		function ajax() {
+
+			url = GmCXt.conf.analyticsPath + "" + params.url;
+
+			if (params.method === 'GET') {
+
+				fetch(GmCXt.getSearchURL(url, params.data), {
+						headers: params.headers,
+						method: params.method
+					})
+					.then(function(response) {
+						response.json()
+							.then(function(r) {
+								onSuccess(r);
+							})
+							.catch(onError);
+					});
+
+			} else {
+				fetch(url, {
+						headers: params.headers,
+						method: params.method,
+						body: params.data
+					})
+					.then(function(response) {
+						response.json()
+							.then(onSuccess)
+							.catch(onError);
+					});
+			}
+		}
+
+		var org = GmCXt.organization;
+
+		if (!GmCXt.isEmpty(GmCXt.conf.analyticsPath) &&
+			((org && org.admin_settings.insights.enabled) || params.url.indexOf("handoff-token") != -1 || GmCXt.isLogoutTrackApi || params.url.indexOf("sentiment") != -1)) {
+			ajax();
+		} else {
+			reject();
+		}
+	});
+};
+GmCXt.guideMeApiProvider = function() {
+
+	var pub = {};
+
+	pub.getUser = function(o) {
+		var params = {
+			url: "user",
+			method: 'GET',
+			headers: {
+				'Content-Type': "application/json"
+			},
+			data: GmCXt.encode(o)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getOrganization = function(o) {
+		var params = {
+			url: "organization",
+			method: 'GET',
+			headers: {
+				'Content-Type': "application/json"
+			},
+			data: GmCXt.encode(o)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getOrgSettings = function(o) {
+		var params = {
+			url: "organization",
+			method: 'GET',
+			headers: {
+				'Content-Type': "application/json"
+			},
+			data: GmCXt.encode(o)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getTours = function(o) {
+		var params = {
+			url: "tour/list",
+			method: 'GET',
+			headers: {
+				'Content-Type': "application/json"
+			},
+			data: GmCXt.encode(o)
+		};
+		return GmCXt.xhr(params);
+
+		// 4830:
+		//GmCXt.validateApiResp( cb,
+		//    params.url, 
+		//    r.data.tours, 
+		//    GmCXt.model.guides 
+		//);
+	};
+
+	pub.getVideoUploadUrl = function(data) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/upload/url?",
+			method: 'GET',
+			headers: {},
+			data: GmCXt.encode(data)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getVideoUploadUrl_AWS = function(data) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/presigned/upload/url?",
+			method: "GET",
+			headers: {},
+			data: GmCXt.encode(data)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getVideoUploadUrl_IBM = function(data) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/presigned/upload/url?",
+			method: "GET",
+			headers: {},
+			data: GmCXt.encode(data)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.videoUploadStatus = function(data) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/upload/status",
+			method: 'POST',
+			headers: {},
+			data: JSON.stringify(data)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.videoUploadStatusAWS = function(data) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/upload/status/aws",
+			method: 'POST',
+			headers: {},
+			data: JSON.stringify(data)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getVideoLocator = function(data) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/upload/status",
+			method: 'GET',
+			headers: {},
+			data: GmCXt.encode(data)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.uploadFTPFile = function(data, successCb, errorCb) {
+		data.organization_id = GmCXt.organization.organization_id;
+		var params = {
+			url: "file/upload/ftp",
+			method: "POST",
+			serviceType: "",
+			data: data,
+			fileInput: true,
+			onSuccess: successCb,
+			onFail: errorCb
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.createBulkStep = function(d) {
+		var params = {
+			url: "step/bulk/create",
+			method: 'POST',
+			headers: {},
+			data: JSON.stringify(d)
+		};
+		return GmCXt.xhr(params);
+	}
+
+	pub.createStep = function(o) {
+		var params = {
+			url: "step",
+			method: 'POST',
+			headers: {},
+			data: JSON.stringify(o.args)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.deleteStep = function(data) {
+
+		var params = {
+			url: 'step',
+			method: 'DELETE',
+			data: JSON.stringify(data)
+		};
+
+		return GmCXt.xhr(params);
+	};
+
+	pub.updateTour = function(data) {
+		var params = {
+			url: 'tour',
+			method: 'PUT',
+			headers: {},
+			data: JSON.stringify(data)
+		};
+
+		return GmCXt.xhr(params);
+	};
+
+	pub.updateStep = function(o) {
+		var params = {
+			url: "step",
+			method: 'PUT',
+			headers: {},
+			data: JSON.stringify(o.args)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.updateStepLang = function(o) {
+		var params = {
+			url: "step/language/update",
+			method: 'PUT',
+			headers: {},
+			data: JSON.stringify(o.args)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.uploadFileBase64 = function(o) {
+		var params = {
+			url: "file/base64image",
+			method: 'POST',
+			headers: {},
+			data: o.args
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.uploadBase64Image = function(o) {
+		var params = {
+			url: "file/upload/base64image",
+			method: 'POST',
+			headers: {},
+			data: o.args
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.uploadFile = function(o) {
+		o.args.append("organization_id", GmCXt.organization.organization_id);
+		var params = {
+			url: "file/image",
+			method: 'POST',
+			headers: {},
+			data: o.args
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.uploadAudio = function(o) {
+		var params = {
+			url: "file/audio",
+			method: 'POST',
+			headers: {},
+			data: o.args
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.getAudio = function(o) {
+		var params = {
+			url: "file/audio",
+			method: 'GET',
+			data: GmCXt.encode(o.args)
+		};
+		return GmCXt.xhr(params);
+	};
+
+	pub.updateSurvey = function(o, user) {
+		var params = {
+			url: "v3/survey/questionnaire/" + o.guide_id + "/",
+			method: 'PUT',
+			headers: {
+				'Content-Type': "application/json",
+				accesstoken: user.accesstoken,
+				key: GmCXt.trackerUtil.clientKey
+			},
+			data: JSON.stringify(o)
+		};
+		return GmCXt.xhrAnalytics(params);
+	};
+
+	pub.updateUserProfile = GmCXt.apiUpdateUserProfile;
+	pub.getHandOffToken = GmCXt.apiGetHandOffToken;
+	pub.getSentiments = GmCXt.apiGetSentiments;
+	pub.getBotConvList = GmCXt.apiGetBotConvList;
+	pub.updateSentiment = GmCXt.apiUpdateSentiment;
+	pub.postSentiment = GmCXt.apiPostSentiment;
+	pub.deleteSentiment = GmCXt.apiDeleteSentiment;
+	pub.getSentiment = GmCXt.apiGetSentiment;
+	pub.getGetBotConv = GmCXt.apiGetBotConv;
+	pub.postSurvey = GmCXt.apiPostSurvey;
+	pub.getSegmentGroupList = GmCXt.apiGetSegmentGroupList;
+	pub.postSegmentGroupList = GmCXt.apiPostSegmentGroupList;
+	pub.putSegmentGroupList = GmCXt.apiPutSegmentGroupList;
+	pub.deleteSegmentGroupList = GmCXt.apiDeleteSegmentGroupList;
+	pub.userApiKeySignin = GmCXt.userApiKeySignin;
+	pub.registerClientInsight = GmCXt.apiRegisterClientInsight;
+	pub.getClientSecretInsight = GmCXt.apiGetClientSecretInsight;
+	pub.trackEventV1 = GmCXt.apiTrackEventV1;
+	pub.saveMyBotReport = GmCXt.saveMyBotReport;
+	pub.getOneTimeTokenInsights = GmCXt.getOneTimeTokenInsights;
+	pub.trackSentiment = GmCXt.apitrackSentiment;
+	pub.trackConversation = GmCXt.apitrackConversation;
+	pub.createNewElTrackObject = GmCXt.createNewElTrackObject;
+	pub.getElementsDetailInsights = GmCXt.getElementsDetailInsights;
+	pub.updateElTrackObject = GmCXt.updateElTrackObject;
+	pub.getCdnSignature = GmCXt.callGetCdnSignature;
+	pub.getTour = GmCXt.getDetailTour;
+	pub.sendFeedbackEmail = GmCXt.sendFeedbackEmail;
+	pub.getAnonymousUserPrefrence = GmCXt.getAnonymousUserPrefrence;
+	pub.setAnonymousUserPrefrence = GmCXt.setAnonymousUserPrefrence;
+
+	return pub;
+};
+
+if (!GmCXt.isPlayer()) {
+	GmCXt.api = GmCXt.guideMeApiProvider();
+}
+GmCXt.apiPlayerProvider = function() {
+
+	var pub = {};
+
+	pub.updateUserProfile = GmCXt.updateUserProfile;
+	pub.getSentiments = GmCXt.apiGetSentiments;
+	pub.getBotConvList = GmCXt.apiGetBotConvList;
+	pub.getSentiment = GmCXt.apiGetSentiment;
+	pub.getGetBotConv = GmCXt.apiGetBotConv;
+	pub.postSurvey = GmCXt.apiPostSurvey;
+	pub.getSegmentGroupList = GmCXt.apiGetSegmentGroupList;
+	pub.postSegmentGroupList = GmCXt.apiPostSegmentGroupList;
+	pub.putSegmentGroupList = GmCXt.apiPutSegmentGroupList;
+	pub.deleteSegmentGroupList = GmCXt.apiDeleteSegmentGroupList;
+	pub.userApiKeySignin = GmCXt.userApiKeySignin;
+	pub.registerClientInsight = GmCXt.apiRegisterClientInsight;
+	pub.getClientSecretInsight = GmCXt.apiGetClientSecretInsight;
+	pub.trackEventV1 = GmCXt.apiTrackEventV1;
+	pub.saveMyBotReport = GmCXt.saveMyBotReport;
+	pub.trackSentiment = GmCXt.apitrackSentiment;
+	pub.trackConversation = GmCXt.apitrackConversation;
+	pub.createNewElTrackObject = GmCXt.createNewElTrackObject;
+	pub.getElementsDetailInsights = GmCXt.getElementsDetailInsights;
+	pub.getHandOffToken = GmCXt.apiGetHandOffToken;
+	pub.updateElTrackObject = GmCXt.updateElTrackObject;
+	pub.getCdnSignature = GmCXt.callGetCdnSignature;
+	pub.getTour = GmCXt.getDetailTour;
+	pub.sendFeedbackEmail = GmCXt.sendFeedbackEmail;
+	pub.getAnonymousUserPrefrence = GmCXt.getAnonymousUserPrefrence;
+	pub.setAnonymousUserPrefrence = GmCXt.setAnonymousUserPrefrence;
+
+	return pub;
+};
+
+if (GmCXt.isPlayer()) {
+	GmCXt.api = GmCXt.apiPlayerProvider();
+}
+
+/**
+	* @file Boot script
+	* This code is executed only once, immediately after content script is injected
+	* into a webpage.
+	* @author Nilesh Pachpande
+	*/
+
+GmCXt.client = {
+	'isUrlTour': false
+};
+GmCXt.user = false;
+GmCXt.organization = false;
+GmCXt.myGuideApps = {};
+GmCXt.initialization = {};
+GmCXt.beaconTours = [];
+GmCXt.beaconsOnScreen = [];
+
+GmCXt.onScreenTooltipGuideInfo = {}; //Info about tooltip guides with rules matched on the screen
+GmCXt.onScreenTooltipGuideIds = []; //Tooltip guides with all tooltips are visible on screen
+GmCXt.partialVisibleTooltipsIds = []; //Tooltip guides with at least one but less than total tooltips are visible on screen
+
+GmCXt.urlBasedTours = [];
+GmCXt.tooltipTours = [];
+GmCXt.fTags = [];
+GmCXt.beaconIframe = {};
+GmCXt.smartTipIframe = {};
+GmCXt.tagIframe = {};
+GmCXt.rulesIframeQueue = [];
+GmCXt.dragWidgetPose = {};
+GmCXt.dragChatPose = {};
+
+GmCXt.initLoading = new Date().getTime();
+GmCXt.pageLoadTime = 0;
+
+mg$(window).on('load', function() {
+	GmCXt.pageLoadTime = new Date().getTime() - GmCXt.initLoading;
+});
+
+mg$(window).on('beforeunload', function() {
+	GmCXt.onWinUnload();
+});
+
+GmCXt.main();
+
+GmCXt.currentUrl = GmCXt._location().href;
+
+GmCXt.gIntervalNumber = 0;
+
+setInterval(function() {
+	GmCXt.gIntervalNumber++;
+
+	if (GmCXt.FT.isPlayer && GmCXt.isClientJs() && GmCXt.conf.appConfig.iframeInjection) {
+		GmCXt.injectGuideMeInIframes(window);
+	}
+	GmCXt.triggerChangeListeners();
+
+	// Update beacons and tooltips in newly found iframes in last 1 sec
+	if (GmCXt.gIntervalNumber % 2 === 0 && GmCXt.newIframesFound) {
+		GmCXt.newIframesFound = false;
+		GmCXt.sendMessageToRenderBeacons();
+		GmCXt.sendMessageToRenderSmartTip();
+	}
+
+}, 500); //Do Not Change the timer.
+
+document.addEventListener('mousedown', GmCXt.onDocumentMouseDown);
+
+document.addEventListener('mouseup', GmCXt.triggerChangeListeners);
+
+document.addEventListener('visibilitychange', GmCXt.onVisibilityChange);
+
+document.addEventListener("keypress", function(event) {
+
+	var org = GmCXt.organization;
+	if(!GmCXt.isEmpty(org) && org.admin_settings && org.admin_settings.keyboard_shortcuts && 
+		org.admin_settings.keyboard_shortcuts === "0"){
+		return;
+	}
+
+	if (event.keyCode == 63) {
+		GmCXt.storage().get(['login_state']).then(function(o) {
+			if (o.login_state) {
+				GmCXt.showKeyCodePopUp();
+			}
+		});
+	}
+
+	var key = '';
+
+	var keycharc = "";
+	if (event.code.indexOf("Key") !== -1) {
+		keycharc = event.code.replace("Key", '');
+	} else {
+		keycharc = unescape(encodeURIComponent(event.key));
+	}
+
+	if (event.shiftKey) {
+		key = "shift+" + keycharc.toLowerCase();
+	}
+
+	if (!GmCXt.isEmpty(key)) {
+		var tour = GmCXt.getTourFromKey(key);
+		if (tour) {
+			GmCXt.getTourAndPlay(tour.tour_id, 'doitforme', 'keypress');
+		}
+	}
+});
+
+GmCXt.getTourFromKey = function(key) {
+	var obj = null;
+	GmCXt.keyInputGuides.forEach(function(tour) {
+		if (tour && GmCXt.updateNumericKeys(tour.tour_settings.keyboardKeyInput) === key)
+			obj = tour;
+	});
+	return obj;
+};
+
+GmCXt.saveCurrentURL();
+
+GmCXt.setPageTitle();
+
+// Desktop changes related code below
+if (GmCXt.conf.appConfig.desktopCommunication) {
+	GmCXt.resetDesktopConnection = function() {
+		GmCXt.desktopConnection = {
+			connected: false,
+			activeReq: false,
+			activeReqTab: null,
+			activeMsg: null
+		};
+	};
+
+	GmCXt.resetDesktopConnection();
+
+	GmCXt.wsDesktop = null;
+
+	GmCXt.establishConnection = function() {
+		if (GmCXt.wsDesktop && GmCXt.wsDesktop.readyState === GmCXt.wsDesktop.OPEN) {
+			GmCXt.wsDesktop.close();
+		}
+
+		if (GmCXt.FT.isPlayer) {
+			GmCXt.wsDesktop = new WebSocket("ws://127.0.0.1:11611");
+		} else {
+			GmCXt.wsDesktop = new WebSocket("ws://127.0.0.1:11511");
+		}
+
+		GmCXt.wsDesktop.onopen = function(event) {
+			GmCXt.log(74, 'WebSocket Connection Established');
+			GmCXt.desktopConnection.connected = true;
+
+			var cb = function(tabId) {
+				GmCXt.sendMessageToDesktop({
+					tabId: tabId,
+					currentUrl: GmCXt.getCurrentURL().url,
+					requestId: 10000,
+					requestType: 'webSocketConnectionEstablished'
+				});
+			}
+
+			GmCXt.sendMessageToBackgroundService({
+				action: 'mgPlayerJSTest_action:get_current_tab_id'
+			}, cb);
+		};
+
+		GmCXt.wsDesktop.onerror = function(err) {
+			GmCXt.log(74, 'err: ', err);
+		};
+
+		GmCXt.wsDesktop.onmessage = function(event) {
+			var message = JSON.parse(event.data);
+			GmCXt.log(74, 'Analyze desktop message', message);
+			GmCXt.analyzeDesktopMsg(message);
+		};
+
+		GmCXt.wsDesktop.onclose = function() {
+			GmCXt.log(74, 'WebSocket Connection Closed');
+			GmCXt.resetDesktopConnection();
+			GmCXt.sendMessageToDesktop({
+				requestId: 10000,
+				requestType: 'webSocketConnectionClosed'
+			});
+		};
+	};
+
+	GmCXt.analyzeDesktopMsg = function(message) {
+		if (!GmCXt.desktopConnection.connected) {
+			return;
+		}
+		var domain = message.domains ? GmCXt.findDomainMatch(message.domains, GmCXt.getCurrentURL().url) : '';
+
+		GmCXt.desktopConnection.activeReq = true;
+		GmCXt.desktopConnection.activeMsg = message;
+
+		// if (message.tabId) {
+		// 	var m = {
+		// 		action: "mgPlayerJSTest_action:update_current_chrome_tab",
+		// 		data: {
+		// 			tabId: parseInt(message.tabId)
+		// 		}
+		// 	};
+	
+		// 	GmCXt.sendMessageToBackgroundService(m);
+		// }
+
+		if (message.type === "createInlineStep" || message.type === "webInlineStep" || message.type === 'createWebHowTo') {
+			if (!domain.url) {
+				GmCXt.log(74, 'Current domian is not configured');
+				GmCXt.toastMsg('Current Domian Is Not Configured').show();
+				GmCXt.sendMessageToDesktop({
+					stepCreation: "fail",
+					ack: 'CurrentDomianIsNotConfigured'
+				});
+				return;
+			}
+
+			GmCXt.sendMessageToDesktop({
+				stepCreation: "start",
+				ack: message.type
+			});
+			GmCXt.log(74, 'Create Inline Step');
+			GmCXt.createStepFromDesktop(message);
+
+		} else if (message.type === 'getTabDetails') {
+			GmCXt.sendMessageToDesktop({
+				'tabDetails': {
+					'URL Hostname': GmCXt.urlParts.host,
+					'URL Path': GmCXt.urlParts.pathname,
+					'URL Parameters': GmCXt.getUrlParam(),
+					'URL Hash': GmCXt.urlParts.hash,
+					'URL': GmCXt.urlParts.href,
+					'Page Title': GmCXt.pageTitle
+				}
+			});
+		} else if (message.type === 'reselectElement') {
+			GmCXt.sendMessageToDesktop({
+				ack: "reselectElement",
+				stepCreation: "start"
+			});
+
+			GmCXt.log(74, 'Reselect Inline Step');
+
+			var step = {
+				step: message.stepData
+			};
+
+			var e = {
+				data: {
+					action: "mgPlayerJSTest_action:reselect_edit_step_element,task:edit_step",
+					data: step,
+					isDesktop: true,
+					isEdit: true
+				}
+			};
+			GmCXt.handleDesktopEditStepInline(e);
+
+		} else if (message.type === "getAudio") {
+			var previewAudio = new Audio(message.data);
+			previewAudio.play();
+		} else {
+			GmCXt.log(74, 'Play Step', message.step);
+			GmCXt.playStepFromDesktop(message);
+		}
+	};
+
+	window.onfocus = function() {
+		// build connection with desktop on focus only if it is disconnected
+		if (!GmCXt.wsDesktop || GmCXt.wsDesktop.readyState === GmCXt.wsDesktop.CLOSED) {
+			GmCXt.establishConnection();
+		}
+	};
+
+	window.onbeforeunload = function() {
+		if (GmCXt.desktopConnection.activeReq) {
+			GmCXt.sendMessageToAllWindows("mgPlayerJSTest_action:hide_dom_outline");
+			GmCXt.sendMessageToDesktop({
+				stepCreation: "fail",
+				ack: 'closedStepCreation'
+			});
+		}
+	};
+}
+/**
  * @author Nilesh Pachpande
  */
 
@@ -24222,6 +43122,1482 @@ GmCXt.listenIframePlayer = function(event) {
 	event = mg$.extend({}, event);
 	if (GmCXt.verifyMsg(event))
 		GmCXt.processIframePlayer(event);
+};
+/**
+ * @author Nilesh Pachpande
+ */
+
+GmCXt.listenIframeCreator = function(event) {
+	event = mg$.extend({}, event);
+	if (GmCXt.verifyMsg(event)) {
+		GmCXt.processIframeCreator(event);
+		GmCXt.processIframePlayer(event);
+	}
+};
+
+GmCXt.processIframeCreator = function(event) {
+	var message = event.data;
+	var messageCopy = mg$.extend(true, {}, message);
+
+	switch (message.action) {
+
+		case 'mgPlayerJSTest_action:toggle_capture_and_navigate_tool':
+			if (GmCXt.enableNavigateTool === true) {
+				GmCXt.enableNavigateTool = false;
+			} else {
+				GmCXt.enableNavigateTool = true;
+			}
+			break;
+		
+		case 'mgPlayerJSTest_action:hide_step_selector_toolbar':
+			GmCXt.toggleStepSelectionToolbar(false);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:highlight_element':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.highlightElement(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:do;task:enable_navigate_tool':
+			GmCXt.enableNavigateTool = true;
+			GmCXt.forwardToContentWindows(message);
+			break;
+
+		case 'mgPlayerJSTest_action:do;task:enable_capture_tool':
+			GmCXt.enableManualJQuerySelector = false;
+			GmCXt.enableNavigateTool = false;
+			GmCXt.jQElementFound = false;
+			GmCXt.forwardToContentWindows(message);
+			break;
+
+		case 'mgPlayerJSTest_action:do;task:enable_capture_delay_tool':
+			GmCXt.enableNavigateTool = true;
+			GmCXt.forwardToContentWindows(message);
+			break;
+
+		case 'mgPlayerJSTest_action:do;task:enable_jQuery_selector':
+			GmCXt.enableManualJQuerySelector = true;
+			GmCXt.enableNavigateTool = true;
+			GmCXt.jQElementFound = false;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectElementUsingJQ(messageCopy.data);
+			break;
+
+		case 'mgPlayerJSTest_action:clear_invalid_jQuery_message;action:do':
+			GmCXt.jQElementFound = true;
+			GmCXt.forwardToContentWindows(message.data);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_new_dom_element':
+		case 'mgPlayerJSTest_action:started;task:select_new_dom_element_for_edit_step':
+			GmCXt.enableNavigateTool = message.data.enableNavigateTool || false;
+			GmCXt.forwardToContentWindows(message);
+
+			GmCXt.log(74, 'mgPlayerJSTest_action:started;task:select_new_dom_element', messageCopy);
+
+			GmCXt.requestHandler.selectNewDomElement(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_new_dom_element_find_replace':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectNewDomElementFindReplace(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:narrow_element_selection':
+		case 'mgPlayerJSTest_action:started;task:expand_element_selection':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.modifyElementSelection(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_dom_element_tags':
+		case 'mgPlayerJSTest_action:started;task:select_dom_element_tags_2':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectNewDomElementTags(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_element_for_message_step':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectSupportingElement(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_element_for_branching_step':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectSupportingElementForBranching(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_element_for_step_rule':
+		case 'mgPlayerJSTest_action:started;task:select_new_element_for_dom_select_rule':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectNewElementForDomRule(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_new_table_for_dom_select_rule':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectNewElementForDomTableRule(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:delete_element_for_message_step':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.deleteSupportingElement();
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_dom_element_for_beacon':
+			GmCXt.enableNavigateTool = false;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectDomElementForBeacon(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:blackout_dom_element':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.blackoutDomElement(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:edit_step_select_existing_dom_element':
+			GmCXt.selectorTool = null;
+			if (GmCXt.visibleWindow(message.data)) {
+				GmCXt.forwardToContentWindows(message);
+				GmCXt.requestHandler.selectDomElementEditStep(messageCopy);
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:edit_tag_select_existing_dom_element':
+			GmCXt.selectorTool = null;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectDomElementEditTag(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:edit_step_select_existing_dom_element:target_frame_only':
+			GmCXt.selectorTool = null;
+			GmCXt.forwardToContentWindows(message);
+			if (GmCXt.validateTargetFrame(message.data.iframeAttrs, message.data.frame.attributes)) {
+				GmCXt.requestHandler.selectDomElementEditStep(messageCopy);
+				GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:set_iframe_id', {
+					currentIframeId: GmCXt.id
+				});
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:edit_message_step_select_existing_dom_element':
+			GmCXt.selectorTool = null;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectDomElementMessageEditStep(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:step_blackout_area_existing_dom_element':
+			GmCXt.selectorTool = null;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectDomElementForBlackOutArea(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:edit_beacon_select_existing_dom_element':
+			GmCXt.selectorTool = null;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectDomElementBeaconEdit(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:edit_beacon_select_existing_dom_element:target_frame_only':
+			GmCXt.selectorTool = null;
+			GmCXt.forwardToContentWindows(message);
+			if (GmCXt.validateTargetFrame(message.data.iframeAttrs, message.data.frame.attributes)) {
+				GmCXt.requestHandler.selectDomElementBeaconEdit(messageCopy);
+				GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:set_iframe_id', {
+					currentIframeId: GmCXt.id
+				});
+			}
+			break;
+
+		case 'mgPlayerJSTest_action:started:select_new_dom_element_for_smart_tip':
+			GmCXt.enableNavigateTool = false;
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectNewDomElementForSmartTip(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:stop_dom_selector;action:do':
+			GmCXt.handleStopDom(message);
+			break;
+
+		case 'mgPlayerJSTest_action:clear_step_req':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.clearStepReqObj();
+			break;
+
+		case 'mgPlayerJSTest_action:clear_dom_outline':
+			GmCXt.handleClearDomOutline(message);
+			break;
+
+		case 'mgPlayerJSTest_action:set_curr_he':
+			GmCXt.setCurrentHe(message);
+			break;
+
+		case 'mgPlayerJSTest_action:clear_dom_outline_new':
+			GmCXt.handleClearDomOutlineNew(message);
+			break;
+
+		case 'mgPlayerJSTest_action:hide_dom_outline':
+			GmCXt.handleHideDomOutline(message);
+			break;
+
+		case 'mgPlayerJSTest_action:delete_beacon_icon':
+			var tourId = (message.data.tourId) ? message.data.tourId : 0;
+			var len = mg$('.mgPlayerJSTest_beacon-icon-tour-' + tourId).length;
+			if (len && len === 1)
+				mg$('.mgPlayerJSTest_beacon-icon-tour-' + tourId).remove();
+
+			break;
+
+		case 'mgPlayerJSTest_action:find_element_to_get_precision':
+			GmCXt.requestHandler.findElementToGetPrecision(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:find_element_to_get_precision_for_rules':
+			GmCXt.requestHandler.findElementToGetPrecisionForRules(messageCopy);
+			break;
+
+		case 'mgPlayerJSTest_action:completed;task:select_new_dom_element':
+		case 'mgPlayerJSTest_action:completed;task:select_new_dom_element_for_edit_step':
+		case 'mgPlayerJSTest_action:completed;task:edit_step_select_existing_dom_element':
+		case 'mgPlayerJSTest_action:completed;task:edit_tag_select_existing_dom_element':
+		case 'mgPlayerJSTest_action:completed;task:select_element_for_message_step':
+		case 'mgPlayerJSTest_action:completed;task:select_element_for_branching_step':
+		case 'mgPlayerJSTest_action:completed;task:select_dom_element_for_beacon':
+		case 'mgPlayerJSTest_action:completed;task:select_new_dom_element_for_smart_tip':
+		case 'mgPlayerJSTest_action:started;task:edit_beacon_select_existing_dom_element':
+		case 'mgPlayerJSTest_action:completed;task:select_element_for_step_rule':
+		case 'mgPlayerJSTest_action:completed;task:select_new_element_for_dom_select_rule':
+		case 'mgPlayerJSTest_action:completed;task:select_new_table_for_dom_select_rule':
+		case 'mgPlayerJSTest_action:completed;task:select_element_for_variable_completed':
+			GmCXt.requestHandler.updateElementOffset(event, message);
+			break;
+
+		case 'mgPlayerJSTest_action:stop_step_edit_tool_instance':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.highlighter.unqueue(messageCopy.data);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_dom_element_for_matching_in_rules':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.findElementToCheckMatchingAlgo(messageCopy.data);
+			break;
+
+		case 'mgPlayerJSTest_action:started;task:select_element_for_variable':
+			GmCXt.forwardToContentWindows(message);
+			GmCXt.requestHandler.selectDomElementForVariable(messageCopy);
+			break;
+	}
+};
+
+GmCXt.handleStopDom = function(message) {
+	GmCXt.forwardToContentWindows(message);
+
+	if (GmCXt.selectorTool) {
+		GmCXt.selectorTool.status = 'inactive';
+		GmCXt.selectorTool.stop();
+	}
+	if (GmCXt.selectorToolFill) {
+		GmCXt.selectorToolFill.status = 'inactive';
+		GmCXt.selectorToolFill.stop();
+	}
+	if (GmCXt.selectorToolRules) {
+		GmCXt.selectorToolRules.status = 'inactive';
+		GmCXt.selectorToolRules.stop();
+	}
+};
+
+GmCXt.handleClearDomOutline = function(message) {
+	GmCXt.forwardToContentWindows(message);
+	if (GmCXt.selectorTool) {
+		GmCXt.selectorTool.removeOutline();
+	}
+	if (GmCXt.selectorToolFill) {
+		GmCXt.selectorToolFill.removeOutline();
+	}
+	if (GmCXt.selectorToolRules) {
+		GmCXt.selectorToolRules.removeOutline();
+	}
+	if (GmCXt.selectorToolFill) {
+		GmCXt.selectorToolFill.clearBlackoutArea();
+		GmCXt.selectorToolFill = null;
+	}
+};
+
+GmCXt.setCurrentHe = function(message) {
+	GmCXt.forwardToContentWindows(message);
+	if (GmCXt.selectorTool) {
+		GmCXt.selectorTool.setCurrentHe();
+	}
+};
+
+GmCXt.handleClearDomOutlineNew = function(message) {
+	GmCXt.forwardToContentWindows(message);
+	if (GmCXt.selectorTool) {
+		GmCXt.selectorTool.removeOutlineNew();
+	}
+};
+
+GmCXt.handleHideDomOutline = function(message) {
+	GmCXt.forwardToContentWindows(message);
+	if (GmCXt.selectorTool) {
+		GmCXt.selectorTool.hideOutline();
+	}
+};
+
+GmCXt.requestHandler.findElementToGetPrecision = function(req) {
+
+	var index = req.data.data.index;
+
+	function cb(el) {
+		var data = {
+			index: index,
+			el: el
+		};
+		GmCXt.sendMessageToParentWindow('mgPlayerJSTest_action:update_element_precision', data);
+	}
+
+	if (GmCXt.stepReq) {
+
+		var elm = req.data.data.el;
+
+		if ((GmCXt.stepReq.type === GmCXt.STEP_BEACON_TYPE && GmCXt.stepReq.dom.hasOwnProperty('selectedDOMElement')) ||
+			(GmCXt.stepReq.step && GmCXt.stepReq.step.step_id && GmCXt.stepReq.reselectElem !== true)) {
+			var el = GmCXt.highlighter.getElementPrecision(elm.criteria);
+			cb(el);
+		} else if (GmCXt.selectorTool) {
+			var el = GmCXt.selectorTool.getElementPrecision(elm.criteria);
+			cb(el);
+		}
+	}
+};
+
+GmCXt.requestHandler.findElementToGetPrecisionForRules = function(req) {
+
+	if (!GmCXt.rulesElement) return;
+
+	var d = req.data.data;
+	var elm = d.el;
+	GmCXt.rulesElement = d.el;
+
+	function cb(el) {
+		if (el === null) return;
+
+		if (GmCXt.rulesElement) {
+			GmCXt.rulesElement = el;
+		}
+
+		var dataValue = {
+			index: d.index,
+			parentIndex: d.parentIndex,
+			rulesElement: el
+		};
+		GmCXt.sendMessageToParentWindow('mgPlayerJSTest_action:update_element_precision:for_rules', dataValue);
+	}
+
+	if (GmCXt.highlighter) {
+		var el = GmCXt.highlighter.getElementPrecision(elm.criteria);
+		cb(el);
+	} else if (GmCXt.selectorToolRules) {
+		var el = GmCXt.selectorToolRules.getElementPrecision(elm.criteria);
+		cb(el);
+	}
+};
+
+GmCXt.requestHandler.blackoutDomElement = function(request) {
+	var cb = function(data) {
+
+		var rect = data.element.position;
+		var actionName = 'mgPlayerJSTest_action:completed;task:blackout_dom_element';
+
+		var message = {
+			action: actionName,
+			id: data.id,
+			position: rect,
+			element: data
+		};
+
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventBlackoutDOMElement(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+			GmCXt.selectorToolFill.removeBlackoutOutline();
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+	GmCXt.selectorToolFill = GmCXt.selector({
+		cb: cb,
+		frame: request.data.frame,
+		identifier: "blackout-request"
+	});
+	GmCXt.selectorToolFill.start();
+};
+
+GmCXt.requestHandler.selectSupportingElement = function(request) {
+	var cb = function(data) {
+
+		var actionName = "mgPlayerJSTest_action:completed;task:select_element_for_message_step";
+		delete data.he;
+
+		var message = {
+			action: actionName,
+			status: GmCXt.ELEMENT_FOUND,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+	var frame = request.data.frame;
+
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.requestHandler.selectNewDomElementTags = function(request) {
+	var cb = function(data) {
+
+		var actionName = request.action.replace("started", "completed");
+		data.title = data.titleSuggestion.text;
+
+		delete data.he;
+
+		var message = {
+			action: actionName,
+			status: GmCXt.ELEMENT_FOUND,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+		}, 500);
+		GmCXt.timeout(function() {
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 200);
+	};
+
+	var frame = request.data.frame;
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.requestHandler.selectSupportingElementForBranching = function(request) {
+
+	function getDataOption(elem) {
+		var data = {
+			id: elem.id,
+			element: GmCXt.dom.getElement(elem, null, request.data.frame)
+		};
+
+		var opt = {
+			text: readText(elem),
+			value: elem.value,
+			data: data
+		};
+
+		if (opt.text) return opt;
+		else return null;
+	}
+
+	function readText(elem) {
+		var text = elem.innerHTML;
+
+		if (text === "" && elem.nextElementSibling) {
+			text = elem.nextElementSibling.innerHTML;
+		}
+
+		if (text === "" && elem.parentElement) {
+
+			var ps = elem.parentElement.nextElementSibling;
+
+			if (ps && ps.tagName === "LABEL" &&
+				(ps.getAttribute("for") === elem.getAttribute("name") ||
+					ps.getAttribute("id") === elem.getAttribute("name") ||
+					ps.getAttribute("for") === elem.getAttribute("id")
+				)
+			) {
+				text = ps.innerText;
+			}
+		}
+		return text.substring(0, 50);
+	}
+
+	var cb = function(data) {
+
+		var actionName = "mgPlayerJSTest_action:completed;task:select_element_for_branching_step";
+		var message = {
+			action: actionName,
+			status: GmCXt.ELEMENT_FOUND,
+			data: data,
+		};
+
+		var tagN = mg$(message.data.he)[0].tagName.toLowerCase();
+		message.data.dataOptions = [];
+
+		message.data.textContent = GmCXt.getElementText(message.data.he);
+
+		if (tagN === 'select') {
+
+			message.data.dataOptionsType = "select";
+			for (var i = 0; i < message.data.he.options.length; i++) {
+				var objToPush = {};
+				objToPush.text = mg$(message.data.he.options[i])[0].innerHTML.substring(0, GmCXt.ruleTextLimit);
+				objToPush.val = mg$(message.data.he.options[i]).val();
+				objToPush.data = {};
+				objToPush.data.element = GmCXt.dom.getElement(message.data.he, null, request.data.frame);
+				message.data.dataOptions.push(objToPush);
+			}
+		} else if (tagN === 'input') {
+
+			if (data.element.selector.js[0].toLowerCase().indexOf("radio") > -1) {
+
+				var allRadio = mg$("input[name='" + message.data.he.name + "']");
+				message.data.dataOptionsType = "radio";
+
+				for (var i = 0; i < allRadio.length; i++) {
+					var opt = getDataOption(allRadio[i]);
+					if (opt) message.data.dataOptions.push(opt);
+				}
+			}
+		} else if (mg$(message.data.he).has("input[type=radio]").length > 0) {
+
+			message.data.dataOptionsType = "radio";
+
+			var allRadio = mg$("input[name='" + mg$(message.data.he).find("input[type=radio]")[0].name + "']");
+
+			for (var i = 0; i < allRadio.length; i++) {
+				var opt = getDataOption(allRadio[i]);
+				if (opt) message.data.dataOptions.push(opt);
+			}
+		} else if (mg$(message.data.he).find("select").length === 1) {
+
+			message.data.dataOptionsType = "select";
+			var elem = mg$(message.data.he).find("select");
+
+			for (var i = 0; i < elem[0].options.length; i++) {
+				var objToPush = {};
+				objToPush.text = mg$(elem[0].options[i])[0].innerHTML;
+				objToPush.val = mg$(elem[0].options[i]).val();
+				objToPush.data = {};
+				objToPush.data.element = GmCXt.dom.getElement(elem[0], null, request.data.frame);
+				message.data.dataOptions.push(objToPush);
+			}
+		}
+
+		delete message.data.he;
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+		}, 300);
+	};
+
+	GmCXt.selectorToolRules = GmCXt.selector({
+		cb: cb,
+		frame: request.data.frame,
+		identifier: "rules-engine-request"
+	});
+	GmCXt.selectorToolRules.start();
+
+};
+
+GmCXt.getInfoFromHe = function(data) {
+	data.childElements = data.element.childElements;
+	data.elTag = mg$(data.he)[0].tagName.toLowerCase();
+	data.parentNotExist = !data.he.parentElement;
+};
+
+GmCXt.requestHandler.selectNewElementForDomTableRule = function(request) {
+	var cb = function(data) {
+
+		if (request.data && request.data.ruleIndex !== undefined) {
+			data.ruleIndex = request.data.ruleIndex;
+			data.groupIndex = request.data.groupIndex;
+			data.reSelect = request.data.reSelect;
+		}
+
+		var actionName = "";
+
+		if (data.he.tagName === 'TABLE') {
+			var table = data.he;
+			data.columns = {};
+			var numberOfCols = table.rows[0].cells.length;
+			var i;
+			for (i = 0; i < numberOfCols; i++) {
+				data.columns[i] = {
+					label: table.rows[0].cells[i].textContent,
+					id: i,
+					values: []
+				};
+			}
+			var val = '';
+			for (i = 1; i < table.rows.length; i++) {
+				for (j = 0; j < numberOfCols; j++) {
+					val = table.rows[i].cells[j].textContent.trim();
+					if (val && !data.columns[j].values.includes(val)) {
+						data.columns[j].values.push(val);
+					}
+				}
+			}
+			actionName = "mgPlayerJSTest_action:completed;task:select_new_table_for_dom_select_rule";
+		} else {
+			//If selected element not table change rule to select element
+			actionName = "mgPlayerJSTest_action:completed;task:select_new_element_for_dom_select_rule";
+		}
+		var message = {
+			action: actionName,
+			status: GmCXt.ELEMENT_FOUND,
+			data: data,
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+		}, 500);
+
+	};
+
+	GmCXt.selectorToolRules = GmCXt.selector({
+		cb: cb,
+		frame: request.data.frame,
+		identifier: "rules-engine-request",
+		type: "table"
+	});
+	GmCXt.selectorToolRules.start();
+};
+
+// This function is to select dom element needed by Rule Engine to show beacon/tooltip/push notification
+GmCXt.requestHandler.selectNewElementForDomRule = function(request) {
+
+	var cb = function(data) {
+
+		if (request.data && request.data.ruleIndex !== undefined) {
+			data.ruleIndex = request.data.ruleIndex;
+			data.groupIndex = request.data.groupIndex;
+			data.reSelect = request.data.reSelect;
+		}
+
+		GmCXt.requestHandler.updateCriteriaForQuickFindEl(data);
+		delete data.he;
+
+		var actionName = "mgPlayerJSTest_action:completed;task:select_new_element_for_dom_select_rule";
+		if (request.action === 'mgPlayerJSTest_action:started;task:select_element_for_step_rule') {
+			// dom rule at step level
+			data.rules = request.data.rules;
+			actionName = "mgPlayerJSTest_action:completed;task:select_element_for_step_rule";
+		}
+		var message = {
+			action: actionName,
+			status: GmCXt.ELEMENT_FOUND,
+			data: data,
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+		}, 300);
+
+	};
+
+	GmCXt.selectorToolRules = GmCXt.selector({
+		cb: cb,
+		frame: request.data.frame,
+		identifier: "rules-engine-request"
+	});
+	GmCXt.selectorToolRules.start();
+};
+
+GmCXt.requestHandler.deleteSupportingElement = function(request) {
+	var message = {
+		action: "mgPlayerJSTest_action:completed;task:delete_element_for_message_step",
+		iframeIdentifier: GmCXt.id
+	};
+
+	// Send a message to all frames to clear outline.
+	GmCXt.timeout(function() {
+		if (window.self === window.top) {
+			GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+		} else {
+			GmCXt.sendMessageToParentWindow(message.action, message);
+		}
+		GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+	}, 300);
+};
+
+GmCXt.selectNewDomElForEdit = function(request) {
+
+	var frame = request.data.frame;
+	var actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element_for_edit_step';
+
+	var cb = function(data, autoCorrectData) {
+
+		if (data.he) {
+			var he = data.he;
+			GmCXt.getInfoFromHe(data);
+			data.isEditableEl = mg$(he).attr('contenteditable');
+			delete data.he;
+		}
+
+		var message = {
+			status: GmCXt.ELEMENT_FOUND,
+			action: actionName,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		var req = mg$.extend(true, {}, request);
+
+		//Auto correction functionality
+		if (req && req.action === 'mgPlayerJSTest_action:started;task:select_new_dom_element_for_edit_step') {
+
+			var oldSelector = req.data.stepReq.data.step.step_settings.element.selector;
+
+			//Get list of dynamic attributes
+			GmCXt.dom.dynamicAttrs = GmCXt.requestHandler.getDynamicAttrList(oldSelector, data.element.selector);
+
+			if (GmCXt.dom.dynamicAttrs !== null) {
+				//Skip dynamic attributes while creating new selector
+				message.data.element = GmCXt.dom.getElement(autoCorrectData.he, data.element.criteria, autoCorrectData.frame);
+
+			} else {
+				//If there are no dynamic attributes to skip, add addditional selector for this element
+				message.data.element.selector1 = oldSelector;
+			}
+		}
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.selectNewDomEl = function(request) {
+	var frame = request.data.frame;
+	if (request.action === 'mgPlayerJSTest_action:started;task:select_new_dom_element_for_edit_step') {
+		var actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element_for_edit_step';
+	} else {
+		var actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element';
+	}
+
+	var cb = function(data) {
+		GmCXt.getInfoFromHe(data);
+		delete data.he;
+
+		var message = {
+			status: GmCXt.ELEMENT_FOUND,
+			action: actionName,
+			data: data,
+			stepType: request.data.stepType,
+			iframeIdentifier: GmCXt.id
+		};
+
+		GmCXt.log(74, 'Element found', GmCXt.stepReq);
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.selectNewDomElFindReplace = function(request) {
+
+	var frame = request.data.frame;
+	var actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element_find_replace';
+	var cb = function(data) {
+
+		delete data.he;
+
+		var message = {
+			status: GmCXt.ELEMENT_FOUND,
+			action: actionName,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+		}, 500);
+		GmCXt.timeout(function() {
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 200);
+	};
+
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.requestHandler.selectElementUsingJQ = function(request) {
+	var jQ = request.data.val;
+	var openPanel = request.data.openPanel;
+	if (jQ) {
+		if (GmCXt.selectorTool)
+			GmCXt.selectorTool.getElemenetUsingJQ(jQ, openPanel);
+		else if (GmCXt.selectorToolFill)
+			GmCXt.selectorToolFill.getElemenetUsingJQ(jQ, openPanel);
+		else if (GmCXt.selectorToolRules)
+			GmCXt.selectorToolRules.getElemenetUsingJQ(jQ, openPanel);
+	}
+};
+
+GmCXt.requestHandler.selectNewDomElement = function(request) {
+
+	GmCXt.log(74, 'selectNewDomElement', request);
+
+	if (request.action === 'mgPlayerJSTest_action:started;task:select_new_dom_element' ||
+		request.data.stepReq.data.step.step_settings.element.selector1) {
+
+		GmCXt.selectNewDomEl(request);
+
+	} else if (request.action === 'mgPlayerJSTest_action:started;task:select_new_dom_element_for_edit_step') {
+		GmCXt.selectNewDomElForEdit(request);
+	}
+};
+
+GmCXt.requestHandler.selectNewDomElementFindReplace = function(request) {
+	if (request.action === 'mgPlayerJSTest_action:started;task:select_new_dom_element_find_replace') {
+		GmCXt.selectNewDomElFindReplace(request);
+	}
+};
+
+GmCXt.requestHandler.modifyElementSelection = function(request) {
+
+	var frame = request.data.frame;
+
+	if (GmCXt.highlighter && GmCXt.stepReq.dom.status === GmCXt.ELEMENT_FOUND) {
+		var currentHe = GmCXt.highlighter.getCurrentHe();
+		GmCXt.startSelectorTool(null, frame);
+	}
+
+	if (GmCXt.selectorTool) {
+		if (request.action === 'mgPlayerJSTest_action:started;task:expand_element_selection') {
+			var data = GmCXt.selectorTool.expandElementSelection(currentHe);
+			GmCXt.onChangeSelection(data);
+		} else if (request.action === 'mgPlayerJSTest_action:started;task:narrow_element_selection') {
+			var data = GmCXt.selectorTool.narrowElementSelection(currentHe);
+			GmCXt.onChangeSelection(data);
+		}
+	}
+};
+
+GmCXt.onChangeSelection = function(data) {
+	if (!data) return;
+	var step_type = GmCXt.stepReq.step.step_type;
+	var actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element';
+	var he = data.he;
+
+	data.isChildrenVisited = mg$(he).children('[gm_visited="true"]').length ? true : false;
+	GmCXt.getInfoFromHe(data);
+
+	if (step_type === GmCXt.STEP_TYPE_SMART_TIP) {
+
+		data.isEditableEl = mg$(he).attr('contenteditable');
+		actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element_for_smart_tip';
+		var isElementFixed = GmCXt.dom.getElementFixedPosition(he);
+		data.elPosProp = isElementFixed ? 'fixed' : mg$(he).css('position');
+		data.parentElPosProp = mg$(he).parent().css('position');
+	}
+
+	delete data.he;
+
+	var message = {
+		status: GmCXt.ELEMENT_FOUND,
+		action: actionName,
+		data: data,
+		iframeIdentifier: GmCXt.id
+	};
+
+	GmCXt.timeout(function() {
+		if (window.self === window.top) {
+			if (step_type === GmCXt.STEP_TYPE_SMART_TIP) {
+				GmCXt.requestHandler.handleEventSelectDOMElementForSmartTip(null, message);
+			} else {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			}
+		} else {
+			GmCXt.sendMessageToParentWindow(message.action, message);
+		}
+		GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+	}, 0);
+};
+
+GmCXt.startSelectorTool = function(cb, frame) {
+	if (!GmCXt.selectorTool || GmCXt.selectorTool.status === 'inactive') {
+		GmCXt.selectorTool = GmCXt.selector({
+			cb: cb,
+			frame: frame
+		});
+		GmCXt.selectorTool.status = 'active';
+		GmCXt.selectorTool.start();
+	}
+};
+
+GmCXt.requestHandler.selectDomElementEditStep = function(request) {
+
+	var actionName = "mgPlayerJSTest_action:completed;task:edit_step_select_existing_dom_element";
+
+	var cb = function(data) {
+		if (data.he) {
+			var he = data.he;
+			GmCXt.getInfoFromHe(data);
+			var isElementFixed = GmCXt.dom.getElementFixedPosition(he);
+			data.elPosProp = isElementFixed ? 'fixed' : mg$(he).css('position');
+			data.parentElPosProp = mg$(he).parent().css('position');
+			delete data.he;
+		}
+
+		var message = {
+			action: actionName,
+			status: data.status,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		if (window.self === window.top) {
+			GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+		} else {
+			GmCXt.sendMessageToParentWindow(actionName, message);
+		}
+	};
+
+	if (request.data.settings) {
+		request.data.identifier = "editStep";
+		GmCXt.highlighter.queue({
+			data: request.data,
+			cb: cb
+		});
+	}
+};
+
+GmCXt.requestHandler.selectDomElementEditTag = function(request) {
+	
+	var actionName = "mgPlayerJSTest_action:completed;task:edit_tag_select_existing_dom_element";
+	var elTags = request.data.elTags;
+
+	var cb = function(data) {
+
+		delete data.he;
+
+		var message = {
+			action: actionName,
+			status: data.status,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		if (window.self === window.top) {
+			GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+		} else {
+			GmCXt.sendMessageToParentWindow(actionName, message);
+		}
+	};
+
+	for (var i = 0; i < elTags.length; i++) {
+
+		var d = {
+			settings: elTags[i].step_settings
+		};
+
+		function handleTag(data) {
+			data.tagId = elTags[i].step_id;
+			cb(data);
+		}
+
+		if (request.data) {
+			request.data.isElem = true;
+			GmCXt.highlighter.queue({
+				data: d,
+				cb: handleTag,
+				type: 'tag'
+			});
+		}
+	}
+};
+
+GmCXt.requestHandler.selectDomElementMessageEditStep = function(request) {
+
+	var data = request.data;
+	var actionName = "mgPlayerJSTest_action:completed;task:edit_message_step_select_existing_dom_element";
+
+	var elems = data.settings.domElems || {};
+	var cb = function(data) {
+
+		data.stepType = request.data.stepType;
+		data.tooltip = request.data.tooltip;
+
+		var message = {
+			action: actionName,
+			status: data.status,
+			data: data,
+			id: request.data.id,
+			iframeIdentifier: GmCXt.id
+		};
+
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+
+	for (var i = 0, j = elems.length; i < j; i++) {
+
+		data.id = i;
+		data.tooltipId = elems[i].id;
+		data.tooltip = i;
+		data.timeout = Date.now() + 250;
+
+		if (request.data.settings) {
+			request.data.identifier = "editStep";
+			GmCXt.highlighter.queue({
+				data: request.data,
+				element: elems[i].element,
+				cb: cb
+			});
+		}
+
+	}
+};
+
+GmCXt.requestHandler.selectDomElementForBlackOutArea = function(request) {
+
+	var actionName = "mgPlayerJSTest_action:completed;task:step_blackout_area_existing_dom_element";
+
+	var cb = function(data) {
+
+		var message = {
+			action: actionName,
+			status: data.status,
+			data: data,
+			id: request.data.id,
+			iframeIdentifier: GmCXt.id
+		};
+
+		if (window.self === window.top) {
+			GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+		} else {
+			GmCXt.sendMessageToParentWindow(actionName, message);
+		}
+	};
+
+	if (request.data.settings) {
+		GmCXt.highlighter.queue({
+			data: request.data,
+			cb: cb,
+			identifier: "blackout-request"
+		});
+	}
+};
+
+GmCXt.requestHandler.selectDomElementBeaconEdit = function(request) {
+
+	var actionName = "mgPlayerJSTest_action:completed;task:edit_beacon_select_existing_dom_element";
+
+	var cb = function(data) {
+
+		request.data.beaconSetting.element = mg$.extend(true, {}, data.element);
+
+		var message = {
+			action: actionName,
+			status: data.status,
+			data: request.data.beaconSetting,
+			iframeIdentifier: GmCXt.id
+		};
+
+		if (window.self === window.top) {
+			GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+		} else {
+			GmCXt.sendMessageToParentWindow(actionName, message);
+		}
+	};
+
+	if (request.data.settings) {
+		GmCXt.highlighter.queue({
+			data: request.data,
+			cb: cb
+		});
+	}
+};
+
+GmCXt.requestHandler.updateCriteriaForQuickFindEl = function(data) {
+	// Default high for beacons, tooltips & rule Els
+	data.element.criteria.precision_level = "High";
+	data.element.isQuickFindEl = true;
+};
+
+GmCXt.requestHandler.selectDomElementForBeacon = function(request) {
+
+	var actionName = 'mgPlayerJSTest_action:completed;task:select_dom_element_for_beacon';
+
+	var frame = request.data.frame;
+	var cb = function(data) {
+
+		GmCXt.requestHandler.updateCriteriaForQuickFindEl(data);
+		delete data.he;
+
+		var message = {
+			status: GmCXt.ELEMENT_FOUND,
+			action: actionName,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.requestHandler.selectDomElementForVariable = function(request) {
+
+	var actionName = 'mgPlayerJSTest_action:completed;task:select_element_for_variable_completed';
+
+	var frame = request.data.frame;
+	var cb = function(data) {
+
+		GmCXt.requestHandler.updateCriteriaForQuickFindEl(data);
+		delete data.he;
+
+		var message = {
+			status: GmCXt.ELEMENT_FOUND,
+			action: actionName,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 500);
+	};
+
+	GmCXt.selectorToolRules = GmCXt.selector({
+		cb: cb,
+		frame: frame,
+		identifier: "rules-engine-request",
+		type: "variable"
+	});
+	GmCXt.selectorToolRules.start();
+};
+
+GmCXt.requestHandler.highlightElement = function(request) {
+
+	var actionName = 'mgPlayerJSTest_action:completed;task:highlight_element';
+
+	var cb = function(data) {
+		if (request.data.originalRequest === 'highlightCurrentStepElement') {
+			GmCXt.stepReq.dom.status = data.status;
+			return;
+		}
+
+		if (data.status === GmCXt.ELEMENT_FOUND) {
+
+			var message = {
+				action: actionName,
+				status: data.status,
+				data: data,
+				iframeIdentifier: GmCXt.id
+			};
+
+			if (window.self === window.top) {
+				GmCXt.requestHandler.handleEventSelectDOMEl(null, message);
+			} else {
+				GmCXt.sendMessageToParentWindow(actionName, message);
+			}
+		} else {
+			if (window.self === window.top) {
+				GmCXt.executeEditInlineStep(data);
+			} else {
+				GmCXt.sendMessageToParentWindow("mgPlayerJSTest_action:task:execute_edit_inline_step", data);
+			}
+		}
+	};
+
+	if (request.data.settings) {
+		GmCXt.highlighter.queue({
+			data: request.data,
+			cb: cb,
+			isHighlightEl: true
+		});
+	}
+};
+
+GmCXt.requestHandler.selectNewDomElementForSmartTip = function(request) {
+
+	var actionName = 'mgPlayerJSTest_action:completed;task:select_new_dom_element_for_smart_tip';
+
+	var frame = request.data.frame;
+
+	var cb = function(data) {
+		var he = data.he;
+		GmCXt.getInfoFromHe(data);
+		data.isEditableEl = mg$(he).attr('contenteditable');
+
+		GmCXt.requestHandler.updateCriteriaForQuickFindEl(data);
+		var isElementFixed = GmCXt.dom.getElementFixedPosition(he);
+		data.elPosProp = isElementFixed ? 'fixed' : mg$(he).css('position');
+		data.parentElPosProp = mg$(he).parent().css('position');
+		delete data.he;
+
+		function getUniqueSelector(element) {
+			if (!(element instanceof Element)) return null;
+		
+			let path = [];
+		
+			while (element?.nodeType === Node?.ELEMENT_NODE) {
+				let selector = element.nodeName.toLowerCase();
+		
+				if (element.id) {
+					selector += `#${element.id}`;
+					path.unshift(selector);
+					break; 
+				}
+		
+				let sibling = element;
+				let index = 1;
+				while ((sibling = sibling.previousElementSibling)) {
+					if (sibling.nodeName.toLowerCase() === selector) {
+						index++;
+					}
+				}
+				selector += `:nth-of-type(${index})`;
+		
+				path.unshift(selector);
+				element = element.parentElement; 
+			}
+		
+			return path.join(" > ");
+		}
+
+		if(window.self !== window.top){
+			data.querySelector = getUniqueSelector(he)
+		}
+
+		var message = {
+			status: GmCXt.ELEMENT_FOUND,
+			action: actionName,
+			data: data,
+			iframeIdentifier: GmCXt.id
+		};
+
+		if (window.self === window.top) {
+			GmCXt.requestHandler.handleEventSelectDOMElementForSmartTip(null, message);
+		} else {
+			GmCXt.sendMessageToParentWindow(actionName, message);
+		}
+
+		// Send a message to all frames to clear outline.
+		GmCXt.timeout(function() {
+			GmCXt.sendMessageToTheTopWindow('mgPlayerJSTest_action:stop_dom_selector;action:inform');
+		}, 300);
+	};
+
+	GmCXt.startSelectorTool(cb, frame);
+};
+
+GmCXt.requestHandler.getDynamicAttrList = function(old, new_) {
+
+	// Define dynamic attributes for each selector
+	var dynamicAttr = {
+		js: null,
+		js1: null,
+		js2: null,
+		js3: null
+	};
+
+	// Get dynamic attributes for each selector
+	if (old.js && new_.js) {
+		dynamicAttr.js = getDynamicAttr(old.js, new_.js);
+	}
+
+	if (old.js1 && new_.js1) {
+		dynamicAttr.js1 = getDynamicAttr(old.js1, new_.js1);
+	}
+
+	if (old.js2 && new_.js2) {
+		dynamicAttr.js2 = getDynamicAttr(old.js2, new_.js2);
+	}
+
+	if (old.js3 && new_.js3) {
+		dynamicAttr.js3 = getDynamicAttr(old.js3, old.js3);
+	}
+
+	function getDynamicAttr(old, new_) {
+
+		var oldObj = GmCXt.dom.getAttributes(old);
+		var newObj = GmCXt.dom.getAttributes(new_);
+
+		var len;
+		if (old.length < new_.length) {
+			len = old.length;
+		} else {
+			len = new_.length;
+		}
+
+		var tagStatus = compareTags(oldObj, newObj, len);
+
+		if (tagStatus !== true) {
+			return null;
+		}
+
+		var dynamicAttri = compareAttributes_(oldObj, newObj, len);
+
+		return dynamicAttri;
+	}
+
+	function compareAttributes_(old, new_, len) {
+
+		//Dynamic attribute list
+		var attributeList = [];
+
+		for (var i = 0; i < len; i++) {
+			if (old[i].tagName === new_[i].tagName) {
+				// Extract dynamic attributes
+				for (var attr in old[i]) {
+					if (!isEqual(old[i][attr], new_[i][attr]))
+						attributeList.push(attr);
+				}
+			}
+		}
+
+		if (attributeList.length === 0) {
+			return null;
+		} else {
+			// Removes duplicate attributes
+			attributeList = Array.from(new Set(attributeList));
+			return attributeList;
+		}
+	}
+
+	function isEqual(val1, val2) {
+		if (val1 && val2) {
+			if (typeof val1 === 'object' && JSON.stringify(val1) === JSON.stringify(val2))
+				return true;
+			if (val1 == val2)
+				return true;
+		}
+		return false;
+	}
+
+	function compareTags(old, new_, len) {
+		var tagStatus = true;
+
+		for (var i = 0; i < len; i++) {
+			if (old[i].tagName !== new_[i].tagName) {
+				tagStatus = false;
+				break;
+			}
+		}
+
+		return tagStatus;
+	}
+
+	//Return dynamic attributes
+	if (dynamicAttr.js || dynamicAttr.js1 || dynamicAttr.js2 || dynamicAttr.js3) {
+		return dynamicAttr;
+	} else {
+		return null;
+	}
+};
+
+GmCXt.requestHandler.findElementToCheckMatchingAlgo = function(data) {
+
+	var callback = function(result) {
+
+		if (!result.found) return;
+
+		var obj = {
+			found: result.found,
+			jobId: data.jobId,
+			fromSidePanel: data.fromSidePanel,
+			ruleIndex: data.ruleIndex,
+			groupIndex: data.groupIndex,
+			de: result.de
+		};
+
+		GmCXt.rulesElement = result.he;
+
+		var message = {
+			action: "mgPlayerJSTest_action:forward;task:select_dom_element_for_matching_in_rules",
+			data: obj
+		};
+
+		GmCXt.sendMessageToTheTopWindow(message.action, message.data);
+	};
+
+	var request = {
+		data: {
+			requestId: Math.random(),
+			element: data.element,
+			frame: data.frame,
+			job: data.job
+		},
+		cb: callback
+	};
+
+	GmCXt.highlighter.queueMatchingAlgoElement(request);
 };
 function domFinder(elem, elemPath) {
 
@@ -35952,5 +56328,21 @@ GmCXt.injectGuideMeInIframes = function(windowInstance) {
 		}
 	}
 
-	load('guideme-clientframe-css', 'content_script/dom_selector/css/style_1749715345626.css');
+	load('guideme-clientframe-css', 'content_script/dom_selector/css/style_1749722599831.css');
+})();
+(function() {
+	function load(cssId, path) {
+		if (!document.getElementById(cssId)) {
+			var head = document.getElementsByTagName('head')[0];
+			var link = document.createElement('link');
+			link.id = cssId;
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = GmCXt.conf.baseUrl + path;
+			link.media = 'all';
+			head.appendChild(link);
+		}
+	}
+
+	load('guideme-clientjs-css', 'content_script/worker/css/style_1749722599831.css');
 })();
